@@ -45,3 +45,8 @@ The clinical triage engine, emergency protocols, and environmental thresholds of
   * **5.1 Microgravity Medical Research:** Advanced biological and medical experiments conducted aboard the International Space Station (ISS) targeting human physiology.
 
 </details>
+
+## 🛠️ For contributors
+
+- [Coding guide (pt-BR)](INSTRUCOES-DE-CODIGO.md): stack, project structure, git workflow and AI usage.
+- [Team kanban](https://github.com/orgs/Apollo62-spaceapps/projects/3)
