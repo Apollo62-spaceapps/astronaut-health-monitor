@@ -2,6 +2,8 @@
 
 **Você é o dono da lógica central do produto.** A SPEC pede que essa lógica seja do time, não de uma IA (risco R-10): use IA para digitar, não para decidir.
 
+> **Já está pronto na `main`:** K1 a K5 (projeto base, contrato, dados, componentes, botão de modo). Veja **[`docs/JA-PRONTO.md`](../JA-PRONTO.md)**: onde colocar o seu código, store, tipos, componentes e dados.
+
 ## 1. Leia antes (nesta ordem)
 1. [`CLAUDE.md`](../../CLAUDE.md): §0 regras inegociáveis e §5 contrato.
 2. [`docs/SPEC-frontend.md`](../SPEC-frontend.md):
