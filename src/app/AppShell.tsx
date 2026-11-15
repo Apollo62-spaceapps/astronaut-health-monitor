@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 import { useHashTab } from '@/lib/useHashTab'
 import { TABS, type TabId } from '@/app/tabs'
 import { MissionBanner } from '@/app/MissionBanner'
+import { EnvironmentModeButton } from '@/features/environment/EnvironmentModeButton'
 import { OverviewPage } from '@/features/overview/OverviewPage'
 import { VitalsPage } from '@/features/vitals/VitalsPage'
 import { RoutinePage } from '@/features/routine/RoutinePage'
@@ -40,8 +41,8 @@ export function AppShell() {
         <span className="text-sm text-muted">Astronaut health monitor · prototype</span>
       </header>
 
-      {/* Faixa da missão (K4). O botão de modo de ambiente (K5) entra em envSlot. */}
-      <MissionBanner envSlot={<span className="text-sm text-white/85">Environment mode button — task K5 #58</span>} />
+      {/* Faixa da missão (K4) com o botão de modo de ambiente (K5). */}
+      <MissionBanner envSlot={<EnvironmentModeButton />} />
 
       <div className="flex flex-1">
         <nav aria-label="Sections" className="w-56 shrink-0 border-r border-border p-3">
