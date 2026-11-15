@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Cpu, Lock, ShieldCheck, WifiOff } from 'lucide-react'
 import { ASSISTANT_NAME, ASSISTANT_TAGLINE } from '@/ai/identity'
 import { canUseOnboardModel, onboardEngine } from '@/ai/engine'
-import { ONBOARD_MODEL_ID } from '@/ai/onboard'
+import { ONBOARD_MODELS } from '@/ai/onboard'
 import { RISK_TEXT } from '@/ai/reply'
 import { KNOWLEDGE } from '@/ai/knowledge'
 import { Button } from '@/components/ui/button'
@@ -109,13 +109,16 @@ function EnginePanel() {
   const setAiMode = useAppStore((s) => s.setAiMode)
   const [progress, setProgress] = useState<{ p: number; text: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
+  // L8: três modelos com ID conferido na biblioteca; o recomendado escreve melhor que o de 1B e cabe em ~1,9 GB.
+  const [modelId, setModelId] = useState<string>(ONBOARD_MODELS[1].id)
   const available = canUseOnboardModel()
+  const model = ONBOARD_MODELS.find((m) => m.id === modelId) ?? ONBOARD_MODELS[0]
 
   const load = async () => {
     setError(null)
     setProgress({ p: 0, text: 'Starting…' })
     try {
-      await onboardEngine().init((p, text) => setProgress({ p, text }))
+      await onboardEngine(modelId).init((p, text) => setProgress({ p, text }))
       setAiMode('onboard-model')
     } catch {
       setError('The onboard model could not start here. Protocol mode covers everything.')
@@ -132,7 +135,7 @@ function EnginePanel() {
       </h2>
       <p className="text-muted">
         {aiMode === 'onboard-model'
-          ? `Onboard model (${ONBOARD_MODEL_ID}) rewrites only the wording of each summary. Facts, actions and escalation stay rule-based.`
+          ? `Onboard model (${model.label}) rewrites only the wording of each answer, grounded on the same facts and NASA passages. Facts, actions and escalation stay rule-based.`
           : `Protocol mode: every answer is built from the rules and a local library of ${KNOWLEDGE.length} NASA-sourced passages. Works offline, no download.`}
       </p>
       {progress && (
@@ -153,9 +156,25 @@ function EnginePanel() {
       {error && <p className="text-xs text-muted">{error}</p>}
       <div className="flex flex-wrap gap-2">
         {aiMode === 'protocol' && available && !progress && (
-          <Button size="sm" variant="outline" onClick={() => void load()}>
-            Load onboard model
-          </Button>
+          <>
+            <label className="flex items-center gap-2 text-xs text-muted">
+              <span className="sr-only">Onboard model</span>
+              <select
+                value={modelId}
+                onChange={(e) => setModelId(e.target.value)}
+                className="rounded-md border border-border bg-surface-2 px-2 py-1 text-sm text-foreground"
+              >
+                {ONBOARD_MODELS.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.label} · ~{(m.vramMB / 1024).toFixed(1)} GB
+                  </option>
+                ))}
+              </select>
+            </label>
+            <Button size="sm" variant="outline" onClick={() => void load()}>
+              Load onboard model
+            </Button>
+          </>
         )}
         {(aiMode === 'onboard-model' || progress) && (
           <Button size="sm" variant="outline" onClick={() => setAiMode('protocol')}>

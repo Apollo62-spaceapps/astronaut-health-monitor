@@ -6,7 +6,7 @@ import type { AiMode, AssistantContext, AssistantEngine, ChatMessage } from '@/d
 import { ProtocolEngine } from '@/ai/protocol'
 import { OnboardModelEngine } from '@/ai/onboard'
 import type { OrbitContext } from '@/ai/context'
-import { classify, isFollowUp } from '@/ai/intent'
+import { classify, classifyAll, isFollowUp } from '@/ai/intent'
 import { followUpAnswer, narrate } from '@/ai/narrate'
 import { FORBIDDEN } from '@/ai/llm'
 import { rewriteSummary } from '@/ai/llm'
@@ -29,7 +29,9 @@ export function engineFor(mode: AiMode): AssistantEngine {
 }
 
 /** Motor de bordo compartilhado (o mesmo da escolha de modo). */
-export function onboardEngine(): OnboardModelEngine {
+export function onboardEngine(modelId?: string): OnboardModelEngine {
+  // Trocar de modelo cria outro motor (o anterior fica para o coletor de lixo).
+  if (modelId && onboard?.modelId !== modelId) onboard = new OnboardModelEngine(modelId)
   onboard ??= new OnboardModelEngine()
   return onboard
 }
@@ -89,10 +91,62 @@ export function orbitProtocolAnswer(ctx: OrbitContext, q: OrbitQuestion): Struct
   const c = classify(q.text)
   const intent = q.intent ?? c.intent
   const opts = { zone: q.zone ?? c.zone, crewId: q.crewId ?? c.crewId, text: q.text }
+  const first = answerFor(intent, ctx, opts)
+  // Pergunta composta ("how am I doing and what should I do?"): responde as duas partes num texto só (L8).
+  if (!q.intent) {
+    const ranked = classifyAll(q.text)
+    const second = ranked.find(([i]) => i !== intent && COMBINABLE.includes(i))
+    const best = ranked[0]?.[1] ?? 0
+    if (second && COMBINABLE.includes(intent) && second[1] >= 1.5 && second[1] >= best * 0.6)
+      return merge(first, answerFor(second[0], ctx, opts))
+  }
+  return first
+}
+
+/** Intenções que fazem sentido juntas numa resposta só. */
+const COMBINABLE: readonly Intent[] = ['status', 'whatNow', 'zoneExplain', 'solarEvent', 'groundDelay', 'routine', 'drift', 'reference', 'riskOutlook', 'metric', 'environment']
+
+function answerFor(intent: Intent, ctx: OrbitContext, opts: { zone?: ZoneTarget; crewId?: string; text: string }): StructuredReply {
   const reply = buildReply(intent, ctx, opts)
   // Voz (L7b): texto corrido com citações, passos guiados e o que foi consultado na base local.
   const n = narrate(reply, ctx, opts)
   return { ...reply, prose: n.prose, steps: n.steps, consulted: n.consulted, followUps: n.followUps }
+}
+
+/** Junta duas respostas: texto em sequência, passos e ações sem repetir, fontes somadas. */
+function merge(a: StructuredReply, b: StructuredReply): StructuredReply {
+  // "Como estou e o que faço?": o resumo do dia sem a frase final, depois os passos (sem repetir o dado).
+  const pair = [a.intent, b.intent].sort().join('+')
+  if (pair === 'status+whatNow') {
+    const st = a.intent === 'status' ? a : b
+    const wn = a.intent === 'status' ? b : a
+    if (wn.steps?.length) {
+      const prose = (st.prose ?? [st.summary]).slice(0, -1)
+      return {
+        ...st,
+        id: `${st.id}+whatNow`,
+        prose: [...prose, 'Here is what I would do, in order:'],
+        steps: wn.steps,
+        actions: wn.actions,
+        consulted: [...(st.consulted ?? []), ...(wn.consulted ?? [])].filter((c, i, xs) => xs.findIndex((y) => y.id === c.id) === i),
+        followUps: wn.followUps,
+        escalate: st.escalate ?? wn.escalate,
+      }
+    }
+  }
+  const uniq = <T,>(xs: T[], key: (x: T) => string) => xs.filter((x, i) => xs.findIndex((y) => key(y) === key(x)) === i)
+  return {
+    ...a,
+    id: `${a.id}+${b.intent}`,
+    prose: [...(a.prose ?? [a.summary]), ...(b.prose ?? [b.summary])],
+    steps: a.steps?.length ? a.steps : b.steps,
+    facts: uniq([...a.facts, ...b.facts], (f) => f.label),
+    actions: uniq([...a.actions, ...b.actions], (x) => JSON.stringify(x)),
+    consulted: uniq([...(a.consulted ?? []), ...(b.consulted ?? [])], (c) => c.id),
+    followUps: uniq([...(b.followUps ?? []), ...(a.followUps ?? [])], (f) => f).slice(0, 3),
+    escalate: a.escalate ?? b.escalate,
+    illustrative: a.illustrative || b.illustrative,
+  }
 }
 
 /**

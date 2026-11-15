@@ -10,6 +10,8 @@ import {
   WITHIN_REFERENCE,
 } from '@/ai/identity'
 import { draftPacket } from '@/ai/packet'
+import { environmentIn } from '@/ai/intent'
+import { metricAnswer, parseMetric } from '@/ai/metric'
 import type { Fact, Intent, ReplyAction, StatusLine, StructuredReply, ZoneTarget } from '@/ai/schema'
 import { BODY_ZONES, HAZARD_LABEL } from '@/domain/config/bodyZones'
 import { ENVIRONMENTS } from '@/domain/config/environments'
@@ -701,6 +703,38 @@ export function buildReply(intent: Intent, ctx: OrbitContext, opts: ReplyOptions
       return drift(ctx)
     case 'about':
       return about(ctx)
+    case 'metric': {
+      // L8: valor de um indicador; sem indicador reconhecido, o da zona com algo fora da referência.
+      const q = parseMetric(opts.text ?? '') ?? { metric: worstVital(ctx)?.kind ?? 'heartRate', when: 'latest' }
+      const m = metricAnswer(ctx, q)
+      return base('metric', ctx, {
+        summary: m.prose[0]!.replace(/\s*\[S\d+(?:, S\d+)*\]/g, ''),
+        facts: m.facts,
+        actions: m.offVital && astronaut(ctx) ? [{ kind: 'remeasure', vital: m.offVital }] : [],
+        illustrative: m.facts.some((f) => !!f.status),
+      })
+    }
+    case 'environment': {
+      const target = environmentIn(opts.text ?? '') ?? ctx.environment
+      const env = ENVIRONMENTS[target]
+      const reply = 2 * env.oneWayDelaySec
+      return base('environment', ctx, {
+        summary: `What changes ${target === 'EARTH' ? 'on Earth' : `on the ${env.label}`}.`,
+        facts: [
+          { label: 'Ground reply', value: formatShortDuration(reply), provenance: 'SIMULATED', detail: env.delayNote, sourceId: target === 'SPACECRAFT' ? 'S10' : undefined },
+          {
+            label: 'Daily dose rate',
+            value: env.doseRateMSvPerDay === null ? 'not sourced' : String(env.doseRateMSvPerDay),
+            unit: env.doseRateMSvPerDay === null ? undefined : 'mSv/day',
+            provenance: 'SIMULATED',
+            sourceId: env.doseRateMSvPerDay === null ? undefined : 'S09',
+          },
+        ],
+        actions: [{ kind: 'goto', tab: 'reference', label: 'Open Baseline' }],
+      })
+    }
+    case 'smalltalk':
+      return base('smalltalk', ctx, { summary: 'Hi.', facts: [], actions: [] })
     case 'triage':
     case 'general':
       return general(ctx)

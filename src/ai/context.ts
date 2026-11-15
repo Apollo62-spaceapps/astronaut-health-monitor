@@ -7,7 +7,7 @@ import { accessLevel, type AccessLevel } from '@/domain/rules/privacy'
 import type { CareerDose } from '@/domain/rules/radiation'
 import { viewOutlook, type VisibleOutlook } from '@/domain/rules/risk'
 import type { BaselineQuality, ReferenceState } from '@/domain/rules/reference'
-import type { Trend } from '@/domain/rules/trend'
+import { dailyValues, type Trend } from '@/domain/rules/trend'
 import type { VitalEvaluation } from '@/domain/rules/vitals'
 import type {
   Alert,
@@ -22,6 +22,7 @@ import type {
   WellbeingEntry,
   ZoneStatus,
 } from '@/domain/types'
+import { VITAL_KINDS } from '@/domain/types'
 import { blackoutPossible } from '@/features/escalation/blackout'
 import type { Insights } from '@/state/insights'
 
@@ -55,6 +56,8 @@ export interface OrbitContext {
   references: Partial<Record<VitalKind, ReferenceState>>
   trends: Trend[]
   crew: VisibleOutlook[]
+  /** L8: um valor por dia (última leitura do dia), 14 dias até agora, por indicador. */
+  history: Partial<Record<VitalKind, { day: string; value: number }[]>>
 }
 
 export interface OrbitExtras {
@@ -107,5 +110,6 @@ export function buildOrbitContext(
     references: insights.references,
     trends: insights.trends,
     crew: insights.crew.map((o) => viewOutlook(o, p)),
+    history: Object.fromEntries(VITAL_KINDS.map((k) => [k, dailyValues(k, input.vitals, input.simNowIso, 14)])),
   }
 }

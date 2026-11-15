@@ -19,6 +19,9 @@ export const INTENTS = [
   'reference',
   'drift',
   'about',
+  'metric',
+  'environment',
+  'smalltalk',
   'general',
 ] as const
 export type Intent = (typeof INTENTS)[number]
@@ -85,7 +88,8 @@ export interface StructuredReply {
 }
 
 /** Saída do LLM: só o resumo (≤ 280 caracteres). */
-export const llmOutputSchema = z.object({ summary: z.string().min(1).max(280) })
+/** Saída do LLM: só a abertura (até 3 frases, ≤ 400 caracteres). */
+export const llmOutputSchema = z.object({ summary: z.string().min(1).max(400) })
 
 const sourceId = z.string().regex(/^S\d+$/)
 export const structuredReplySchema = z.object({

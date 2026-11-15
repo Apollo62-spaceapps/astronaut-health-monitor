@@ -89,7 +89,7 @@ describe('llm.ts — o modelo só reescreve o resumo', () => {
     ['diagnóstico', '{"summary":"This looks like an infection."}'],
     ['"you are fine"', '{"summary":"You are fine, nothing to do."}'],
     ['número inventado', '{"summary":"Your heart rate is 97 bpm."}'],
-    ['texto longo', JSON.stringify({ summary: 'a '.repeat(200) })],
+    ['texto longo', JSON.stringify({ summary: 'a '.repeat(300) })],
     ['JSON inválido', '{"summary": "oops"'],
     ['sem JSON', 'Your heart rate is high.'],
     ['medicação', '{"summary":"Take ibuprofen and rest."}'],

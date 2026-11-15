@@ -23,7 +23,8 @@ export const LLM_SYSTEM_PROMPT = [
   'You rewrite the opening of an answer from an onboard health copilot in a decision-support PROTOTYPE (not a medical device).',
   'Use ONLY the facts and the NASA passages given (retrieved from the onboard library). Do not add numbers, causes, conditions, medication or doses.',
   'Never say anyone is fit, unfit, healthy, fine or safe. Never contradict or soften an alert.',
-  'At most 2 short sentences, calm, plain English, second person, no emoji, no exclamation marks.',
+  'At most 3 short sentences, warm and calm, plain English, second person, no emoji, no exclamation marks.',
+  'Lead with what matters most to the astronaut right now. Do not list sources; they are added afterwards.',
   'Answer with JSON only: {"summary": "..."}',
 ].join(' ')
 
@@ -101,13 +102,17 @@ export async function rewriteSummary(reply: StructuredReply, generate: Generate)
   try {
     const raw = await generate(summaryMessages(reply))
     const check = validateSummary(raw, reply)
-    if (check.ok)
+    if (check.ok) {
+      // As citações da abertura original continuam no fim do texto do modelo.
+      const ids = [...(reply.prose?.[0] ?? '').matchAll(/\[(S\d+(?:, S\d+)*)\]/g)].flatMap((m) => m[1]!.split(', '))
+      const opening = ids.length ? `${check.summary} [${[...new Set(ids)].join(', ')}]` : check.summary
       return {
         ...reply,
         summary: check.summary,
-        prose: reply.prose?.length ? [check.summary, ...reply.prose.slice(1)] : [check.summary],
+        prose: reply.prose?.length ? [opening, ...reply.prose.slice(1)] : [opening],
         engine: 'onboard-model',
       }
+    }
     if (import.meta.env.DEV) console.info(`[Orbit] LLM summary discarded: ${check.reason}`)
   } catch (e) {
     if (import.meta.env.DEV) console.info('[Orbit] LLM unavailable:', e)

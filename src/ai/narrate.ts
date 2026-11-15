@@ -6,6 +6,9 @@ import type { OrbitContext } from '@/ai/context'
 import { ASSISTANT_NAME } from '@/ai/identity'
 import { KNOWLEDGE, passageById, retrieve, type Passage } from '@/ai/knowledge'
 import { RISK_TEXT } from '@/ai/reply'
+import { environmentIn, normalize } from '@/ai/intent'
+import { metricAnswer, parseMetric } from '@/ai/metric'
+import { referenceTransition } from '@/domain/rules/reference'
 import type { StructuredReply, ZoneTarget } from '@/ai/schema'
 import { BODY_ZONES, HAZARD_LABEL } from '@/domain/config/bodyZones'
 import { ENVIRONMENTS } from '@/domain/config/environments'
@@ -59,6 +62,8 @@ function pick<T>(options: readonly T[], seed: string): T {
 }
 export const cite = (ids: readonly SourceId[] | undefined) => (ids && ids.length ? ` [${ids.join(', ')}]` : '')
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+/** "Distance from Earth" → "distance from Earth" (nome próprio continua maiúsculo). */
+const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 const value = (ev: VitalEvaluation) => `${formatVitalValue(ev.kind, ev.latest.value)} ${VITAL_UNIT[ev.kind]}`
 const base = (ev: VitalEvaluation) => `${formatVitalValue(ev.kind, ev.baseline.preflightMean)} ${VITAL_UNIT[ev.kind]}`
 const pctText = (dev: number) => `${Math.round(Math.abs(dev))}%`
@@ -260,7 +265,7 @@ function zoneExplain(ctx: OrbitContext, zoneId: ZoneTarget | undefined, seed: st
   }
   prose.push(
     content.whyItMatters
-      ? `Why it matters: ${content.whyItMatters.text}${cite(content.whyItMatters.sourceIds)} The related hazard is ${zone.hazard ? HAZARD_LABEL[zone.hazard].toLowerCase() : 'still under review'}.`
+      ? `Why it matters: ${content.whyItMatters.text}${cite(content.whyItMatters.sourceIds)} The related hazard is ${zone.hazard ? lowerFirst(HAZARD_LABEL[zone.hazard]) : 'still under review'}.`
       : `I have no source that links this zone to a hazard yet, so I will not speculate. Consult your flight surgeon.`,
   )
   const passages =
@@ -395,7 +400,7 @@ function riskOutlook(ctx: OrbitContext, reply: StructuredReply, crewId: string |
       `Across the crew, ${sorted
         .map(
           (c) =>
-            `${c.isSelf && ctx.role === 'ASTRONAUT' ? 'you' : c.name} ${c.isSelf && ctx.role === 'ASTRONAUT' ? 'are' : 'is'} ${RISK_TEXT[c.level]}${c.hazard ? ` (${HAZARD_LABEL[c.hazard].toLowerCase()})` : ''}`,
+            `${c.isSelf && ctx.role === 'ASTRONAUT' ? 'you' : c.name} ${c.isSelf && ctx.role === 'ASTRONAUT' ? 'are' : 'is'} ${RISK_TEXT[c.level]}${c.hazard ? ` (${lowerFirst(HAZARD_LABEL[c.hazard])})` : ''}`,
         )
         .join(', ')}.`,
     )
@@ -416,7 +421,7 @@ function riskOutlook(ctx: OrbitContext, reply: StructuredReply, crewId: string |
     const who = o.isSelf && ctx.role === 'ASTRONAUT' ? 'Your outlook' : `${o.name}’s outlook`
     const visible = o.drivers.filter((d) => !('restricted' in d))
     prose.push(
-      `${who} is ${RISK_TEXT[o.level]}${o.hazard ? `, driven mostly by ${HAZARD_LABEL[o.hazard].toLowerCase()}` : ''}. ${
+      `${who} is ${RISK_TEXT[o.level]}${o.hazard ? `, driven mostly by ${lowerFirst(HAZARD_LABEL[o.hazard])}` : ''}. ${
         visible.length
           ? `The factors I counted: ${visible.map((d) => ('valueText' in d ? `${d.label.toLowerCase()} (${d.valueText})` : d.label)).join('; ')}.`
           : 'No factor is raising it today.'
@@ -511,8 +516,15 @@ export function ragAnswer(question: string, ctx: OrbitContext): Narration {
     }
   const [first, ...rest] = hits
   const prose = [
-    `${pick(['From the NASA material I carry onboard:', 'Here is what my onboard library says.', 'Based on the NASA sources I have here:'], question)} ${first!.passage.text}${cite(first!.passage.sourceIds)}`,
-    ...rest.slice(0, 1).map((h) => `${h.passage.text}${cite(h.passage.sourceIds)}`),
+    `${
+      first!.passage.kind === 'app'
+        ? pick(['Here is how it works in this prototype.', 'Good question. In this app:', 'Short answer, from how Orbit and the app are built:'], question)
+        : pick(['From the NASA material I carry onboard:', 'Here is what my onboard library says.', 'Based on the NASA sources I have here:'], question)
+    } ${first!.passage.text}${cite(first!.passage.sourceIds)}`,
+    ...rest
+      .filter((h) => h.score >= first!.score * 0.6)
+      .slice(0, 1)
+      .map((h) => `${h.passage.text}${cite(h.passage.sourceIds)}`),
   ]
   // Liga a resposta aos dados da pessoa quando a pergunta cita uma zona com algo fora da referência.
   const top = worst(ctx)
@@ -525,7 +537,12 @@ export function ragAnswer(question: string, ctx: OrbitContext): Narration {
     prose.push(`For you right now, that matters because your ${LOWER_LABEL[top.kind]} is ${deviationClause(ctx, top)}.`)
   return {
     prose,
-    consulted: hits.map((h) => ({ id: h.passage.id, title: h.passage.title, sourceIds: h.passage.sourceIds })),
+    // Só as passagens que entraram no texto.
+    consulted: [first!, ...rest.filter((h) => h.score >= first!.score * 0.6).slice(0, 1)].map((h) => ({
+      id: h.passage.id,
+      title: h.passage.title,
+      sourceIds: h.passage.sourceIds,
+    })),
     followUps: ['How am I doing today?', 'What should I do now?'],
   }
 }
@@ -590,8 +607,85 @@ export function narrate(
         ],
         followUps: ['How long until the ground replies?'],
       }
+    case 'metric': {
+      const mq = parseMetric(q.text ?? '') ?? { metric: worst(ctx)?.kind ?? 'heartRate', when: 'latest' as const }
+      const m = metricAnswer(ctx, mq)
+      const ids =
+        mq.metric === 'sleep' || mq.metric === 'mood'
+          ? ['sleep-behavior', 'ssm-actigraphy']
+          : mq.metric === 'dose'
+            ? ['radiation-limit', 'radiation-cruise']
+            : mq.metric === 'exercise'
+              ? ['bone-muscle', 'iss-exercise']
+              : ['personal-reference']
+      return { prose: m.prose, followUps: m.followUps, consulted: consult(...ids) }
+    }
+    case 'environment':
+      return environmentAnswer(ctx, environmentIn(q.text ?? '') ?? ctx.environment)
+    case 'smalltalk':
+      return smalltalk(ctx, q.text ?? '')
     case 'triage':
     case 'general':
       return ragAnswer(q.text ?? '', ctx)
   }
+}
+
+/** "What changes on the Moon?": o que muda de verdade no app e o que tem fonte (L8). */
+export function environmentAnswer(ctx: OrbitContext, target: MissionMode): Narration {
+  const env = ENVIRONMENTS[target]
+  const here = target === ctx.environment
+  const place = target === 'EARTH' ? 'on Earth' : `on the ${env.label}`
+  const prose: string[] = []
+  prose.push(
+    target === 'EARTH'
+      ? `${here ? 'You are on Earth, so' : 'On Earth'} the flight surgeon is reachable directly, with no delay, and everything is compared with your pre-flight exam.`
+      : target === 'ISS'
+        ? `${here ? 'You are on the Space Station:' : 'On the Space Station'} contact with the ground is close to real time in this scenario, and gravity is micro, as in transit.`
+        : target === 'LUNAR'
+          ? `${here ? 'You are on the Moon:' : 'On the Moon'} a reply takes about 2.6 seconds (1.3 s each way), and gravity is partial; the exact fraction is not sourced yet, so I don’t quote a number.`
+          : `${here ? 'You are aboard the Spacecraft:' : 'Aboard the Spacecraft'} a reply takes about 40 minutes in this scenario (20 minutes each way), with possible blackouts of up to 2 to 3 weeks near solar conjunction.${cite(['S10', 'S11'])} Gravity is micro.`,
+  )
+  prose.push(
+    env.doseRateMSvPerDay === null
+      ? `There is no sourced daily radiation dose rate ${place}, so no mission dose is added there.`
+      : `Radiation adds about ${env.doseRateMSvPerDay} mSv a day ${place}, the cruise average measured on the way to Mars.${cite(['S08', 'S09'])}`,
+  )
+  prose.push(
+    target === 'ISS'
+      ? `Exercise uses ARED, T2 and CEVIS, about two hours a day on average.${cite(['S13'])}`
+      : 'There is no sourced exercise equipment list for this environment, so the app does not name devices there.',
+  )
+  prose.push(`Hazards in focus ${place}: ${env.emphasizedHazards.map((h) => lowerFirst(HAZARD_LABEL[h])).join(', ')}.${cite(['S19'])}`)
+  if (!here) prose.push(referenceTransition(ctx.environment, target).text)
+  prose.push('Your own data stay the same; what changes is how they are read and escalated. Switch with the Mode buttons at the top.')
+  const others = (['EARTH', 'ISS', 'LUNAR', 'SPACECRAFT'] as const).filter((m) => m !== target && m !== ctx.environment)
+  return {
+    prose,
+    consulted: consult(
+      target === 'LUNAR' ? 'moon-delay' : target === 'SPACECRAFT' ? 'mars-delay' : target === 'ISS' ? 'iss-exercise' : 'personal-reference',
+      'app-environments',
+      ...(here ? [] : ['adaptation']),
+    ),
+    followUps: others.slice(0, 2).map((m) => `What changes ${m === 'EARTH' ? 'on Earth' : `on the ${ENVIRONMENTS[m].label}`}?`),
+  }
+}
+
+/** Conversa curta: cumprimento, agradecimento, "ok", despedida (L8). */
+export function smalltalk(ctx: OrbitContext, text: string): Narration {
+  const t = normalize(text)
+  const top = worst(ctx)
+  const hook =
+    ctx.shelterActive
+      ? 'A solar particle event is active, so shelter comes first. Want the steps?'
+      : top && top.level !== 'normal'
+        ? `Your ${zoneOfVital(top.kind) ?? 'heart'} zone is at ${STATUS_WORD[shownLevel(top.kind, top.level, ctx.body)]} right now. Want me to walk you through it?`
+        : 'Everything is within your personal reference right now. What would you like to look at?'
+  const prose = /\b(thanks|thank you|thx)\b/.test(t)
+    ? ['Anytime. I will keep an eye on your readings; ask me whenever something changes.']
+    : /\b(bye|goodbye|see you)\b/.test(t)
+      ? ['Talk soon. If anything changes, it shows on the body map first.']
+      : /^(ok|okay|got it|cool|great|nice|perfect)\b/.test(t)
+        ? ['Good. Anything else you want me to check?']
+        : [`Hi, I’m here. ${hook}`]
+  return { prose, followUps: ['How am I doing today?', 'What should I do now?'] }
 }

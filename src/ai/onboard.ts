@@ -6,6 +6,18 @@ import type { AssistantContext, AssistantEngine, ChatMessage } from '@/domain/ty
 import { SYSTEM_PROMPT, contextMessage } from '@/ai/prompts'
 
 export const ONBOARD_MODEL_ID = 'Llama-3.2-1B-Instruct-q4f32_1-MLC'
+
+/**
+ * Modelos de bordo oferecidos (L8). IDs conferidos na lista pré-compilada do @mlc-ai/web-llm 0.2.87; versões
+ * q4f32 (não exigem shader-f16). VRAM de lá. P-03: conferir as licenças antes do pitch — Llama 3.2: Llama 3.2
+ * Community License; Qwen2.5-1.5B: Apache-2.0.
+ */
+export const ONBOARD_MODELS = [
+  { id: 'Llama-3.2-1B-Instruct-q4f32_1-MLC', label: 'Light · Llama 3.2 1B', vramMB: 1129 },
+  { id: 'Qwen2.5-1.5B-Instruct-q4f32_1-MLC', label: 'Recommended · Qwen2.5 1.5B', vramMB: 1889 },
+  { id: 'Llama-3.2-3B-Instruct-q4f32_1-MLC', label: 'Best quality · Llama 3.2 3B', vramMB: 2952 },
+] as const
+export type OnboardModelId = (typeof ONBOARD_MODELS)[number]['id']
 /** Acima disso, a mensagem cai para o protocolo (AI-03). */
 export const GENERATION_TIMEOUT_MS = 20_000
 
@@ -24,6 +36,10 @@ type Engine = {
 export class OnboardModelEngine implements AssistantEngine {
   readonly mode = 'onboard-model' as const
   private engine: Engine | null = null
+  readonly modelId: string
+  constructor(modelId: string = ONBOARD_MODEL_ID) {
+    this.modelId = modelId
+  }
 
   async init(onProgress?: (p: number, text: string) => void) {
     if (this.engine) return
@@ -31,7 +47,7 @@ export class OnboardModelEngine implements AssistantEngine {
     // Import dinâmico: a biblioteca só é carregada quando alguém liga o modelo (o modo protocolo fica leve).
     const webllm = await import('@mlc-ai/web-llm')
     const worker = new Worker(new URL('./onboard.worker.ts', import.meta.url), { type: 'module' })
-    this.engine = (await webllm.CreateWebWorkerMLCEngine(worker, ONBOARD_MODEL_ID, {
+    this.engine = (await webllm.CreateWebWorkerMLCEngine(worker, this.modelId, {
       initProgressCallback: (r: { progress: number; text: string }) => onProgress?.(r.progress, r.text),
     })) as unknown as Engine
   }
@@ -41,7 +57,7 @@ export class OnboardModelEngine implements AssistantEngine {
     if (!this.engine) throw new Error('Onboard model not initialized')
     const timeout = new Promise<never>((_, rej) => setTimeout(() => rej(new Error('timeout')), GENERATION_TIMEOUT_MS))
     const res = await Promise.race([
-      this.engine.chat.completions.create({ messages, temperature: 0.1, max_tokens: 120 }),
+      this.engine.chat.completions.create({ messages, temperature: 0.2, max_tokens: 160 }),
       timeout,
     ])
     return res.choices[0]?.message.content?.trim() || ''

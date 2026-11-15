@@ -2,6 +2,9 @@
 // Mesma entrada ⇒ mesma saída. Empate ⇒ whatNow. Menção a dor no peito, falta de ar ou desmaio ⇒ emergência
 // (BODY-10/P-12: sem fluxo clínico, só "precisa de uma pessoa agora").
 import type { ZoneTarget, Intent } from '@/ai/schema'
+import type { MissionMode } from '@/domain/types'
+import { KNOWLEDGE } from '@/ai/knowledge'
+import { fixTypos, toEnglish } from '@/ai/lang'
 
 export interface Classified {
   intent: Intent
@@ -119,6 +122,48 @@ const KEYWORDS: Record<Exclude<Intent, 'general'>, string[]> = {
   reference: ['baseline', 'reference', 'my normal', 'usual range', 'where did my', 'pre-flight', 'preflight'],
   drift: ['drift', 'drifting', 'trend', 'creeping', 'slowly', 'going up', 'going down', 'rising', 'falling'],
   about: ['who are you', 'what are you', 'about you', 'your name', 'are you ai', 'how do you work'],
+  // L8: valor de um indicador ("what's my blood pressure?", "how much did I sleep?"). Só conta com um indicador citado.
+  metric: [
+    'what is my',
+    "what's my",
+    'whats my',
+    'what was my',
+    'how much',
+    'how many',
+    'average',
+    'yesterday',
+    'last week',
+    'last 7 days',
+    'latest',
+    'last reading',
+    'history',
+    'show me my',
+    'value',
+    'how high',
+    'how low',
+  ],
+  // L8: comparar ambientes ("what changes on the Moon?"). Só conta com um ambiente citado.
+  environment: [
+    'what changes',
+    'what about the',
+    'what if i',
+    'compare',
+    'difference between',
+    'if i were',
+    'if i was',
+    'on the moon',
+    'on the station',
+    'on the space station',
+    'on the spacecraft',
+    'on earth',
+    'on mars',
+    'in transit',
+    'switch to',
+    'move to',
+    'going to the',
+    'go to the',
+  ],
+  smalltalk: [],
 }
 
 /** Intenções genéricas pesam metade: uma palavra de assunto ("solar", "baseline") vence "what do I do". */
@@ -134,13 +179,73 @@ const ZONE_WORDS: [ZoneTarget, RegExp][] = [
   ['radiation', /\b(radiation|dose)\b/],
 ]
 
-export const normalize = (text: string) =>
-  text
-    .toLowerCase()
-    .replace(/[’`]/g, "'")
+const basic = (text: string) =>
+  toEnglish(text)
     .replace(/[^a-z0-9'\s-]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
+
+/** Vocabulário para corrigir erro de digitação: palavras-chave, zonas e a base local. */
+let VOCAB: Set<string> | null = null
+function vocab(): Set<string> {
+  if (VOCAB) return VOCAB
+  const words = [
+    ...Object.values(KEYWORDS).flat(),
+    'heart rate blood pressure glucose temperature sleep mood dose radiation exercise adherence systolic diastolic',
+    'earth station moon spacecraft mars transit shelter solar baseline reference trend outlook report doctor',
+    ...KNOWLEDGE.flatMap((p) => [p.title, ...p.keywords]),
+  ]
+  VOCAB = new Set(
+    words
+      .join(' ')
+      .toLowerCase()
+      .split(/[^a-z0-9'-]+/)
+      .filter((w) => w.length >= 4),
+  )
+  return VOCAB
+}
+
+/** Texto normalizado: português → inglês, sem acento, e erros de digitação corrigidos. */
+export const normalize = (text: string) => fixTypos(basic(text), vocab())
+
+const METRIC_WORDS =
+  /\b(heart rate|pulse|bpm|blood pressure|bp|systolic|diastolic|glucose|sugar|temperature|temp|sleep|slept|mood|dose|radiation|exercise|adherence|workout)\b/
+const SMALLTALK =
+  /^(hi|hello|hey|good (morning|afternoon|evening)|thanks|thank you|thx|ok|okay|got it|cool|great|nice|perfect|bye|goodbye|see you)\b/
+export const ENV_WORDS: [MissionMode, RegExp][] = [
+  ['LUNAR', /\b(moon|lunar)\b/],
+  ['ISS', /\b(space station|station|iss)\b/],
+  ['SPACECRAFT', /\b(spacecraft|mars|transit|deep space)\b/],
+  ['EARTH', /\b(earth|home)\b/],
+]
+
+/** Ambiente citado na pergunta ("on the Moon" → LUNAR). */
+export function environmentIn(text: string): MissionMode | undefined {
+  const t = normalize(text)
+  return ENV_WORDS.find(([, re]) => re.test(t))?.[0]
+}
+
+/** Todas as intenções com pontuação, da maior para a menor (também usado nas perguntas compostas). */
+export function classifyAll(text: string): [Intent, number][] {
+  const t = normalize(text)
+  const scores = new Map<Intent, number>()
+  for (const [intent, words] of Object.entries(KEYWORDS) as [Intent, string[]][]) {
+    const weight = (w: string) => (GENERIC.includes(intent) ? w.split(' ').length / 2 : w.split(' ').length + 2)
+    const score = words.reduce((s, w) => s + (t.includes(w) ? weight(w) : 0), 0)
+    if (score > 0) scores.set(intent, score)
+  }
+  // Valor de indicador só com um indicador citado: "what's my baseline?" não é métrica.
+  if (scores.has('metric') && !METRIC_WORDS.test(t)) scores.delete('metric')
+  // Comparar ambientes só com um ambiente citado; "baseline/reference" puxa para a referência.
+  if (scores.has('environment') && !environmentIn(t)) scores.delete('environment')
+  if (/\b(baseline|reference)\b/.test(t) && scores.has('reference') && !scores.has('drift')) scores.set('reference', scores.get('reference')! + 4)
+  if (SMALLTALK.test(t) && t.split(' ').length <= 5) scores.set('smalltalk', 10)
+  // Pergunta sobre um tripulante citado é do outlook.
+  if (/\bcrew ([a-d])\b/.test(t)) scores.set('riskOutlook', (scores.get('riskOutlook') ?? 0) + 2)
+  // "why is my heart zone attention" → zoneExplain quando cita uma zona.
+  if (zoneIn(t) && /\bwhy\b/.test(t)) scores.set('zoneExplain', (scores.get('zoneExplain') ?? 0) + 2)
+  return [...scores.entries()].sort((a, b) => b[1] - a[1])
+}
 
 export function isEmergency(text: string): boolean {
   const t = normalize(text)
@@ -159,19 +264,10 @@ export function classify(text: string): Classified {
   if (isEmergency(t)) return { intent: 'triage', zone, emergency: true }
   if (!t) return { intent: 'general', emergency: false }
 
-  const scores = new Map<Intent, number>()
-  for (const [intent, words] of Object.entries(KEYWORDS) as [Intent, string[]][]) {
-    const weight = (w: string) => (GENERIC.includes(intent) ? w.split(' ').length / 2 : w.split(' ').length + 2)
-    const score = words.reduce((s, w) => s + (t.includes(w) ? weight(w) : 0), 0)
-    if (score > 0) scores.set(intent, score)
-  }
-  // Pergunta sobre um tripulante citado é do outlook.
-  if (crewId) scores.set('riskOutlook', (scores.get('riskOutlook') ?? 0) + 2)
-  // "why is my heart zone attention" → zoneExplain quando cita uma zona.
-  if (zone && /\bwhy\b/.test(t)) scores.set('zoneExplain', (scores.get('zoneExplain') ?? 0) + 2)
+  const scores = new Map(classifyAll(t))
 
   // Pergunta curta que só cita uma zona ("and my blood pressure?") é sobre essa zona.
-  if (scores.size === 0 && zone && t.split(' ').length <= 6)
+  if (scores.size === 0 && zone && (t.split(' ').length <= 3 || /^(and|what about|how about)(?=[ ]|$)/.test(t)))
     return { intent: 'zoneExplain', zone, crewId, emergency: false }
   if (scores.size === 0) return { intent: 'general', zone, crewId, emergency: false }
   const best = Math.max(...scores.values())
