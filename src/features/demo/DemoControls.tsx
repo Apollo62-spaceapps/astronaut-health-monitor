@@ -1,0 +1,119 @@
+// Demo controls (DEMO-01, DEMO-02): botão fixo "Demo" no canto inferior direito, em todas as telas,
+// visualmente separado do produto (borda tracejada, rótulo "Demo"). Tudo o que ele dispara leva "demo" na UI.
+import { useState } from 'react'
+import { FlaskConical, RotateCcw, Sun, Timer, X } from 'lucide-react'
+import { useAppStore } from '@/state/store'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+import { useAiEngineSwitch } from '@/features/assistant/useAiEngineSwitch'
+
+export function DemoControls() {
+  const [open, setOpen] = useState(false)
+  const replaySolarEvent = useAppStore((s) => s.replaySolarEvent)
+  const endShelter = useAppStore((s) => s.endShelter)
+  const resetScenario = useAppStore((s) => s.resetScenario)
+  const eventReplayed = useAppStore((s) => s.eventReplayed)
+  const shelterActive = useAppStore((s) => s.shelterActive)
+  const acceleration = useAppStore((s) => s.timeAcceleration)
+  const setTimeAcceleration = useAppStore((s) => s.setTimeAcceleration)
+  // Mesma troca de motor da aba Assistant: o modelo de bordo passa pelo init() (AI-03).
+  const { aiMode, switchTo, loading, notice } = useAiEngineSwitch()
+
+  return (
+    <div className="fixed right-4 bottom-14 z-40 flex flex-col items-end gap-2">
+      {open && (
+        <section
+          id="demo-controls-panel"
+          aria-labelledby="demo-controls-title"
+          className="w-[min(420px,calc(100vw-2rem))] space-y-4 rounded-lg border-2 border-dashed border-muted/60 bg-surface p-4 shadow-xl"
+        >
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Demo · not part of the product</p>
+              <h2 id="demo-controls-title" className="text-lg">
+                Demo controls
+              </h2>
+            </div>
+            <Button variant="ghost" size="icon" aria-label="Close demo controls" onClick={() => setOpen(false)}>
+              <X aria-hidden />
+            </Button>
+          </div>
+
+          <div className="space-y-1">
+            <p className="text-sm font-semibold">Solar event replay</p>
+            <p className="text-xs text-muted">Starts the shelter flow and postpones today&apos;s exercise.</p>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" onClick={replaySolarEvent} disabled={eventReplayed}>
+                <Sun aria-hidden />
+                {eventReplayed ? 'Event replayed · demo' : 'Replay solar event · demo'}
+              </Button>
+              {shelterActive && (
+                <Button variant="outline" size="sm" onClick={endShelter}>
+                  End shelter · demo
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <p className="text-sm font-semibold">AI engine</p>
+            <p className="text-xs text-muted">Alerts stay rule-driven in both engines.</p>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={loading !== null}
+              onClick={() => void switchTo(aiMode === 'protocol' ? 'onboard-model' : 'protocol')}
+            >
+              Switch to {aiMode === 'protocol' ? 'onboard model' : 'protocol mode'} · demo
+            </Button>
+            {loading && (
+              <div aria-live="polite" className="space-y-1">
+                <Progress value={Math.round(loading.p * 100)} aria-label="Onboard model loading" />
+                <p className="text-xs text-muted">{loading.text}</p>
+              </div>
+            )}
+            {notice && (
+              <p role="status" className="text-xs text-muted">
+                {notice}
+              </p>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <label htmlFor="demo-time" className="space-y-1 text-sm font-semibold">
+              <span className="block">Time acceleration · demo</span>
+              <span className="flex items-center gap-2 font-normal">
+                <Timer aria-hidden className="size-4 text-muted" />
+                <select
+                  id="demo-time"
+                  value={acceleration}
+                  onChange={(e) => setTimeAcceleration(Number(e.target.value))}
+                  className="rounded-md border border-border bg-ground px-2 py-1"
+                >
+                  <option value={1}>1× · paused</option>
+                  <option value={60}>60×</option>
+                  <option value={600}>600×</option>
+                </select>
+              </span>
+            </label>
+            <Button variant="outline" size="sm" onClick={resetScenario}>
+              <RotateCcw aria-hidden />
+              Reset scenario · demo
+            </Button>
+          </div>
+        </section>
+      )}
+      <Button
+        variant="outline"
+        aria-expanded={open}
+        aria-controls="demo-controls-panel"
+        aria-label="Demo controls"
+        onClick={() => setOpen((v) => !v)}
+        className="border-2 border-dashed border-muted/60 bg-surface shadow-lg"
+      >
+        <FlaskConical aria-hidden />
+        Demo
+      </Button>
+    </div>
+  )
+}

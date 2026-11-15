@@ -13,6 +13,7 @@ import { WellbeingPage } from '@/features/wellbeing/WellbeingPage'
 import { CommsPage } from '@/features/escalation/CommsPage'
 import { AssistantPage } from '@/features/assistant/AssistantPage'
 import { SourcesPage } from '@/features/sources/SourcesPage'
+import { DemoControls } from '@/features/demo/DemoControls'
 import { useEffect } from 'react'
 import { useAppStore } from '@/state/store'
 
@@ -43,47 +44,54 @@ export function AppShell() {
   }, [acceleration, advanceDemoMinutes])
 
   return (
-    <div className="flex min-h-screen min-w-[1280px] flex-col bg-ground">
+    // Sem largura mínima fixa: nada de rolagem horizontal em 1280/1366 px (nem com a barra de rolagem vertical).
+    <div className="flex min-h-screen flex-col bg-ground">
       {/* Header (ground #000) — DESIGN-SYSTEM §4 */}
-      <header className="flex h-14 items-center justify-between px-6">
+      <header className="flex h-11 items-center justify-between gap-4 px-6">
         <span className="text-lg font-extrabold tracking-tight">APOLLO 62</span>
-        <span className="text-sm text-muted">Astronaut health monitor · prototype</span>
+        <span className="truncate text-sm text-muted">Astronaut health monitor · prototype</span>
       </header>
 
       {/* Faixa da missão (K4) com o botão de modo de ambiente (K5). */}
       <MissionBanner envSlot={<EnvironmentModeButton />} />
 
-      <div className="flex flex-1">
-        <nav aria-label="Sections" className="w-56 shrink-0 border-r border-border p-3">
+      <div className="flex min-w-0 flex-1">
+        {/* ≤ 1100 px: a sidebar vira só ícones (o nome continua acessível e no title). */}
+        <nav aria-label="Sections" className="w-14 shrink-0 border-r border-border p-2 min-[1101px]:w-56 min-[1101px]:p-3">
           <ul className="space-y-1">
             {TABS.map(({ id, label, icon: Icon }) => (
               <li key={id}>
                 <a
                   href={`#/${id}`}
+                  title={label}
                   onClick={(e) => {
                     e.preventDefault()
                     go(id)
                   }}
                   aria-current={tab === id ? 'page' : undefined}
                   className={cn(
-                    'flex items-center gap-3 rounded-md px-3 py-2 text-foreground no-underline hover:bg-surface-2 hover:no-underline',
+                    'flex items-center justify-center gap-3 rounded-md px-2 py-2 text-foreground no-underline hover:bg-surface-2 hover:no-underline min-[1101px]:justify-start min-[1101px]:px-3',
                     tab === id && 'bg-surface font-semibold',
                   )}
                 >
-                  <Icon aria-hidden className="size-4" />
-                  {label}
+                  <Icon aria-hidden className="size-4 shrink-0" />
+                  <span className="sr-only min-[1101px]:not-sr-only">{label}</span>
                 </a>
               </li>
             ))}
           </ul>
         </nav>
 
-        <main className="flex-1 p-6">
-          <Page />
+        <main className="min-w-0 flex-1 p-6">
+          {/* Regra única de largura para todas as telas (polimento 15/11). */}
+          <div className="mx-auto w-full max-w-[1280px]">
+            <Page />
+          </div>
         </main>
       </div>
 
       <footer className="border-t border-border px-6 py-3 text-sm text-muted">{DISCLAIMER}</footer>
+      <DemoControls />
     </div>
   )
 }

@@ -44,7 +44,10 @@ describe('Vitais (L4 #55)', () => {
     page()
     expect(screen.getAllByRole('figure')).toHaveLength(5)
     expect(document.body.textContent).toContain('Pre-flight baseline')
-    expect(document.body.textContent).toContain('In-flight baseline (14 d)')
+    expect(document.body.textContent).toContain('(exam L-14…L-1)')
+    expect(document.body.textContent).toContain('In-flight baseline')
+    expect(document.body.textContent).toContain('(last 14 d)')
+    expect(document.body.textContent).toContain('7-day average')
   })
 
   it('uma medição nova muda o card na hora (regra recalcula)', () => {

@@ -13,6 +13,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { VITAL_LABEL, VITAL_UNIT, formatVitalValue } from '@/lib/format'
 import { CONSULT, ZONE_CONTENT } from '@/features/overview/zoneContent'
 import { VitalChart, chartPoints } from '@/features/vitals/VitalChart'
+import { DayLabel } from '@/components/DayLabel'
+import { SourceRef } from '@/components/SourceRef'
+import { shownLevel } from '@/features/overview/phaseDisplay'
 
 /** "Why this matters" (CORE-08): o texto com fonte da zona do corpo a que o vital pertence. */
 function whyItMatters(kind: VitalKind) {
@@ -34,6 +37,7 @@ function Trend({ pct }: { pct: number | null }) {
 export function VitalsPage() {
   const out = useEngine()
   const vitals = useAppStore((s) => s.vitals)
+  const preflight = useAppStore((s) => s.preflight)
   const simNowIso = useAppStore((s) => s.simNowIso)
   const missionDay = useAppStore((s) => s.missionDay)
 
@@ -41,9 +45,7 @@ export function VitalsPage() {
     <div className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-            Mission day <span className="num">{missionDay}</span> · Simulated
-          </p>
+          <DayLabel />
           <h1 className="mt-1 text-4xl font-extrabold tracking-tight">Vitals</h1>
           <p className="mt-2 text-muted">
             Today's value against your own baselines: pre-flight exam and the last in-flight days.
@@ -63,8 +65,12 @@ export function VitalsPage() {
                   label={VITAL_LABEL[kind]}
                   value={formatVitalValue(kind, ev.latest.value)}
                   unit={VITAL_UNIT[kind]}
-                  status={ev.level}
-                  statusDetail={`${formatDeviation(ev.deviationPct)} vs pre-flight`}
+                  status={shownLevel(kind, ev.level, out.body)}
+                  statusDetail={
+                    shownLevel(kind, ev.level, out.body) === 'adapting'
+                      ? `${formatDeviation(ev.deviationPct)} vs pre-flight · adaptation window`
+                      : `${formatDeviation(ev.deviationPct)} vs pre-flight`
+                  }
                   provenance={ev.latest.provenance}
                   className="bg-transparent p-0"
                   caption={
@@ -87,10 +93,11 @@ export function VitalsPage() {
                     <TooltipContent className="max-w-xs">
                       {why ? (
                         <>
-                          {why.text} <span className="num">[{why.sourceIds.join(', ')}]</span>
+                          {why.text} <SourceRef ids={why.sourceIds} className="[&_a]:text-current" />
                         </>
                       ) : (
-                        CONSULT
+                        // P-13: glicemia sem hazard com fonte.
+                        <>Related hazard: under review. {CONSULT}</>
                       )}
                     </TooltipContent>
                   </Tooltip>
@@ -108,11 +115,12 @@ export function VitalsPage() {
                 <VitalChart
                   kind={kind}
                   baseline={ev.baseline}
-                  xDomain={[Math.max(0, missionDay - 120), missionDay]}
+                  xDomain={[-14, missionDay]}
                   points={chartPoints(
-                    vitals.filter((r) => r.kind === kind),
+                    [...preflight, ...vitals].filter((r) => r.kind === kind),
                     MISSION_START_ISO,
                     simNowIso,
+                    missionDay + 15,
                   )}
                 />
               ) : (
