@@ -7,13 +7,12 @@ import {
   Dumbbell,
   HeartPulse,
   Radiation,
-  RadioTower,
   Smile,
   type LucideIcon,
 } from 'lucide-react'
 
 export type TabId =
-  'overview' | 'vitals' | 'routine' | 'radiation' | 'wellbeing' | 'exercise' | 'comms' | 'assistant' | 'sources'
+  'overview' | 'vitals' | 'routine' | 'radiation' | 'wellbeing' | 'exercise' | 'assistant' | 'sources'
 
 export interface TabDef {
   id: TabId
@@ -30,7 +29,6 @@ export const TABS: readonly TabDef[] = [
   { id: 'radiation', label: 'Radiation', icon: Radiation, owner: 'Felipe', task: 'F2 #45' },
   { id: 'exercise', label: 'Exercise', icon: Dumbbell, owner: 'Felipe', task: 'F3 #56' },
   { id: 'wellbeing', label: 'Wellbeing', icon: Smile, owner: 'Felipe', task: 'F4 #47' },
-  { id: 'comms', label: 'Comms', icon: RadioTower, owner: 'Kayque', task: 'K6 #46' },
   { id: 'assistant', label: 'Assistant', icon: Bot, owner: 'Kayque', task: 'K7 #48' },
   { id: 'sources', label: 'Data & Sources', icon: BookOpen, owner: 'Felipe', task: 'F5 #49' },
 ]

@@ -10,7 +10,6 @@ import { RoutinePage } from '@/features/routine/RoutinePage'
 import { RadiationPage } from '@/features/radiation/RadiationPage'
 import { ExercisePage } from '@/features/exercise/ExercisePage'
 import { WellbeingPage } from '@/features/wellbeing/WellbeingPage'
-import { CommsPage } from '@/features/escalation/CommsPage'
 import { AssistantPage } from '@/features/assistant/AssistantPage'
 import { SourcesPage } from '@/features/sources/SourcesPage'
 import { DemoControls } from '@/features/demo/DemoControls'
@@ -24,7 +23,6 @@ const PAGES: Record<TabId, ComponentType> = {
   radiation: RadiationPage,
   exercise: ExercisePage,
   wellbeing: WellbeingPage,
-  comms: CommsPage,
   assistant: AssistantPage,
   sources: SourcesPage,
 }
