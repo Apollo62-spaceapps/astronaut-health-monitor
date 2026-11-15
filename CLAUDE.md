@@ -63,7 +63,7 @@ A SPEC foi convertida de `SPEC-frontend.docx` (v0.2 de 14/11/2026). Este arquivo
 
 **P0 (obrigatório para a demo):**
 - **Overview com mapa do corpo:** zonas Head, Heart, Torso e Skin, mais o overlay de radiação (CORE-01, BODY-01…04, 06, 07).
-- **Cards e gráficos de vitais**, com baseline pré-voo e em voo (CORE-02…05, 08, 09).
+- **Cards e gráficos de vitais**, com a faixa do baseline pré-voo no gráfico e a média em voo como texto no card (CORE-02…05 v2, 08, 09).
 - **Radiação:** dose de carreira; evento DONKI real; replay → alerta urgent + fluxo de abrigo; exercício adiado (RAD-01…05, 07).
 - **Bem-estar:** check-in, gráfico de 14 dias, consentimento (MH-01, 02, 04).
 - **Exercício:** plano, check-in, adesão (EX-01…03, 05).
@@ -108,7 +108,7 @@ A SPEC foi convertida de `SPEC-frontend.docx` (v0.2 de 14/11/2026). Este arquivo
 | Validação | Zod | 4.6.7 | Valida fixtures e entradas |
 | Testes | Vitest (+ jsdom e Testing Library) | 4.1.12 / 30.1.3 / 16.3.3 | Testes do motor de regras (P0) |
 | LLM | `@mlc-ai/web-llm` num Web Worker + ProtocolEngine | 0.2.87 | No navegador, offline depois do cache, sem chave. Modelo candidato: `Llama-3.2-1B-Instruct-q4f32_1-MLC` (P-03: confirmar o ID, a licença e o cache) |
-| Fontes | `@fontsource-variable/inter` + `@fontsource/jetbrains-mono` (algarismos tabulares) | 5.3.0 | Nada via CDN |
+| Fontes | `@fontsource-variable/ibm-plex-sans` + `@fontsource/ibm-plex-mono` (algarismos tabulares) | 5.3.0 | Nada via CDN |
 | Qualidade | oxlint + Prettier | 1.89.0 / 3.9.10 | **Desvio da SPEC (que pedia ESLint):** o template atual do Vite já traz oxlint |
 
 O alias de import é `@/` → `src/` (exigido pelo shadcn; configurar em `tsconfig.app.json` e `vite.config.ts`).
@@ -116,7 +116,7 @@ O alias de import é `@/` → `src/` (exigido pelo shadcn; configurar em `tsconf
 O visual segue o **`docs/DESIGN-SYSTEM.md`**:
 - estilo nasa.gov, escuro e de alto contraste;
 - tokens Tailwind v4 (`ground`, `surface`, `banner`, `action`, `link`, `muted`, `normal`, `attention`, `urgent`) definidos no `@theme` do `src/index.css`;
-- Inter + JetBrains Mono;
+- IBM Plex Sans + IBM Plex Mono (mono só em números);
 - layout para notebook ≥ 1280 px.
 
 ## 4. Arquitetura (SPEC §5.2 e §5.3)

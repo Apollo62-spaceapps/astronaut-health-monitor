@@ -36,8 +36,8 @@ export function ProvenanceBadge({ provenance, className }: { provenance: Provena
       title={title}
       aria-label={`${label}${target ? ` — open source ${target}` : ' — about simulated data'}`}
       className={cn(
-        'inline-block rounded px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider no-underline hover:no-underline',
-        provenance.kind === 'real' ? 'bg-link/15 text-link' : 'bg-white/10 text-muted',
+        'inline-block text-[11px] font-medium uppercase tracking-wider no-underline hover:underline',
+        provenance.kind === 'real' ? 'text-link' : 'text-muted',
         className,
       )}
     >

@@ -49,7 +49,7 @@ Guia para o Kayque, o Lucas e o Felipe, com ou sem ferramenta de IA.
 | Validação | Zod 4 (fixtures e formulários) |
 | Testes | Vitest 4 (regras P0) |
 | IA | WebLLM num Web Worker + ProtocolEngine determinístico |
-| Fontes | `@fontsource-variable/inter` + `@fontsource/jetbrains-mono` |
+| Fontes | `@fontsource-variable/ibm-plex-sans` + `@fontsource/ibm-plex-mono` |
 | Qualidade | oxlint + Prettier |
 
 As versões são **fixas** no `package.json`. Não atualize nem adicione biblioteca sem combinar com o time.

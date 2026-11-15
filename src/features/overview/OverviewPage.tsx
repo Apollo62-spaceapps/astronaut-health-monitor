@@ -113,7 +113,7 @@ export function OverviewPage() {
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">
             Mission day <span className="num">{missionDay}</span> · Simulated · {env.label}
           </p>
-          <h1 id="overview-title" className="text-5xl leading-tight font-extrabold tracking-tight">
+          <h1 id="overview-title" className="text-3xl leading-tight font-semibold">
             Your body, day <span className="num">{missionDay}</span>.
           </h1>
           <p className="text-lg">{headline(out, groundSec, environment === 'EARTH')}</p>

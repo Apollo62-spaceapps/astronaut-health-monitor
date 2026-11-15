@@ -44,18 +44,35 @@ export function RadiationPage() {
             <>
               <div className="flex items-baseline gap-2">
                 <span className="num text-4xl">{dose.totalMSv.toFixed(1)}</span>
-                <span>of {dose.limitMSv} mSv</span>
-                <span className="num ml-auto text-2xl">{dose.pctOfLimit.toFixed(0)}%</span>
+                <span className="text-muted">mSv</span>
+                <span className="ml-auto text-lg">
+                  <span className="num">{dose.pctOfLimit.toFixed(0)}%</span>{' '}
+                  <span className="text-muted">of your limit</span>
+                </span>
               </div>
-              <div
-                role="progressbar"
-                aria-label={`Career dose ${dose.pctOfLimit.toFixed(0)} percent`}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuenow={Math.min(100, dose.pctOfLimit)}
-                className="h-3 overflow-hidden rounded-full bg-surface-2"
-              >
-                <div className="h-full bg-link" style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }} />
+              <div className="space-y-1">
+                <div className="flex justify-end text-xs text-urgent">
+                  Career limit <span className="num ml-1">{dose.limitMSv} mSv</span>
+                </div>
+                <div
+                  role="progressbar"
+                  aria-label={`Career dose ${dose.pctOfLimit.toFixed(0)} percent of limit`}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.min(100, dose.pctOfLimit)}
+                  className="relative h-3 rounded-sm bg-surface-2"
+                >
+                  <div
+                    className="h-full rounded-sm bg-foreground"
+                    style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }}
+                  />
+                  <div aria-hidden className="absolute -top-1 right-0 h-5 w-0.5 bg-urgent" />
+                </div>
+                <div className="num flex justify-between text-xs text-muted">
+                  <span>0</span>
+                  <span>{dose.limitMSv / 2}</span>
+                  <span>{dose.limitMSv}</span>
+                </div>
               </div>
               <p className="text-sm text-muted">
                 Prior dose {radiation.careerPriorMSv.toFixed(1)} mSv + mission dose {dose.missionMSv.toFixed(1)} mSv

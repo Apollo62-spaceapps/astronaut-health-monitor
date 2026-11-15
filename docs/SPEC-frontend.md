@@ -291,7 +291,7 @@ interface OutboundPacket {      // store-and-forward
 | CORE-02 | Cada indicador tem um card com o valor atual, a unidade, o desvio % em relação ao baseline, a tendência, o selo de proveniência e o status. | P0 |
 | CORE-03 | O status usa cor + ícone + texto (“Normal”, “Attention”, “Urgent”). A cor nunca é o único sinal (acessibilidade). | P0 |
 | CORE-04 | O status é calculado pelo motor de regras com limiares de config/thresholds.ts. Enquanto P-01 não for decidido, os limiares ficam como placeholders marcados e a interface exibe o selo “Illustrative thresholds”. | P0 |
-| CORE-05 | Gráfico por indicador (ECharts) com série temporal, linha de baseline pré-voo e linha de baseline em voo. As faixas coloridas só entram após P-01. | P0 |
+| CORE-05 | Gráfico por indicador com série temporal (média móvel de 7 dias), **uma** faixa de referência (baseline pré-voo ± limiar de atenção, ilustrativo até P-01) e o valor de hoje destacado com a cor do status. A média em voo aparece como texto no card, não como segunda linha. Ver `docs/DESIGN-SYSTEM.md` v2 §6. *(Alterado em 15/11/2026: dois baselines sobrepostos dificultavam a leitura; a pesquisa sobre exibição de resultados ao paciente indica uma referência única.)* | P0 |
 | CORE-06 | Formulário “Log measurement” com validação Zod. Os limites são de plausibilidade de entrada (bloquear erro de digitação), não critério clínico [DECISÃO]. | P1 |
 | CORE-07 | Lista “Today’s measurements” com as medições previstas para o dia e o status de cada uma (o briefing sugere lembretes de medição, S01). | P1 |
 | CORE-08 | Ícone ⓘ “Why this matters” em cada indicador, com uma explicação curta e um link para a fonte (o briefing pede instruções simples, S01). | P0 (texto curto) |
@@ -483,7 +483,7 @@ Placeholders de limiares: config/thresholds.ts exporta constantes com o comentá
 | NFR-04 | Qualidade: TS strict, ESLint sem erros, testes Vitest das regras P0 passando antes do pitch. |
 | NFR-05 | Proveniência: nenhum número aparece sem o selo REAL ou SIMULATED. |
 | NFR-06 | Segurança: nenhuma chave ou segredo no repositório. .env no .gitignore. |
-| NFR-07 | Visual: tema escuro estilo “mission control”, sóbrio e clínico. Tipografia Inter mais uma fonte mono com algarismos tabulares. Cores de status consistentes (verde, âmbar e vermelho, com ícone e texto). Layout para notebook (≥ 1280 px). Responsivo é P2. |
+| NFR-07 | Visual: tema escuro estilo “mission control”, sóbrio e clínico. Tipografia IBM Plex Sans mais IBM Plex Mono com algarismos tabulares (DESIGN-SYSTEM v2). Cores de status consistentes (verde, âmbar e vermelho, com ícone e texto). Layout para notebook (≥ 1280 px). Responsivo é P2. |
 | NFR-08 | Aviso fixo no rodapé: “Decision-support prototype — not a medical device, not for diagnosis. Some data simulated.” |
 
 ## 9. Dados
