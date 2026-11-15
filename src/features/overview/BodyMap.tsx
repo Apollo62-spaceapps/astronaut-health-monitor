@@ -170,8 +170,10 @@ const LEG_STRIPES = [
   { x: CX - 34, y1: 468, y2: 512 },
 ] as const
 
-const TORSO_SHELL = `M${CX - 62} 140 H${CX + 62} L${CX + 78} 160 V250 L${CX + 60} 284 H${CX - 60} L${CX - 78} 250 V160 Z`
-const CHEST_PLATE = `M${CX - 48} 160 H${CX + 48} L${CX + 58} 172 V238 L${CX + 44} 260 H${CX - 44} L${CX - 58} 238 V172 Z`
+/** Tronco em barril: ombros arredondados, laterais curvas que afinam até a cintura. */
+const TORSO_SHELL = `M${CX - 54} 140 Q${CX} 133 ${CX + 54} 140 Q${CX + 80} 144 ${CX + 80} 174 C${CX + 80} 222 ${CX + 74} 262 ${CX + 58} 284 H${CX - 58} C${CX - 74} 262 ${CX - 80} 222 ${CX - 80} 174 Q${CX - 80} 144 ${CX - 54} 140 Z`
+/** Placa do peito em escudo arredondado (cabe o anel do coração, r = 32 em HY). */
+const CHEST_PLATE = `M${CX - 44} 160 Q${CX} 153 ${CX + 44} 160 Q${CX + 60} 164 ${CX + 60} 182 V224 Q${CX + 60} 250 ${CX + 38} 262 Q${CX} 276 ${CX - 38} 262 Q${CX - 60} 250 ${CX - 60} 224 V182 Q${CX - 60} 164 ${CX - 44} 160 Z`
 const BUCKLE = `M${CX - 26} 308 H${CX + 26} L${CX + 18} 324 H${CX - 18} Z`
 
 export function BodyMap({
