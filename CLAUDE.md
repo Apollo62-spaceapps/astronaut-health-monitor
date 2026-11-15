@@ -35,7 +35,8 @@ Contexto para o Claude e para qualquer IA ou pessoa do time. **A fonte de verdad
   - adesão ao exercício.
 
   O sistema continua funcionando longe da Terra e escalona para o CMO ou para o solo, respeitando quem pode ver cada dado.
-- **Diferenciais para o pitch (SPEC §6.1.1, §6.5, §6.7):**
+- **Diferenciais para o pitch (SPEC §6.1.1, §6.5, §6.7, §17):**
+  0. **Um sistema, quatro ambientes.** Um seletor estilo "modo noturno" (**Earth · Space Station · Moon · Spacecraft**) muda o sistema inteiro: tema, atraso de comunicação, escalonamento, gravidade, taxa de dose e equipamentos de exercício. Isso responde ao pedido do briefing de adaptar a vários ambientes [S01]. Veja a §5.1.
   1. **O atraso de comunicação faz parte da interface.** Trocar de ISS para Marte muda o escalonamento ao vivo ("Ground reply in ~40 min — safe actions now"). É o "diferencial em 10 segundos" da demo.
   2. **Privacidade médica real.** A cabeça fica cinza com cadeado para o CMO, e existe break-glass com motivo e auditoria.
   3. **Evento solar real da NASA (DONKI)** reproduzido no cenário, gerando o fluxo de abrigo baseado na Orion.
@@ -50,7 +51,8 @@ Contexto para o Claude e para qualquer IA ou pessoa do time. **A fonte de verdad
 - **Radiação:** dose de carreira; evento DONKI real; replay → alerta urgent + fluxo de abrigo; exercício adiado (RAD-01…05, 07).
 - **Bem-estar:** check-in, gráfico de 14 dias, consentimento (MH-01, 02, 04).
 - **Exercício:** plano, check-in, adesão (EX-01…03, 05).
-- **Missão e escalonamento:** seletor ISS/Lua/Marte, ETA de 2 × o atraso, fila store-and-forward (ESC-01…04).
+- **Seletor de ambiente** Earth / Space Station / Moon / Spacecraft. Ele troca o tema e o comportamento do sistema inteiro, e substitui o seletor de missão da SPEC (ENV-01…06, §5.1).
+- **Escalonamento:** ETA de 2 × o atraso do ambiente e fila store-and-forward (ESC-02…04).
 - **Assistente:**
   - ProtocolEngine, que funciona 100% sozinho;
   - WebLLM num Web Worker, com seleção automática e manual do motor;
@@ -103,13 +105,14 @@ src/
     wellbeing/      check-in de humor/sono, bloqueio por perfil, break-glass
     exercise/       plano do dia, check-in, adesão
     assistant/      chat, selo de modo de IA
+    environment/    seletor de ambiente (Earth / Space Station / Moon / Spacecraft) e tema por ambiente
     escalation/     painel de comunicação, fila store-and-forward
     sources/        página Data & Sources
     demo/           painel Demo controls
   domain/
     types.ts        contrato de dados (SPEC §5.4 + §6.6)
     rules/          engine.ts, vitals.ts, body.ts, radiation.ts, exercise.ts, escalation.ts, privacy.ts + *.test.ts
-    config/         thresholds.ts (P-01, placeholders), missions.ts, bodyZones.ts
+    config/         thresholds.ts (P-01, placeholders), environments.ts (os 4 ambientes, §5.1), bodyZones.ts
   ai/               engine.ts (Strategy), protocol.ts, onboard.ts, onboard.worker.ts, prompts.ts
   data/
     fixtures/       astronaut.json, vitals.json, wellbeing.json, exercise.json   [SIMULATED]
@@ -147,13 +150,7 @@ scripts/
   - R-PRIV-01 (perfil + consentimento + break-glass → pode ver?);
   - R-BODY-01 (pior status da zona; Head restricted para o CMO).
 - **Regras P1:** R-PHASE-01 ("Adapting" só substitui attention; urgent nunca é mascarado), R-RAD-04 e R-MH-01.
-- **Missões:**
-
-  | Missão | Atraso de ida | Origem |
-  |---|---|---|
-  | ISS | ~0 s | simplificação |
-  | LUNAR | ~1,3 s | cálculo físico |
-  | MARS_TRANSIT | 20 min | dentro da faixa de 4–24 min [S10]; ida e volta de ~40 min |
+- **Ambientes:** ver a §5.1. Eles substituem as "missões" ISS/LUNAR/MARS_TRANSIT da SPEC.
 - **Dados:**
   - fixtures sintéticos com semente fixa: dia de missão 120, ~14 dias de pré-voo e 120 dias em voo;
   - dose da missão no dia 120 = 120 × 1,8 = 216 mSv;
@@ -161,12 +158,55 @@ scripts/
   - evento real `2024-05-11T02:10:00-SEP-001` (GOES-P SEISS >100 MeV) [S07], com o rótulo "Real event observed near Earth (NASA DONKI), replayed in this scenario."
   - não inventar tendências fisiológicas como fato: as séries são ruído em torno do baseline mais um desvio roteirizado (P-07).
 
+### 5.1 Modos de ambiente (estilo "modo noturno") — adendo à SPEC (§17 do `docs/SPEC-frontend.md`)
+
+O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
+
+**Como funciona por dentro:**
+- `store.environment` guarda o ambiente atual.
+- O atributo `data-environment` no `<html>` controla a cor de destaque (tokens CSS), sempre com contraste AA. A escolha é salva no localStorage.
+- O comportamento vem de `src/domain/config/environments.ts`.
+- **As regras recebem o ambiente como entrada.** As telas não decidem nada sozinhas.
+
+**Contrato:**
+- `type MissionMode = 'EARTH' | 'ISS' | 'LUNAR' | 'SPACECRAFT'`. Isso substitui `'ISS' | 'LUNAR' | 'MARS_TRANSIT'`.
+- `MissionProfile` ganha:
+  - `gravity: 'earth' | 'micro' | 'partial'`;
+  - `doseRateMSvPerDay: number | null` mais `doseRateProvenance`;
+  - `exerciseDevices: ExerciseDevice[] | null`;
+  - `emphasizedHazards: Hazard[]`;
+  - `themeToken`.
+
+| Ambiente (UI) | id | Gravidade | Atraso de ida | Taxa de dose diária | Exercício | Destaque visual |
+|---|---|---|---|---|---|---|
+| **Earth** (pré-voo e pós-voo) | `EARTH` | 1 g | 0 s; flight surgeon acessível direto | não exibir número (fora do escopo) | — (plano de solo) | azul-esverdeado |
+| **Space Station** | `ISS` | microgravidade | ~0 s, quase tempo real [DECISÃO, simplificação da SPEC] | `null` → "rate not sourced for this environment" (P-16) | ARED, T2, CEVIS, ~2 h/dia [S13] | ciano |
+| **Moon** (superfície) | `LUNAR` | parcial (P-17: confirmar fração e fonte antes de mostrar número) | ~1,3 s (cálculo físico) | `null` (P-16) | `null` → "simulated habitat equipment" (P-18) | prata |
+| **Spacecraft** (trânsito, cenário a caminho de Marte) | `SPACECRAFT` | microgravidade | 20 min (dentro da faixa de 4–24 min [S10]); apagão de até 2–3 semanas [S10, S11] | **1,8 mSv/dia** (média de cruzeiro do MSL/RAD) [S08, S09] | `null` (P-18) | índigo |
+
+**O que muda ao trocar de ambiente:**
+- **Comunicação e escalonamento (R-ESC-01):** ETA = 2 × o atraso. Na Terra, aparece "Flight surgeon available now". Na Spacecraft: "Ground reply in ~40 min — follow these safe actions now".
+- **Radiação (R-RAD-02):** a dose diária usa a taxa do ambiente. Quando não há fonte para a taxa, não aparece número e o card mostra "rate not sourced for this environment".
+- **Gravidade e fases:** trocar de gravidade (ex.: Spacecraft → Moon, ou Spacecraft → Earth no retorno) dispara "Adapting" no mapa do corpo (BODY-09, R-PHASE-01, P1). Urgent nunca é mascarado.
+- **Exercício:** os equipamentos e o plano do ambiente. Sem fonte, aparece "simulated".
+- **Hazards em destaque:** o card do mapa do corpo destaca o hazard mais relevante do ambiente. Por exemplo, "distance from Earth" na Spacecraft e "gravity fields" na volta à Terra.
+- **Visual:** a cor de destaque e o ícone do ambiente na TopBar. Os status (verde, âmbar e vermelho) **não** mudam de cor entre ambientes.
+
+**Regras novas:**
+- **ENV-01:** seletor na TopBar com 4 botões (ícone + texto), acessível por teclado.
+- **ENV-02:** a troca é instantânea e não perde o estado da demo.
+- **ENV-03:** todo número que depende do ambiente leva o selo REAL ou SIMULATED e a fonte.
+- **ENV-04:** um ambiente sem fonte para um número **não** mostra o número.
+- **ENV-05:** o ambiente entra no `AssistantContext`.
+- **ENV-06:** o tema por ambiente respeita o contraste AA, e os status mantêm as cores.
+
 ## 6. Roteiro da demo (SPEC §10)
 
-1. **Overview** (Astronauta, Marte, dia 120): o mapa do corpo aparece com as zonas coloridas. Clicar no coração e mostrar o card (função, desvio contra o baseline, hazard, fonte), a dose de carreira e os selos REAL/SIMULATED.
+1. **Overview** (Astronauta, **Spacecraft**, dia 120): o mapa do corpo aparece com as zonas coloridas. Clicar no coração e mostrar o card (função, desvio contra o baseline, hazard, fonte), a dose de carreira e os selos REAL/SIMULATED.
+   - **Momento "modo noturno":** apertar Earth → Space Station → Moon → Spacecraft. O tema, o atraso, o escalonamento, a taxa de dose e o exercício mudam na frente dos jurados.
 2. **Replay event:** o evento DONKI real gera o alerta urgent e o fluxo de abrigo da Orion, e o exercício passa para postponed.
 3. **Assistente** (WebLLM), com o selo do modo de IA.
-4. **Escalonamento:** em Marte aparece "Ground reply in ~40 min — safe actions now" e o pacote entra na fila. Trocando para ISS, a mesma situação tem resposta quase imediata.
+4. **Escalonamento:** na Spacecraft aparece "Ground reply in ~40 min — safe actions now" e o pacote entra na fila. Trocando para Space Station ou Earth, a mesma situação tem resposta quase imediata.
 5. **Perfil CMO:** a cabeça fica cinza com cadeado e o bem-estar fica bloqueado. Fazer o break-glass com motivo e mostrar o registro de auditoria.
 6. **Fallback:** mudar para o protocol mode. O semáforo e os alertas não mudam.
 7. **Data & Sources.**
@@ -176,6 +216,7 @@ scripts/
 - **Kanban:** https://github.com/orgs/Apollo62-spaceapps/projects/3. As tasks são só do Kayque e do Lucas.
 - **Kayque (K4yquee):**
   - base, design system, AppShell e TopBar;
+  - **seletor de ambiente e tema por ambiente (K12)**;
   - contrato (tipos, store, configs), fixtures, DONKI e catálogo de fontes;
   - radiação, escalonamento (UI), bem-estar e privacidade, assistente, Data & Sources, Demo controls;
   - ensaio da demo.
@@ -236,3 +277,7 @@ Ao usar uma delas, acrescente-a ao `src/data/sources.ts` com um id novo (S20+).
 - **P-11:** nome do sistema.
 - **P-12:** orientação clínica e fluxo de dor no peito. Bloqueado: só ações não clínicas.
 - **P-13:** hazard da glicemia. O card mostra "Related hazard: under review".
+- **P-16** (novo): taxa de dose diária na Space Station, na Moon e na Earth. Sem fonte, não mostrar número; só a Spacecraft tem fonte (1,8 mSv/dia [S08, S09]).
+- **P-17** (novo): fração da gravidade lunar. As páginas da NASA divergem (1/6 vs. outros valores) e a de Marte também (3/8 vs. ~1/3). Confirmar a fonte antes de mostrar o número.
+- **P-18** (novo): equipamentos de exercício fora da ISS (Moon e Spacecraft). Sem fonte, mostrar "simulated habitat equipment".
+- **P-19** (novo): "Espaçonave" foi interpretada como **nave em trânsito**. Se o time quiser **EVA** (atividade fora da nave), ela vira um 5º modo ou substitui a Spacecraft.

@@ -681,3 +681,53 @@ Revisão feita em 14/11/2026 sobre o rascunho v0.1. Critérios: coerência inter
 | S17 | WebLLM / MLC | Documentação oficial; artigo arXiv 2412.15803 | https://webllm.mlc.ai/docs/ · https://arxiv.org/abs/2412.15803 | Verificar a licença da biblioteca e do modelo (P-03) |
 | S18 | shadcn/ui | Tailwind v4 (suporte a Tailwind v4 e React 19) | https://ui.shadcn.com/docs/tailwind-v4 | — |
 | S19 | NASA Human Research Program | The Human Body in Space (publicado em 02/02/2021, atualizado em 26/05/2026) | https://www.nasa.gov/humans-in-space/the-human-body-in-space/ | Verificar |
+
+## 17. Adendo v0.3 (14/11/2026, noite): modos de ambiente
+
+> Este adendo foi acrescentado depois da v0.2, a pedido do time. Ele **substitui** o seletor de missão da §6.5 (ESC-01) e o tipo `MissionMode` da §5.4. O restante da SPEC continua valendo.
+
+**Ideia:** um seletor estilo "modo noturno" com quatro ambientes, **Earth · Space Station · Moon · Spacecraft**. Apertar um botão muda o sistema inteiro: tema de destaque, atraso de comunicação e escalonamento, gravidade (fases), taxa de dose diária, equipamentos de exercício e hazards em destaque. Isso atende ao pedido do briefing de adaptar a ferramenta a vários ambientes [S01].
+
+```ts
+type MissionMode = 'EARTH' | 'ISS' | 'LUNAR' | 'SPACECRAFT';   // substitui 'ISS' | 'LUNAR' | 'MARS_TRANSIT'
+
+interface MissionProfile {
+  mode: MissionMode;
+  label: string;                         // "Earth" | "Space Station" | "Moon" | "Spacecraft"
+  oneWayDelaySec: number;
+  delayNote: string;
+  gravity: 'earth' | 'micro' | 'partial';
+  doseRateMSvPerDay: number | null;      // null = sem fonte para este ambiente → não mostrar número (P-16)
+  doseRateProvenance?: Provenance;
+  exerciseDevices: ExerciseDevice[] | null;   // null = "simulated habitat equipment" (P-18)
+  emphasizedHazards: Hazard[];
+  themeToken: 'earth' | 'station' | 'moon' | 'spacecraft';
+}
+```
+
+| Ambiente | Gravidade | Atraso de ida | Taxa de dose diária | Exercício |
+| --- | --- | --- | --- | --- |
+| Earth (pré-voo e pós-voo) | 1 g | 0 s; flight surgeon acessível direto | não exibir | plano de solo |
+| Space Station | microgravidade | ~0 s [DECISÃO] | null (P-16) | ARED, T2, CEVIS, ~2 h/dia [S13] |
+| Moon (superfície) | parcial (P-17) | ~1,3 s (cálculo físico) | null (P-16) | null (P-18) |
+| Spacecraft (trânsito, cenário a caminho de Marte) | microgravidade | 20 min [S10]; apagões de até 2–3 semanas [S10, S11] | 1,8 mSv/dia [S08, S09] | null (P-18) |
+
+| ID | Requisito | Prioridade |
+| --- | --- | --- |
+| ENV-01 | Seletor na TopBar com 4 botões (ícone + texto), acessível por teclado. O ambiente fica em `store.environment` e é salvo no localStorage | P0 |
+| ENV-02 | A troca é instantânea, não perde o estado da demo e atualiza comunicação, escalonamento, radiação, exercício e o destaque de hazards | P0 |
+| ENV-03 | O atributo `data-environment` no `<html>` muda só a cor de destaque (tokens CSS). Os status (verde, âmbar e vermelho, com ícone e texto) não mudam de cor. Contraste AA | P0 |
+| ENV-04 | Um ambiente sem fonte para um número não mostra o número ("rate not sourced for this environment") | P0 |
+| ENV-05 | O ambiente entra no `AssistantContext` e no `OutboundPacket` | P0 |
+| ENV-06 | A troca de gravidade (ex.: Spacecraft → Moon, Spacecraft → Earth) dispara "Adapting" pela R-PHASE-01 (urgent nunca é mascarado) | P1 |
+
+**Regras afetadas:**
+- **R-ESC-01:** recebe o ambiente. ETA = 2 × atraso; na Earth, aparece "Flight surgeon available now".
+- **R-RAD-02:** dose diária = `doseRateMSvPerDay` do ambiente; se for `null`, não soma número novo e marca o card.
+- **R-EX-01:** usa os equipamentos do ambiente.
+
+**Pendências novas:**
+- **P-16:** taxa de dose na ISS, na Lua e na Terra.
+- **P-17:** fração da gravidade lunar, com fonte.
+- **P-18:** equipamentos de exercício fora da ISS.
+- **P-19:** confirmar se "Spacecraft" é a nave em trânsito ou EVA (atividade fora da nave).

@@ -17,7 +17,8 @@ The astronaut self-assesses through a **core of vital signs compared with their 
 | **Radiation** | Career dose vs. the 600 mSv limit. A **real solar particle event from NASA DONKI** (May 11, 2024) is replayed in the scenario and triggers a shelter flow adapted from NASA's Orion procedure. |
 | **Wellbeing (restricted)** | Daily mood and sleep self-report, private by default. The CMO sees it only with the astronaut's consent, or through an audited **break-glass** emergency access. |
 | **Exercise** | Adherence to the prescribed ARED / T2 / CEVIS plan. |
-| **Mission mode** | ISS / Moon / Mars transit. The communication delay is part of the interface: "Ground reply in ~40 min — follow these safe actions now", with a store-and-forward queue. |
+| **Environment switch** | Like a dark-mode toggle: **Earth · Space Station · Moon · Spacecraft**. One click changes the whole system: accent theme, communication delay, escalation, gravity phase, daily radiation dose rate and exercise equipment. Numbers without a source for that environment are not shown. |
+| **Delay-aware escalation** | The communication delay is part of the interface. On the Spacecraft: "Ground reply in ~40 min — follow these safe actions now", with a store-and-forward queue. On Earth: "Flight surgeon available now". |
 | **Assistant** | An on-device language model running in the browser (WebLLM), with a deterministic protocol fallback. The AI only talks and summarizes; it never changes an alert. |
 | **Data & Sources** | Every source used, with links and terms. |
 
@@ -36,6 +37,7 @@ The astronaut self-assesses through a **core of vital signs compared with their 
 | 600 mSv career limit (NASA OCHMO) | Prior career dose; dose increments during the event |
 | 1.8 mSv/day cruise average measured by MSL/RAD | Mission day 120 scenario |
 | Communication delay range of 4–24 min to Mars (NASA) | Alert thresholds, labeled *Illustrative thresholds* |
+| Mars communication blackouts of up to 2–3 weeks (NASA) | Exercise equipment on the Moon and on the Spacecraft; daily dose rates for the Station, Moon and Earth (not shown) |
 | ARED / T2 / CEVIS and ~2 h/day of exercise (NASA) | Exercise prescription split between devices |
 
 ## 🛠️ Tech stack

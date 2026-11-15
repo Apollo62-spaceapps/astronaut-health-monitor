@@ -66,7 +66,8 @@ A estrutura completa está na SPEC §5.3. O resumo:
 | Pasta | O que tem | Dono |
 |---|---|---|
 | `src/app/`, `src/components/ui/`, `src/lib/` | AppShell, TopBar, Sidebar, tema, componentes shadcn | Kayque |
-| `src/domain/types.ts`, `src/state/store.ts`, `src/domain/config/` | Contrato de dados, store, missões, zonas do corpo, limiares | Kayque cria e congela às ~21h30; depois, só mudar combinando entre os dois |
+| `src/domain/types.ts`, `src/state/store.ts`, `src/domain/config/` | Contrato de dados, store, **ambientes** (`environments.ts`), zonas do corpo, limiares | Kayque cria e congela às ~21h30; depois, só mudar combinando entre os dois |
+| `src/features/environment/` | Seletor de ambiente (Earth / Space Station / Moon / Spacecraft) e tema por ambiente | Kayque |
 | `src/domain/rules/` (+ `*.test.ts`) | Motor de regras | **Lucas** |
 | `src/features/overview/`, `src/features/vitals/`, `src/features/exercise/` | Mapa do corpo, cards e gráficos de vitais, exercício | **Lucas** |
 | `src/features/radiation/`, `escalation/`, `wellbeing/`, `assistant/`, `sources/`, `demo/` | Radiação, comunicação e fila, bem-estar e privacidade, assistente, fontes, controles da demo | Kayque |
@@ -81,14 +82,21 @@ A estrutura completa está na SPEC §5.3. O resumo:
 
 - **Tipos:** os mesmos da SPEC §5.4 e §6.6, sem renomear. Se precisar de campo novo, combine primeiro.
 - **Status:** `AlertLevel` = `normal | attention | urgent`. O mapa do corpo usa `ZoneStatus` = `AlertLevel | adapting | restricted`. A zona mostra o **pior** status dos indicadores dela (R-BODY-01).
-- **Missões** (`config/missions.ts`):
-  - ISS: ~0 s;
-  - LUNAR: ~1,3 s;
-  - MARS_TRANSIT: 20 min.
+- **Ambientes, estilo "modo noturno"** (SPEC §17, `config/environments.ts`). Um botão na TopBar muda o sistema inteiro. `MissionMode` = `EARTH | ISS | LUNAR | SPACECRAFT`.
 
-  O ETA de resposta do solo é **2 × o atraso de ida**.
+  | Ambiente | Gravidade | Atraso de ida | Dose/dia | Exercício |
+  |---|---|---|---|---|
+  | Earth | 1 g | 0 s ("Flight surgeon available now") | não exibir | plano de solo |
+  | Space Station | micro | ~0 s | sem fonte → não mostrar (P-16) | ARED, T2, CEVIS [S13] |
+  | Moon | parcial (P-17) | ~1,3 s | sem fonte (P-16) | "simulated habitat equipment" (P-18) |
+  | Spacecraft (trânsito a Marte) | micro | 20 min [S10] | 1,8 mSv [S08, S09] | "simulated" (P-18) |
+
+  - O ETA de resposta do solo é **2 × o atraso de ida**.
+  - **As regras recebem o ambiente como entrada.** As telas leem o resultado e não decidem nada.
+  - O `data-environment` no `<html>` muda só a cor de destaque. Os status mantêm verde, âmbar e vermelho, com ícone e texto.
+  - Um número sem fonte para o ambiente não aparece.
 - **Radiação:**
-  - dose da missão = dias × 1,8 mSv [S08, S09];
+  - dose diária = taxa do ambiente (só a Spacecraft tem fonte: 1,8 mSv [S08, S09]);
   - limite de carreira = 600 mSv [S03];
   - o evento real é `2024-05-11T02:10:00-SEP-001` [S07].
   - **Nunca** mostrar nível S1–S5 como dado real (RAD-07).
