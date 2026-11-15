@@ -14,7 +14,7 @@ A visual self-assessment tool that keeps working far from Earth. The astronaut s
 
 1. **One system, four environments.** A mode button switches the whole platform between **Earth · Space Station · Moon · Spacecraft**. One click changes the communication delay, the escalation, the gravity phase, the radiation dose rate, the exercise context and the mission banner.
 2. **The communication delay is part of the interface.** On the Spacecraft: *"Ground reply in ~40 min — follow these safe actions now"*. On Earth: *"Flight surgeon available now"*.
-3. **Early warning, not just a readout.** The rule engine projects each vital from the astronaut's own last 7 days and warns *before* it crosses the next line (*"Resting heart rate heading toward Urgent in ~3 days"*). The career dose is projected with the sourced cruise rate. Orbit tells the crew proactively, with safe actions, as soon as a warning appears.
+3. **Early warning, not just a readout.** The rule engine projects each vital from the astronaut's own last 7 days and warns *before* it crosses the next line (*"Resting heart rate heading toward Urgent in ~3 days"*). The career dose is projected with the sourced cruise rate. Orbit tells the crew proactively, with safe actions, as soon as a warning appears. If a vital turns **Urgent** (e.g. a very fast resting heart rate), Orbit interrupts with *"This needs a person now"*, the safe actions, the delay to the ground and a one-tap **Notify CMO now** that queues a priority message.
 4. **Rules decide, AI assists.** Colors, alerts and escalation come from a deterministic, tested rule engine. Orbit only explains, cites its sources and drafts the report to the ground; it never changes an alert, names a condition or suggests medication.
 
 ## 🧭 Screens

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { OrbitMark } from '@/features/assistant/OrbitMark'
 import { useOrbitStore } from '@/features/assistant/orbitStore'
 import { OrbitNudge } from '@/features/assistant/OrbitNudge'
+import { OrbitEmergency } from '@/features/assistant/OrbitEmergency'
 
 const OrbitRuntime = lazy(() => import('@/features/assistant/OrbitRuntime'))
 
@@ -62,6 +63,7 @@ export function OrbitHost({ showLauncher }: { showLauncher: boolean }) {
           {ASSISTANT_NAME}
         </Button>
       )}
+      <OrbitEmergency />
       {showLauncher && <OrbitNudge />}
       {activated && (
         <Suspense fallback={null}>
