@@ -2,6 +2,7 @@ import type { ComponentType } from 'react'
 import { cn } from '@/lib/utils'
 import { useHashTab } from '@/lib/useHashTab'
 import { TABS, type TabId } from '@/app/tabs'
+import { MissionBanner } from '@/app/MissionBanner'
 import { OverviewPage } from '@/features/overview/OverviewPage'
 import { VitalsPage } from '@/features/vitals/VitalsPage'
 import { RoutinePage } from '@/features/routine/RoutinePage'
@@ -39,13 +40,8 @@ export function AppShell() {
         <span className="text-sm text-muted">Astronaut health monitor · prototype</span>
       </header>
 
-      {/* Faixa da missão (banner). K4 coloca perfil/IA/janela de resposta; K5 coloca o botão de modo de ambiente. */}
-      <div role="region" aria-label="Mission banner" className="bg-banner px-6 py-3 text-sm">
-        <span className="font-semibold">Mission banner</span>
-        <span className="ml-3 text-white/80">
-          Environment mode · Role · AI mode · Ground reply window (tasks K4 #44, K5 #58)
-        </span>
-      </div>
+      {/* Faixa da missão (K4). O botão de modo de ambiente (K5) entra em envSlot. */}
+      <MissionBanner envSlot={<span className="text-sm text-white/85">Environment mode button — task K5 #58</span>} />
 
       <div className="flex flex-1">
         <nav aria-label="Sections" className="w-56 shrink-0 border-r border-border p-3">
