@@ -12,6 +12,7 @@ import { WellbeingPage } from '@/features/wellbeing/WellbeingPage'
 import { AssistantPage } from '@/features/assistant/AssistantPage'
 import { SourcesPage } from '@/features/sources/SourcesPage'
 import { DemoControls } from '@/features/demo/DemoControls'
+import { EnvironmentBackdrop } from '@/features/environment/backdrops/EnvironmentBackdrop'
 import { useEffect } from 'react'
 import { useAppStore } from '@/state/store'
 
@@ -41,9 +42,11 @@ export function AppShell() {
 
   return (
     // Sem largura mínima fixa: nada de rolagem horizontal em 1280/1366 px (nem com a barra de rolagem vertical).
-    <div className="flex min-h-screen flex-col bg-ground">
+    // `isolate`: o fundo decorativo (z-index −1) pinta acima do bg-ground do shell e abaixo do conteúdo.
+    <div className="relative isolate flex min-h-screen flex-col bg-ground">
+      <EnvironmentBackdrop />
       {/* Header (ground #000) — DESIGN-SYSTEM §4 */}
-      <header className="flex h-11 items-center justify-between gap-4 px-6">
+      <header className="flex h-11 items-center justify-between gap-4 bg-ground px-6">
         <span className="text-lg font-semibold tracking-wider">APOLLO 62</span>
         <span className="truncate text-sm text-muted">Astronaut health monitor · prototype</span>
       </header>
@@ -53,7 +56,10 @@ export function AppShell() {
 
       <div className="flex min-w-0 flex-1">
         {/* ≤ 1100 px: a sidebar vira só ícones (o nome continua acessível e no title). */}
-        <nav aria-label="Sections" className="w-14 shrink-0 border-r border-border p-2 min-[1101px]:w-56 min-[1101px]:p-3">
+        <nav
+          aria-label="Sections"
+          className="on-backdrop w-14 shrink-0 border-r border-border p-2 min-[1101px]:w-56 min-[1101px]:p-3"
+        >
           <ul className="space-y-1">
             {TABS.map(({ id, label, icon: Icon }) => (
               <li key={id}>
@@ -78,7 +84,8 @@ export function AppShell() {
           </ul>
         </nav>
 
-        <main className="min-w-0 flex-1 p-6">
+        {/* on-backdrop: halo escuro no texto que fica direto sobre o fundo do ambiente (index.css). */}
+        <main className="on-backdrop min-w-0 flex-1 p-6">
           {/* Regra única de largura para todas as telas (polimento 15/11). */}
           <div className="mx-auto w-full max-w-[1280px]">
             <Page />
@@ -86,7 +93,7 @@ export function AppShell() {
         </main>
       </div>
 
-      <footer className="border-t border-border px-6 py-3 text-sm text-muted">{DISCLAIMER}</footer>
+      <footer className="border-t border-border bg-ground px-6 py-3 text-sm text-muted">{DISCLAIMER}</footer>
       <DemoControls />
     </div>
   )

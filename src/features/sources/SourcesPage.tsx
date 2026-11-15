@@ -113,6 +113,20 @@ export function SourcesPage() {
         </CardContent>
       </Card>
 
+      {/* L6: menção de inspiração dos fundos. Nada foi copiado do OriginKit (docs/reference/backdrops.html foi
+          desenhado do zero), então não há fonte nova no catálogo — S20 já é o NTRS 20220013418. */}
+      <Card id="source-visual">
+        <CardHeader>
+          <CardTitle>Visual inspiration</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2 text-sm text-muted">
+          <p>
+            Environment backgrounds: decorative only; no data. Drawn in-house on a 2D canvas, inspired by OriginKit visual
+            references. No OriginKit code or assets are used.
+          </p>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Acknowledgement</CardTitle>

@@ -39,6 +39,7 @@
 - Status nunca só por cor. Urgent leva hachura; no mapa do corpo, todo status não normal leva hachura (BODY-04).
 - **Cinza é o padrão.** Uma tela normal é quase toda branca e cinza. Se uma cor aparece, ela significa algo.
 - Proibido: gradientes, brilho (glow), sombras decorativas, roxo/índigo como cor de interface. **Exceção provisória:** a faixa da Spacecraft (`#2E1F66`, §7), fixada no `CLAUDE.md` §5.1, até o time decidir se troca a cor.
+- **Exceção (L6, 15/11, aprovada pelo Lucas):** o fundo decorativo por ambiente (§7.1) usa gradientes e, na Spacecraft, violeta. Ele fica atrás de tudo, não carrega informação e nunca usa verde, âmbar ou vermelho. Cards, tabelas e gráficos continuam opacos. O texto que fica direto sobre o fundo leva um halo escuro (`.on-backdrop`, funcional, não decorativo).
 
 ---
 
@@ -81,6 +82,7 @@
 - **Funcional:** anima só mudança de estado (alerta aparece, zona muda de status, número atualiza). 150–250 ms, `ease-out`.
 - Nada de animação de entrada decorativa, nada de pulso contínuo. Pulso só em Urgent, ≤ 1,5 Hz (BODY-05).
 - **Exceção (decisão do time, commit `e4ee320`):** no mapa do corpo, o batimento ilustrativo do coração (ciclo de 1,2 s) e a respiração do tronco (ciclo de 5 s) ficam ligados, com o aviso "Illustrative rhythm, not a live reading". Eles não substituem o status (ícone, texto e hachura continuam) e param com `prefers-reduced-motion`.
+- **Exceção (L6):** o fundo decorativo por ambiente se move devagar (§7.1). Não pisca e não muda a luminância de forma brusca (WCAG 2.3.1), e fica estático com `prefers-reduced-motion`.
 - Sempre respeitar `prefers-reduced-motion` (já está no `index.css`).
 
 ---
@@ -125,7 +127,7 @@ Referências de design, não de saúde: não sustentam nenhuma afirmação na in
 
 ## 7. Ambientes (faixa da missão)
 
-O botão de modo troca o comportamento da plataforma. Visualmente, **só a faixa da missão e o ícone mudam**.
+O botão de modo troca o comportamento da plataforma. Visualmente, mudam **a faixa da missão, o ícone e o fundo decorativo** (§7.1).
 
 | Ambiente | `data-environment` | Cor da faixa | Contraste com branco | Ícone (lucide) |
 |---|---|---|---|---|
@@ -133,6 +135,21 @@ O botão de modo troca o comportamento da plataforma. Visualmente, **só a faixa
 | Space Station | `station` | `#0B4A5E` | 9,7:1 | `Satellite` |
 | Moon | `moon` | `#3A3F45` | 10,6:1 | `Moon` |
 | Spacecraft | `spacecraft` | `#2E1F66` *(exceção à regra do roxo, §1; PENDENTE: decidir se troca)* | 14,0:1 | `Rocket` |
+
+### 7.1 Fundo decorativo por ambiente (L6)
+
+Fonte: `docs/reference/backdrops.html` (aprovado pelo Lucas em 15/11), portado para `src/features/environment/backdrops/`. Canvas 2D, sem WebGL, sem imagem, sem lib nova.
+
+| Ambiente | Fundo |
+|---|---|
+| Earth | Céu de entardecer com nuvens em 2 camadas de paralaxe |
+| Space Station | Rastros de estrelas girando em torno de um polo |
+| Moon | Terreno em wireframe cinza com a Terra no horizonte |
+| Spacecraft | Rastros violeta/brancos, sensação de velocidade |
+
+- Opacidade `--backdrop-opacity: 0.6` (index.css) mais a vinheta.
+- Troca com crossfade de 500 ms; fora dele, uma animação por vez.
+- `prefers-reduced-motion`: um quadro estático. Aba oculta: o loop para. Sem canvas: gradiente CSS do ambiente.
 
 ---
 
