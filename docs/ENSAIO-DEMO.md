@@ -27,31 +27,32 @@ npm run preview     # abre em http://localhost:4173
 
 ## 3. Roteiro (SPEC §10), com o que deve aparecer
 
-Antes de começar: **Data & Sources → Demo controls → Reset scenario · demo**. Perfil **Astronaut**, ambiente **Spacecraft**.
+Antes de começar: botão **Demo** (tracejado, no canto da tela) → **Reset scenario · demo**. Ambiente **Spacecraft**.
+
+> Desde 15/11 (decisão do time), a app mostra **só a visão do astronauta**: saíram as abas Routine e Comms e o seletor de perfil. O lembrete com **Log measurement** e a janela de resposta do solo continuam na faixa da missão.
 
 | # | Ação | Deve aparecer |
 |---|---|---|
 | 1 | **Overview** | Mapa do corpo; Heart em ▲ Attention (+18% vs baseline); selos SIMULATED/REAL; "Illustrative thresholds" |
 | 1a | Clicar no coração (ou Tab + Enter) | Card: Function · Indicator (84 bpm vs baseline) · Related hazard · What to do · Source |
-| 1b | Botão de ambiente: Earth → Space Station → Moon → Spacecraft | A faixa muda de cor; a janela de resposta vai de "Flight surgeon available now" a ~2,6 s e a 40 min; na dose, "rate not sourced" fora da Spacecraft; no exercício, ARED/T2/CEVIS só na Space Station; a rotina muda (manutenção da Spacecraft na Space Station) |
-| 1c | Lembrete na faixa → **Log measurement** → salvar 84 | O item da rotina vira Done; o mapa e o gráfico se atualizam |
-| 2 | **Radiation → Replay event · demo** | ● Urgent com os 3 passos do abrigo da Orion; "Real event observed near Earth (NASA DONKI), replayed in this scenario."; rotina e exercício em Postponed |
-| 3 | **Assistant**: perguntar "How am I doing?" | Resposta com o rótulo "AI-generated — verify with CMO/flight surgeon."; selo do modo de IA |
-| 4 | **Comms** na Spacecraft → Send summary to ground | "Ground reply in ~40 min"; pacote na fila. Trocar para Space Station/Earth: resposta quase imediata |
-| 4a | *(opcional, K9)* Ligar **Comm blackout · demo** na Comms | A faixa mostra "Comm blackout · no ground link"; o pacote fica "Queued — held until the blackout ends". Desligar: a fila volta a andar [S10, S11] |
-| 5 | Perfil **CMO** → Overview e Wellbeing | Head cinza com cadeado (◼ Restricted); "Restricted — private medical data" → **Emergency access** → motivo → dados aparecem + entrada no **Audit log** |
-| 5a | Voltar para **Astronaut** → Wellbeing | "CMO accessed your wellbeing data — reason: …" e a entrada no Audit log |
-| 6 | **Data & Sources → Demo controls → Switch to protocol mode · demo** | Faixa "AI: protocol mode"; alertas e cores **não mudam** |
-| 7 | **Data & Sources** | Tabela S01–S19 com URLs e termos; agradecimento ao DONKI |
-| 7a | *(opcional, K9)* Clicar num selo `REAL · DONKI` (Radiation) | Abre Data & Sources com a linha S07 destacada. Na Wellbeing, **Why is this private?** mostra o texto com [S02] e [S04] |
+| 1b | Botão de ambiente: Earth → Space Station → Moon → Spacecraft | A faixa muda de cor; a janela de resposta do solo vai de "Flight surgeon available now" a ~2,6 s e a 40 min (o diferencial em 10 segundos); na dose, "rate not sourced" fora da Spacecraft; no exercício, ARED/T2/CEVIS só na Space Station |
+| 1c | Lembrete na faixa → **Log measurement** → salvar 84 | O lembrete some; o mapa e o gráfico se atualizam |
+| 2 | **Radiation → Replay event · demo** | ● Urgent com os 3 passos do abrigo da Orion; "Real event observed near Earth (NASA DONKI), replayed in this scenario."; exercício em Postponed |
+| 3 | **Assistant**: perguntar "How am I doing?" | Resposta com o selo do modo de IA; na IA de bordo, o rótulo "AI-generated — verify with CMO/flight surgeon." |
+| 4 | **Wellbeing** → check-in → **Why is this private?** | Gráfico de 14 dias; consentimento "Share wellbeing alerts (not details) with CMO"; o texto de privacidade com [S02] e [S04]; o Audit log registra a mudança de consentimento |
+| 5 | Botão **Demo** → **Switch to protocol mode · demo** | Faixa "AI: protocol mode"; alertas e cores **não mudam** |
+| 6 | **Data & Sources** | Tabela S01–S19 com URLs e termos; agradecimento ao DONKI |
+| 6a | *(opcional)* Clicar num selo `REAL · DONKI` (Radiation) | Abre Data & Sources com a linha S07 destacada |
+
+**Fala do pitch para o que saiu da tela:** a privacidade do CMO (cabeça com cadeado, break-glass auditado) e a fila ao solo com apagão continuam no código e nos testes (`demoSweep.test.tsx`, `blackout.test.tsx`) e podem ser citadas como "já implementado, fora da demo".
 
 ## 4. Varredura final (já automatizada)
 
-`npm test` roda `src/app/demoSweep.test.tsx`, que confere em todas as telas:
+`npm test` roda `src/app/demoSweep.test.tsx`, que confere em todas as abas:
 - o rodapé "Decision-support prototype — not a medical device…";
 - que não aparece "fit", "healthy", "apto" nem diagnóstico;
 - que há no máximo um botão vermelho por tela;
-- os passos 5 e 5a do roteiro e o exercício por ambiente.
+- o exercício por ambiente e as regras de privacidade (break-glass → auditoria), direto no store.
 
 Conferência manual (olho): todo número visível tem selo REAL ou SIMULATED.
 
@@ -71,5 +72,5 @@ Depois da tag, só entra correção de bug que quebre a demo, combinada no grupo
 | Problema | Saída |
 |---|---|
 | Sem WebGPU ou o modelo não carrega | `?ai=protocol` na URL. É o fallback planejado (AI-03): "sem a LLM, o semáforo não muda" |
-| Estado bagunçado no meio da demo | Data & Sources → Demo controls → **Reset scenario · demo** |
+| Estado bagunçado no meio da demo | Botão **Demo** → **Reset scenario · demo** |
 | Notebook sem internet | Tudo roda local depois do build; só o primeiro download do modelo precisa de rede (R-06) |

@@ -5,6 +5,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import App from '@/app/App'
 import { TABS } from '@/app/tabs'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { RoutinePage } from '@/features/routine/RoutinePage'
 import type { MissionMode, Role } from '@/domain/types'
 import { useAppStore } from '@/state/store'
 
@@ -22,6 +24,17 @@ function renderTab(tab: string, role: Role = 'ASTRONAUT', environment: MissionMo
   useAppStore.setState({ role, environment })
   window.location.hash = `/${tab}`
   return render(<App />)
+}
+
+// A aba Routine saiu do menu (decisão do time, 15/11), mas a RoutinePage segue no código e a
+// rotina ainda alimenta o lembrete da faixa; os testes de CORE-07 renderizam a tela direto.
+function renderRoutine(role: Role = 'ASTRONAUT') {
+  useAppStore.setState({ role, environment: 'SPACECRAFT' })
+  return render(
+    <TooltipProvider>
+      <RoutinePage />
+    </TooltipProvider>,
+  )
 }
 
 const primaries = (root: HTMLElement) =>
@@ -68,7 +81,7 @@ describe('exercício durante o abrigo (R-EX-02)', () => {
 
 describe('rotina coerente com as leituras (CORE-07)', () => {
   it('com leitura de hoje o status é Done, com horário; pressão como sistólica/diastólica', () => {
-    const { container } = renderTab('routine')
+    const { container } = renderRoutine()
     expect(container.textContent).not.toContain('Overdue')
     expect(container.textContent).toContain('121/79 mmHg')
     expect(container.textContent).toContain('today, 07:30 UTC')
@@ -83,7 +96,7 @@ describe('perfis (CMO / Flight Surgeon)', () => {
 
   it('CMO não vê ação de registrar medida na rotina', () => {
     useAppStore.getState().advanceDay(1)
-    renderTab('routine', 'CMO')
+    renderRoutine('CMO')
     expect(screen.queryByRole('button', { name: 'Log measurement' })).toBeNull()
   })
 })

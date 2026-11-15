@@ -37,7 +37,7 @@ export function AssistantPage() {
     if (r.fellBack) setNotice('The onboard model did not answer safely in time — protocol mode answered instead.')
     setHistory((h) => [...h, { role: 'assistant', text: r.text, engine: r.engine, at: simNowIso }])
     setBusy(false)
-    queueMicrotask(() => listRef.current?.lastElementChild?.scrollIntoView({ block: 'nearest' }))
+    queueMicrotask(() => listRef.current?.lastElementChild?.scrollIntoView?.({ block: 'nearest' }))
   }
 
   const onSubmit = (e: FormEvent) => {
