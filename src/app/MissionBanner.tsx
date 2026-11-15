@@ -4,6 +4,10 @@ import type { ReactNode } from 'react'
 import { ENVIRONMENTS, groundReplySec } from '@/domain/config/environments'
 import type { Role } from '@/domain/types'
 import { useAppStore } from '@/state/store'
+import { Button } from '@/components/ui/button'
+import { MeasurementDialog } from '@/features/routine/MeasurementDialog'
+import { useState } from 'react'
+import { Clock3 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export const ROLE_LABEL: Record<Role, string> = {
@@ -49,6 +53,14 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
   const setRole = useAppStore((s) => s.setRole)
   const aiMode = useAppStore((s) => s.aiMode)
   const missionDay = useAppStore((s) => s.missionDay)
+  const routine = useAppStore((s) => s.routine)
+  const shelterActive = useAppStore((s) => s.shelterActive)
+  const simNowIso = useAppStore((s) => s.simNowIso)
+  const addReading = useAppStore((s) => s.addReading)
+  const setRoutineStatus = useAppStore((s) => s.setRoutineStatus)
+  const [logItemId, setLogItemId] = useState<string | null>(null)
+  const reminder = routine.find((item) => item.kind === 'measure' && (item.status === 'overdue' || item.status === 'due'))
+  const logItem = routine.find((item) => item.id === logItemId) ?? reminder ?? null
 
   return (
     <div role="region" aria-label="Mission banner" className="bg-banner px-6 py-3 transition-colors">
@@ -82,6 +94,19 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
       <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-white/85">
         Mission day <span className="num">{missionDay}</span> · Simulated
       </p>
+      {reminder && !shelterActive && <div className="mt-3 flex items-center gap-3 rounded-md bg-black/20 px-3 py-2" role="status">
+        <Clock3 aria-hidden className="size-4" />
+        <span className="flex-1 text-sm">Time to measure your {reminder.vital === 'heartRate' ? 'resting heart rate' : reminder.title.toLowerCase().replace('measure ', '')}{reminder.status === 'overdue' ? ' · overdue' : ''}</span>
+        <span className="rounded border border-white/30 px-2 py-1 text-[11px] uppercase tracking-wider">Demo</span>
+        <Button size="sm" onClick={() => setLogItemId(reminder.id)}>Log measurement</Button>
+      </div>}
+      {shelterActive && <p className="mt-3 text-sm">Radiation shelter active · routine items postponed · demo</p>}
+      <MeasurementDialog item={logItem} open={!!logItemId} onOpenChange={(open) => { if (!open) setLogItemId(null) }} nowIso={simNowIso} onSave={(item, reading) => {
+        addReading(reading)
+        setRoutineStatus(item.id, 'done')
+        // TODO(Lucas): call the rules engine here when L1 (#52) is integrated.
+        setLogItemId(null)
+      }} />
     </div>
   )
 }

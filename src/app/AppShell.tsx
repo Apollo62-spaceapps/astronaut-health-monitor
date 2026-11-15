@@ -13,6 +13,8 @@ import { WellbeingPage } from '@/features/wellbeing/WellbeingPage'
 import { CommsPage } from '@/features/escalation/CommsPage'
 import { AssistantPage } from '@/features/assistant/AssistantPage'
 import { SourcesPage } from '@/features/sources/SourcesPage'
+import { useEffect } from 'react'
+import { useAppStore } from '@/state/store'
 
 const PAGES: Record<TabId, ComponentType> = {
   overview: OverviewPage,
@@ -32,6 +34,13 @@ export const DISCLAIMER = 'Decision-support prototype — not a medical device, 
 export function AppShell() {
   const [tab, go] = useHashTab()
   const Page = PAGES[tab]
+  const acceleration = useAppStore((s) => s.timeAcceleration)
+  const advanceDemoMinutes = useAppStore((s) => s.advanceDemoMinutes)
+  useEffect(() => {
+    if (acceleration <= 1) return
+    const timer = window.setInterval(() => advanceDemoMinutes(acceleration), 1000)
+    return () => window.clearInterval(timer)
+  }, [acceleration, advanceDemoMinutes])
 
   return (
     <div className="flex min-h-screen min-w-[1280px] flex-col bg-ground">
