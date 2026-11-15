@@ -21,6 +21,10 @@ export const INFLIGHT_BASELINE_WINDOW_DAYS = 14
 /** % do limite de carreira de radiação → nível (R-RAD-04, P1). PENDENTE P-01. */
 export const CAREER_DOSE_PCT = { attention: 75, urgent: 90 }
 
+/** Adesão semanal ao exercício abaixo disto → attention na zona Legs (L5, P1). Nunca urgent (sem fonte).
+ * PENDENTE P-01 — valores ilustrativos. */
+export const EXERCISE_ADHERENCE_ATTENTION_BELOW_PCT = 70
+
 /** Bem-estar baixo (R-MH-01, P1). PENDENTE P-01. */
 export const LOW_WELLBEING = { moodAtOrBelow: 2, forDays: 3, sleepBelowHours: 5 }
 

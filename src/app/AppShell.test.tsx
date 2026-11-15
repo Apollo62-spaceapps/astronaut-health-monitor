@@ -24,7 +24,7 @@ describe('AppShell (K1)', () => {
   it('abre a aba do hash da URL', () => {
     window.location.hash = '/radiation'
     render(<App />)
-    expect(screen.getByRole('heading', { name: 'Radiation' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: /^Radiation/ })).toBeTruthy()
   })
 
   it('nunca usa palavras proibidas na casca', () => {

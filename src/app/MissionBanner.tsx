@@ -106,7 +106,7 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
       <MeasurementDialog item={logItem} open={!!logItemId} onOpenChange={(open) => { if (!open) setLogItemId(null) }} nowIso={simNowIso} onSave={(item, reading) => {
         addReading(reading)
         setRoutineStatus(item.id, 'done')
-        // TODO(Lucas): call the rules engine here when L1 (#52) is integrated.
+        // O motor de regras recalcula status e alertas sozinho (useRulesEngineSync no App, L2 #53).
         setLogItemId(null)
       }} />
     </div>
