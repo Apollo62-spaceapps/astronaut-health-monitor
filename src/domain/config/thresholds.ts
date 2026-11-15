@@ -1,7 +1,7 @@
 // PENDENTE P-01 — valores ilustrativos. NENHUM destes números tem fonte clínica.
 // A UI mostra o selo "Illustrative thresholds" sempre que eles forem usados (CORE-04).
 // Quem decide os valores é o time (Lucas lidera, task L1 #52); registre o motivo ao mudar.
-import type { VitalKind } from '@/domain/types'
+import type { MissionMode, VitalKind } from '@/domain/types'
 
 export const THRESHOLDS_ARE_ILLUSTRATIVE = true as const
 
@@ -27,6 +27,42 @@ export const EXERCISE_ADHERENCE_ATTENTION_BELOW_PCT = 70
 
 /** Bem-estar baixo (R-MH-01, P1). PENDENTE P-01. */
 export const LOW_WELLBEING = { moodAtOrBelow: 2, forDays: 3, sleepBelowHours: 5 }
+
+// ───────── Referência pessoal por ambiente (L7, Orbit §5B) ─────────
+
+/** Leituras mínimas do exame pré-voo para o baseline não ser "Low-confidence baseline". PENDENTE P-01. */
+export const MIN_BASELINE_READINGS = 7
+
+/**
+ * Janela de adaptação da referência por ambiente, em dias. PENDENTE P-01 — valores ilustrativos.
+ * Igual à janela da R-PHASE-01 (3 dias, S04) para o mapa do corpo e a referência dizerem a mesma coisa.
+ */
+export const REFERENCE_ADAPTATION_DAYS: Record<MissionMode, number> = { EARTH: 3, ISS: 3, LUNAR: 3, SPACECRAFT: 3 }
+
+/** Leituras mínimas no ambiente para reconstruir a referência adaptada. PENDENTE P-01. */
+export const MIN_ADAPTED_READINGS = 3
+
+/** R-TREND-01: dias consecutivos no mesmo sentido para marcar tendência, e quantos dias olhar. PENDENTE P-01. */
+export const TREND_MIN_DAYS = 3
+export const TREND_LOOKBACK_DAYS = 14
+
+// ───────── Crew Risk Outlook (L7, Orbit §5A, R-RISK-01) ─────────
+
+/** Limiares dos "drivers" do risk outlook. PENDENTE P-01 — valores ilustrativos, sem fonte clínica. */
+export const RISK_DRIVERS = {
+  /** Média de sono dos últimos 3 registros abaixo disto → Guarded / Elevated. */
+  sleepGuardedBelowH: 6,
+  sleepElevatedBelowH: 5,
+  /** Média de humor (1–5) dos últimos 3 registros até isto → Guarded / Elevated. */
+  moodGuardedAtOrBelow: 3,
+  moodElevatedAtOrBelow: 2,
+  /** Adesão semanal ao exercício abaixo disto → Guarded. */
+  adherenceGuardedBelowPct: 70,
+  /** % do limite de carreira a partir do qual a dose já conta como Guarded (Elevated/High seguem CAREER_DOSE_PCT). */
+  doseGuardedPct: 50,
+  /** Resposta do solo a partir disto (s) → driver "communication delay" (Guarded). */
+  longDelaySec: 600,
+} as const
 
 /** Plausibilidade de entrada do "Log measurement" (só bloqueia erro de digitação; NÃO é critério clínico). */
 export const INPUT_PLAUSIBILITY: Record<VitalKind, { min: number; max: number }> = {

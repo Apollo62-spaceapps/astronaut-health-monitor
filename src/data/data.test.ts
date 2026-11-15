@@ -60,8 +60,9 @@ describe('cenário da demo (K3)', () => {
 })
 
 describe('catálogo de fontes (SRC-01)', () => {
-  it('tem S01…S20, sem repetição, todas com URL, uso e termos', () => {
-    expect(SOURCES.map((x) => x.id)).toEqual(Array.from({ length: 20 }, (_, i) => `S${String(i + 1).padStart(2, '0')}`))
+  // S21 (exercício, Felipe) e S22–S28 (Standard Measures, L7) entraram em 15/11.
+  it('tem S01…S28, sem repetição, todas com URL, uso e termos', () => {
+    expect(SOURCES.map((x) => x.id)).toEqual(Array.from({ length: 28 }, (_, i) => `S${String(i + 1).padStart(2, '0')}`))
     for (const src of SOURCES) {
       expect(src.urls.length).toBeGreaterThan(0)
       expect(src.urls.every((u) => u.startsWith('https://'))).toBe(true)

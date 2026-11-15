@@ -216,7 +216,76 @@ export const SOURCES: readonly Source[] = [
     use: 'Research context for exercise monitoring and countermeasures',
     terms: 'Open access · cited, not reproduced',
   },
+  // ── NASA Spaceflight Standard Measures (SSM), L7 / Orbit §5C. Pesquisa do time em 15/11/2026; os ids do
+  // prompt (S21–S27) viraram S22–S28 porque S21 já estava em uso. PENDENTE: o time ainda precisa abrir cada página e conferir os termos (a UI não mostra nota interna).
+  {
+    id: 'S22',
+    provider: 'NASA',
+    title: 'Spaceflight Standard Measures: Characterizing How Humans Adapt in Space',
+    urls: ['https://www.nasa.gov/?p=329041'],
+    accessed: '2026-11-15',
+    use: 'Overview of the Standard Measures domains and the purpose of each measure; wellbeing questionnaire format',
+    terms: 'NASA public page · cited, not reproduced',
+  },
+  {
+    id: 'S23',
+    provider: 'NASA NTRS (Clément, Mullenax et al., 2020)',
+    title: 'Spaceflight Standard Measures',
+    urls: ['https://ntrs.nasa.gov/api/citations/20200001281/downloads/20200001281.pdf'],
+    accessed: '2026-11-15',
+    use: 'HRP risks addressed (Crew outlook event types); example pre-, in- and post-flight schedule',
+    terms: 'NASA public page · cited, not reproduced',
+  },
+  {
+    id: 'S24',
+    provider: 'NASA NTRS (Zwart, 2018)',
+    title: 'Spaceflight Standard Measures',
+    urls: ['https://ntrs.nasa.gov/api/citations/20180002943/downloads/20180002943.pdf'],
+    accessed: '2026-11-15',
+    use: 'Earlier schedule by domain (differs in part from S23; both cited)',
+    terms: 'NASA public page · cited, not reproduced',
+  },
+  {
+    id: 'S25',
+    provider: 'NASA Life Sciences Portal',
+    title: 'Standard Measures',
+    urls: ['https://nlsp.nasa.gov/explore/home/lsda_sm'],
+    accessed: '2026-11-15',
+    use: 'The six core domains of the Standard Measures',
+    terms: 'NASA public page · cited, not reproduced',
+  },
+  {
+    id: 'S26',
+    provider: 'NASA NTRS (Theriot et al., 2023)',
+    title: 'Standard Measures in Analogs of Spaceflight',
+    urls: ['https://ntrs.nasa.gov/citations/20220014080'],
+    accessed: '2026-11-15',
+    use: 'Analog crews (HERA: 4 people): size of the synthetic crew in Crew outlook',
+    terms: 'NTRS: Public Use Permitted',
+  },
+  {
+    id: 'S27',
+    provider: 'NASA',
+    title: 'Artemis II Standard Measures',
+    urls: ['https://www.nasa.gov/reference/artemis-ii-standard-measures'],
+    accessed: '2026-11-15',
+    use: 'Lunar branch of the Standard Measures (context for the Moon environment)',
+    terms: 'NASA public page · cited, not reproduced',
+  },
+  {
+    id: 'S28',
+    provider: 'NASA NTRS (Williams, 2017)',
+    title: 'BHP Laboratory Standard Measures',
+    urls: ['https://ntrs.nasa.gov/citations/20170005421'],
+    accessed: '2026-11-15',
+    use: 'Caveat: research measures for longitudinal analysis; they do not define health or readiness',
+    terms: 'NASA public page · cited, not reproduced',
+  },
 ]
+
+/** Ressalva do SSM (S28, parafraseada): mostrada em Data & Sources e no "about" do Orbit. */
+export const SSM_CAVEAT =
+  'NASA Standard Measures are research measures collected for longitudinal analysis; this prototype does not define health or readiness.'
 
 export function sourceById(id: SourceId): Source | undefined {
   return SOURCES.find((s) => s.id === id)

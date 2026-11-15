@@ -1,0 +1,35 @@
+{
+  "note": "Synthetic crew for the Crew outlook demo (L7). All values SIMULATED; generic names, no real people. Crew of 4, the size of a HERA analog crew [S26]. Crew A is the astronaut of the main scenario (live data from the store).",
+  "crew": [
+    {
+      "id": "B",
+      "name": "Crew B",
+      "hr": { "preflightMean": 68, "series": [72, 73, 75, 76, 77, 78, 78] },
+      "sleepHours": [5.6, 5.4, 5.8],
+      "mood": [3, 4, 3],
+      "adherencePct": 82,
+      "careerPriorMSv": 140,
+      "postponedSessions": 0
+    },
+    {
+      "id": "C",
+      "name": "Crew C",
+      "hr": { "preflightMean": 76, "series": [77, 78, 77, 78, 77, 78, 78] },
+      "sleepHours": [6.8, 7.0, 6.6],
+      "mood": [4, 4, 4],
+      "adherencePct": 91,
+      "careerPriorMSv": 60,
+      "postponedSessions": 0
+    },
+    {
+      "id": "D",
+      "name": "Crew D",
+      "hr": { "preflightMean": 64, "series": [63, 64, 64, 63, 64, 63, 64] },
+      "sleepHours": [4.6, 4.8, 4.9],
+      "mood": [2, 2, 3],
+      "adherencePct": 88,
+      "careerPriorMSv": 95,
+      "postponedSessions": 0
+    }
+  ]
+}
