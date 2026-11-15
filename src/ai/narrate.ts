@@ -15,7 +15,7 @@ import { ENVIRONMENTS } from '@/domain/config/environments'
 import { VITAL_DEVIATION_PCT } from '@/domain/config/thresholds'
 import { SHELTER_STEPS } from '@/domain/rules/radiation'
 import { ALERT_LEVEL_ORDER, type VitalEvaluation } from '@/domain/rules/vitals'
-import type { MissionMode, SourceId } from '@/domain/types'
+import type { MissionMode, SourceId, ZoneStatus } from '@/domain/types'
 import { shownLevel, zoneOfVital } from '@/features/overview/phaseDisplay'
 import { ZONE_CONTENT } from '@/features/overview/zoneContent'
 import { VITAL_UNIT, formatShortDuration, formatUtcTime, formatVitalValue } from '@/lib/format'
@@ -131,7 +131,7 @@ function status(ctx: OrbitContext, seed: string): Narration {
   const trend = ctx.trends.find((t) => t.kind === off[0]?.kind) ?? ctx.trends[0]
   if (off.length === 0) {
     prose.push(
-      `${opener} Heart rate, blood pressure, glucose and temperature all sit within your personal reference ${PLACE[ctx.environment]}, compared with your own pre-flight exam rather than a population range.${cite(['S23'])}`,
+      `${opener} Heart rate, blood pressure, glucose and temperature all sit within your personal reference ${PLACE[ctx.environment]}, compared with your own pre-flight exam rather than a population range.`,
     )
   } else {
     const top = off[0]!
@@ -461,7 +461,7 @@ function reference(ctx: OrbitContext): Narration {
       )
   }
   prose.push(
-    `NASA follows astronauts the same way, comparing each person with themselves before, during and after flight.${cite(['S22', 'S23'])}`,
+    `NASA's Standard Measures also collect the same measures from each astronaut before, during and after flight, as research data, not as a health or readiness rating.${cite(['S22', 'S23', 'S28'])}`,
   )
   return {
     prose,
@@ -495,7 +495,7 @@ function about(): Narration {
   return {
     prose: [
       `I am ${ASSISTANT_NAME}, the health copilot that flies with you. I read the data the rule engine already checked, explain it in plain words and help you decide when to call the CMO.`,
-      `Everything runs onboard, without a connection: a deterministic rule layer decides every color, alert and escalation, and I answer from a local library of ${KNOWLEDGE.length} passages drawn from NASA sources, always citing them. An optional on-device model can only rephrase my wording.${cite(['S12'])}`,
+      `Everything runs onboard, without a connection: a deterministic rule layer decides every color, alert and escalation, and I answer from a local library of ${KNOWLEDGE.length} passages: the ones about health and space cite their sources (mostly NASA), the rest explain how this app works. An optional on-device model can only rephrase my wording. The idea follows NASA work on Earth-independent medical operations.${cite(['S12'])}`,
       'I never change an alert, never name a condition and never replace the flight surgeon. You stay in the loop for every action.',
     ],
     consulted: consult('eimo', 'ssm-caveat'),
@@ -519,7 +519,9 @@ export function ragAnswer(question: string, ctx: OrbitContext): Narration {
     `${
       first!.passage.kind === 'app'
         ? pick(['Here is how it works in this prototype.', 'Good question. In this app:', 'Short answer, from how Orbit and the app are built:'], question)
-        : pick(['From the NASA material I carry onboard:', 'Here is what my onboard library says.', 'Based on the NASA sources I have here:'], question)
+        : first!.passage.sourceIds.length === 0
+          ? 'Here is what my onboard library says.'
+          : pick(['From the material I carry onboard:', 'Here is what my onboard library says.', 'Based on the sources I have here:'], question)
     } ${first!.passage.text}${cite(first!.passage.sourceIds)}`,
     ...rest
       .filter((h) => h.score >= first!.score * 0.6)
@@ -674,12 +676,21 @@ export function environmentAnswer(ctx: OrbitContext, target: MissionMode): Narra
 export function smalltalk(ctx: OrbitContext, text: string): Narration {
   const t = normalize(text)
   const top = worst(ctx)
+  // AI-07: a saudação nunca diz "tudo normal" se as regras mostram algo fora do normal em qualquer módulo.
+  const alert = [...ctx.alerts].sort((a, b) => (a.level === 'urgent' ? 0 : 1) - (b.level === 'urgent' ? 0 : 1))[0]
+  const offZone = (Object.entries(ctx.body) as [string, ZoneStatus | null][]).find(
+    ([, s]) => s === 'attention' || s === 'urgent' || s === 'adapting',
+  )
   const hook =
     ctx.shelterActive
       ? 'A solar particle event is active, so shelter comes first. Want the steps?'
       : top && top.level !== 'normal'
         ? `Your ${zoneOfVital(top.kind) ?? 'heart'} zone is at ${STATUS_WORD[shownLevel(top.kind, top.level, ctx.body)]} right now. Want me to walk you through it?`
-        : 'Everything is within your personal reference right now. What would you like to look at?'
+        : alert
+          ? `${ctx.alerts.length > 1 ? `You have ${ctx.alerts.length} active alerts. The first one: ` : ''}${STATUS_WORD[alert.level]}: ${alert.title}. Want me to walk you through it?`
+          : offZone
+            ? `Your ${offZone[0]} zone is at ${STATUS_WORD[offZone[1]!]} right now. Want me to walk you through it?`
+            : 'Everything is within your personal reference right now. What would you like to look at?'
   const prose = /\b(thanks|thank you|thx)\b/.test(t)
     ? ['Anytime. I will keep an eye on your readings; ask me whenever something changes.']
     : /\b(bye|goodbye|see you)\b/.test(t)

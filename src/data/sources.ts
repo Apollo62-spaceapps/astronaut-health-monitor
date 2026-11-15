@@ -277,7 +277,7 @@ export const SOURCES: readonly Source[] = [
   {
     id: 'S28',
     provider: 'NASA NTRS (Williams, 2017)',
-    title: 'BHP Laboratory Standard Measures',
+    title: 'Behavioral Health and Performance Laboratory Standard Measures (BHP-SM)',
     urls: ['https://ntrs.nasa.gov/citations/20170005421'],
     accessed: '2026-11-15',
     use: 'Caveat: research measures for longitudinal analysis; they do not define health or readiness',

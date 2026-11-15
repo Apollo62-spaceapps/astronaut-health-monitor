@@ -206,15 +206,16 @@ const CORE: Passage[] = [
   },
   {
     id: 'moon-delay',
+    kind: 'app',
     title: 'Communication delay to the Moon',
-    text: 'The Moon is about 384,400 km away, so a radio signal takes about 1.3 seconds each way, and a reply about 2.6 seconds.',
+    text: 'The Moon is about 384,400 km away, so a radio signal takes about 1.3 seconds each way, and a reply about 2.6 seconds (physical calculation: average Earth–Moon distance ÷ speed of light).',
     sourceIds: [],
     keywords: ['moon', 'lunar', 'delay', 'seconds', 'distance', 'reply', 'communication'],
   },
   {
     id: 'cmo-role',
     title: 'The crew medical officer',
-    text: 'NASA standards call for a crew medical officer on each vehicle, at least two per crew, and keep medical communications private.',
+    text: 'NASA standards call for at least two crew medical officers per vehicle, and keep medical communications private.',
     sourceIds: ['S02'],
     keywords: ['cmo', 'medical', 'officer', 'doctor', 'crew', 'private', 'privacy', 'who'],
   },
@@ -296,10 +297,12 @@ const CORE: Passage[] = [
     keywords: ['artemis', 'moon', 'lunar', 'return', 'balance', 'tests'],
   },
   {
+    // Descreve a lógica do próprio app (decisão do time, P-01), não um achado da S23: por isso kind 'app' e sem fonte.
     id: 'personal-reference',
+    kind: 'app',
     title: 'How this app reads your numbers',
     text: 'Each reading is compared with the astronaut’s own pre-flight exam, not with a population range. After a gravity change the reference is rebuilt from readings in the new environment; back on Earth it is compared with the pre-flight exam again. The thresholds are illustrative until the team sources them.',
-    sourceIds: ['S23'],
+    sourceIds: [],
     keywords: [
       'reference',
       'baseline',

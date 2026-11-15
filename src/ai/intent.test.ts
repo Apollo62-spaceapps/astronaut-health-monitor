@@ -31,7 +31,7 @@ describe('intent.ts (Orbit)', () => {
   })
 
   it('emergência: dor no peito, falta de ar, desmaio', () => {
-    for (const t of ['I have chest pain', "I can't breathe", 'short of breath', 'I fainted', 'I passed out']) {
+    for (const t of ['I have chest pain', "I can't breathe", 'short of breath', 'I fainted', 'I passed out', "It's hard to breathe", 'hard to breathe', 'trouble breathing']) {
       expect(isEmergency(t), t).toBe(true)
       expect(classify(t)).toMatchObject({ intent: 'triage', emergency: true })
     }
@@ -46,5 +46,12 @@ describe('intent.ts (Orbit)', () => {
   it('empate ⇒ whatNow; mesma entrada ⇒ mesma saída', () => {
     expect(classify('help me with status')).toEqual(classify('help me with status'))
     expect(classify('').intent).toBe('general')
+  })
+
+  it('saudação com pergunta responde a pergunta; saudação sozinha é smalltalk', () => {
+    expect(classify('thanks').intent).toBe('smalltalk')
+    expect(classify('hi').intent).toBe('smalltalk')
+    expect(classify("thanks, what's my heart rate?").intent).not.toBe('smalltalk')
+    expect(classify('hi, how am I doing?').intent).toBe('status')
   })
 })
