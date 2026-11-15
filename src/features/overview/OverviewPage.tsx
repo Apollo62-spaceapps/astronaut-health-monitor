@@ -8,6 +8,7 @@ import { BODY_ZONES } from '@/domain/config/bodyZones'
 import { ENVIRONMENTS } from '@/domain/config/environments'
 import type { BodyZoneId, MissionMode, VitalKind } from '@/domain/types'
 import { visibleAlerts, type EngineOutput } from '@/domain/rules/engine'
+import { INPUT_PLAUSIBILITY } from '@/domain/config/thresholds'
 import { formatDeviation, type VitalEvaluation } from '@/domain/rules/vitals'
 import { worstLevel } from '@/domain/rules/body'
 import { inAdaptation } from '@/domain/rules/phase'
@@ -43,7 +44,9 @@ const ENV_PLACE: Record<MissionMode, string> = {
 }
 
 const ROLE_TEXT: Record<string, string> = { CMO: 'CMO', FLIGHT_SURGEON: 'flight surgeon', ASTRONAUT: 'astronaut' }
-const dailyCheckInSchema = z.object({ mood: z.coerce.number().int().min(1).max(5), sleepHours: z.coerce.number().min(0).max(24) })
+const dailyCheckInSchema = z.object({ mood: z.coerce.number().int().min(1).max(5), sleepHours: z.coerce.number().min(0).max(24), heartRate: z.coerce.number(), systolicBP: z.coerce.number(), diastolicBP: z.coerce.number(), glucose: z.coerce.number(), bodyTemp: z.coerce.number() }).superRefine((v, ctx) => {
+  for (const kind of ['heartRate','systolicBP','diastolicBP','glucose','bodyTemp'] as const) if (v[kind] < INPUT_PLAUSIBILITY[kind].min || v[kind] > INPUT_PLAUSIBILITY[kind].max) ctx.addIssue({ code: 'custom', message: `${kind}: enter a plausible value.`, path: [kind] })
+})
 
 /** Desvio em palavras para o aria-label (BODY-04): "resting heart rate +18% vs baseline". */
 const devText = (ev: VitalEvaluation) =>
@@ -122,13 +125,18 @@ export function OverviewPage() {
   const [checkInOpen, setCheckInOpen] = useState(false)
   const [mood, setMood] = useState('3')
   const [sleepHours, setSleepHours] = useState('')
+  const [measurementValues, setMeasurementValues] = useState<Record<string,string>>({ heartRate:'', systolicBP:'', diastolicBP:'', glucose:'', bodyTemp:'' })
   const dateKey = simNowIso.slice(0, 10)
   const checkIn = wellbeing.find((x) => x.date === dateKey && (x.environment ?? 'EARTH') === environment)
   function saveCheckIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const result = dailyCheckInSchema.safeParse({ mood, sleepHours })
+    const result = dailyCheckInSchema.safeParse({ mood, sleepHours, ...measurementValues })
     if (!result.success) return
     loadScenario({ wellbeing: [...wellbeing.filter((x) => x.date !== dateKey || (x.environment ?? 'EARTH') !== environment), { date: dateKey, environment, mood: result.data.mood as 1|2|3|4|5, sleepHours: result.data.sleepHours }] })
+    const metrics = [
+      ['heartRate', result.data.heartRate, 'bpm'], ['systolicBP', result.data.systolicBP, 'mmHg'], ['diastolicBP', result.data.diastolicBP, 'mmHg'], ['glucose', result.data.glucose, 'mg/dL'], ['bodyTemp', result.data.bodyTemp, '°C'],
+    ] as const
+    for (const [kind, value, unit] of metrics) addReading({ kind, value, unit, takenAt: simNowIso, provenance: { kind: 'simulated', note: 'Daily astronaut self-report' } })
     setCheckInOpen(false)
   }
 
@@ -355,7 +363,7 @@ export function OverviewPage() {
           }}
         />
       )}
-      <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}><DialogContent><form onSubmit={saveCheckIn} className="space-y-4"><DialogHeader><DialogTitle>Daily health check-in</DialogTitle><DialogDescription>{ENVIRONMENTS[environment].label} · quick self-report, saved separately for this environment. Not a clinical assessment.</DialogDescription></DialogHeader><fieldset className="space-y-2"><legend className="text-sm">How are you feeling? (1–5)</legend><div className="grid grid-cols-5 gap-2">{[1,2,3,4,5].map((n) => <label key={n} className="flex items-center justify-center gap-2 rounded-md bg-surface-2 p-2"><input type="radio" name="mood" checked={mood===String(n)} onChange={() => setMood(String(n))} />{n}</label>)}</div></fieldset><div className="space-y-2"><Label htmlFor="daily-sleep">Sleep last night (hours)</Label><Input id="daily-sleep" type="number" min="0" max="24" step="0.5" required value={sleepHours} onChange={(e) => setSleepHours(e.target.value)} /></div><p className="text-xs text-muted">For vital measurements, use Log measurement. Consult your flight surgeon.</p><DialogFooter><Button type="submit">Save check-in</Button></DialogFooter></form></DialogContent></Dialog>
+      <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}><DialogContent><form onSubmit={saveCheckIn} className="space-y-3"><DialogHeader><DialogTitle>Daily health check-in</DialogTitle><DialogDescription>{ENVIRONMENTS[environment].label} · self-report saved for this environment. Not a clinical assessment.</DialogDescription></DialogHeader><fieldset><legend className="mb-2 text-sm">Mood (1–5)</legend><div className="grid grid-cols-5 gap-2">{[1,2,3,4,5].map((n) => <label key={n} className="flex items-center justify-center gap-2 rounded-md bg-surface-2 p-2"><input type="radio" name="mood" checked={mood===String(n)} onChange={() => setMood(String(n))} />{n}</label>)}</div></fieldset><div className="grid grid-cols-2 gap-3">{([ ['sleepHours','Sleep last night (hours)','0.5'],['heartRate','Resting heart rate (bpm)','1'],['systolicBP','Systolic blood pressure (mmHg)','1'],['diastolicBP','Diastolic blood pressure (mmHg)','1'],['glucose','Blood glucose (mg/dL)','1'],['bodyTemp','Body temperature (°C)','0.1'] ] as const).map(([key,label,step]) => <div key={key} className="space-y-1"><Label htmlFor={`daily-${key}`}>{label}</Label><Input id={`daily-${key}`} type="number" step={step} required min={key==='sleepHours'?0:undefined} max={key==='sleepHours'?24:undefined} value={key==='sleepHours'?sleepHours:measurementValues[key] ?? ''} onChange={(e) => key==='sleepHours'?setSleepHours(e.target.value):setMeasurementValues((v)=>({...v,[key]:e.target.value}))} /></div>)}</div><p className="text-xs text-muted">Input plausibility only · Illustrative thresholds · Consult your flight surgeon.</p><DialogFooter><Button type="submit">Save daily check-in</Button></DialogFooter></form></DialogContent></Dialog>
     </div>
   )
 }
