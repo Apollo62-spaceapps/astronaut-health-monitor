@@ -161,7 +161,7 @@ export function AssistantPage() {
             className="flex-1 rounded-md border border-border bg-surface-2 px-3 py-2"
             autoComplete="off"
           />
-          <Button type="submit" disabled={busy || !input.trim()}>
+          <Button type="submit" variant="secondary" disabled={busy || !input.trim()}>
             Send
           </Button>
         </form>
