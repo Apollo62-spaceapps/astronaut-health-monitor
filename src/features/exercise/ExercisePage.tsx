@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useState } from 'react'
 import { Check, Dumbbell, Flame, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -21,9 +21,12 @@ export function ExercisePage() {
   const progress = planned ? Math.min(100, Math.round(completed / planned * 100)) : 0
   const adherence = weeklyAdherence(applyShelter(sessions, simNowIso, shelterActive), simNowIso)
   const streak = streakDays(sessions, today)
-  const days = useMemo(() => Array.from({ length: 7 }, (_, i) => {
+  const days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(`${today}T00:00:00Z`); d.setUTCDate(d.getUTCDate() - 6 + i); return d.toISOString().slice(0, 10)
-  }), [today])
+  })
+  // Campo vazio ou fora de 0–240 mostra o erro (antes: vazio salvava 0 min e marcava o dia como "skipped").
+  const [minutesError, setMinutesError] = useState("")
+  const [savedNote, setSavedNote] = useState("")
   function saveMinutes(value: number) {
     const next = sessions.map((s) => s.date !== today ? s : { ...s, doneMin: value, status: value >= s.prescribedMin ? 'done' as const : value > 0 ? 'partial' as const : 'skipped' as const })
     loadScenario({ exercise: next })
@@ -35,7 +38,7 @@ export function ExercisePage() {
       <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1"><span className="num text-4xl">{completed}</span><span className="text-muted">minutes logged</span><ProvenanceBadge provenance={{ kind: 'simulated', note: 'Self-reported demo data.' }} /></p>
       <div aria-label={`Daily progress ${progress}%`} className="h-2 overflow-hidden rounded-sm bg-surface-2"><div className="h-full bg-link" style={{ width: `${progress}%` }} /></div>
       <p className="text-sm text-muted">NASA reports about 2 hours of exercise per day on the ISS, on average. Reference only; not an individual target. <SourceRef ids={['S13']} /></p>
-      {!shelterActive && todaySessions.length > 0 && <form className="flex flex-wrap items-end gap-3 max-sm:flex-col max-sm:items-stretch" onSubmit={(e) => { e.preventDefault(); const v = Number(new FormData(e.currentTarget).get('minutes')); if (Number.isFinite(v) && v >= 0 && v <= 240) saveMinutes(v) }}><div className="space-y-1 max-sm:w-full"><Label htmlFor="exercise-minutes">Total minutes today</Label><Input id="exercise-minutes" name="minutes" type="number" min="0" max="240" defaultValue={completed || ''} className="w-32 font-mono max-md:h-11 max-sm:w-full" /></div><Button type="submit" variant="outline" className="max-md:h-11 max-sm:w-full"><Check aria-hidden />Save check-in</Button></form>}
+      {!shelterActive && todaySessions.length > 0 && <form className="flex flex-wrap items-end gap-3 max-sm:flex-col max-sm:items-stretch" onSubmit={(e) => { e.preventDefault(); const raw = String(new FormData(e.currentTarget).get('minutes') ?? '').trim().replace(',', '.'); const v = raw === '' ? NaN : Number(raw); if (!Number.isInteger(v) || v < 0 || v > 240) { setSavedNote(''); setMinutesError('Enter whole minutes from 0 to 240.'); return } setMinutesError(''); saveMinutes(v); setSavedNote(`Saved · ${v} min today.`) }}><div className="space-y-1 max-sm:w-full"><Label htmlFor="exercise-minutes">Total minutes today</Label><Input id="exercise-minutes" name="minutes" type="text" inputMode="numeric" autoComplete="off" defaultValue={completed || ''} aria-invalid={!!minutesError} aria-describedby={minutesError ? 'exercise-minutes-error' : undefined} className="w-32 font-mono max-md:h-11 max-sm:w-full" /></div><Button type="submit" variant="outline" className="max-md:h-11 max-sm:w-full"><Check aria-hidden />Save check-in</Button>{minutesError && <p id="exercise-minutes-error" className="w-full text-sm text-attention">▲ {minutesError}</p>}{savedNote && <p role="status" className="w-full text-sm text-muted">{savedNote}</p>}</form>}
       <p className="text-xs text-muted">Self-report, not a clinical assessment. Consult your flight surgeon.</p>
     </CardContent></Card>
     <div className="grid gap-6 lg:grid-cols-2">

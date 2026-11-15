@@ -126,9 +126,12 @@ function zoneSub(id: BodyZoneId, out: EngineOutput): string | undefined {
 
 /** Frase do topo, montada a partir do alerta mais grave visível (determinística, sem IA). */
 function headline(out: EngineOutput, groundSec: number, isEarth: boolean, astronaut: boolean): string {
+  // Space Station: atraso ~0 (quase tempo real, §17) — antes saía "about 0.0 seconds".
   const reply = isEarth
     ? 'The flight surgeon is available now.'
-    : `Ground reply would take ${formatDuration(groundSec)}.`
+    : groundSec === 0
+      ? 'The ground can reply in near real time.'
+      : `Ground reply would take ${formatDuration(groundSec)}.`
   const whose = astronaut ? 'your own' : "the crew member's"
   const alerts = visibleAlerts(out.alerts, out.privacy)
   const top = alerts[0]
