@@ -1,20 +1,16 @@
 // Assistente (K7 #48) — SPEC §6.6, AI-01..08. A IA só conversa e resume; nunca muda status/alertas.
 import { useMemo, useRef, useState, type FormEvent } from 'react'
-import { Bot, Cpu, ListChecks } from 'lucide-react'
+import { Bot } from 'lucide-react'
 import type { ChatMessage } from '@/domain/types'
 import { useAppStore } from '@/state/store'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 import { buildAssistantContext } from '@/domain/rules/engine'
 import { useEngineInput } from '@/state/useEngine'
 import { replyWithFallback } from '@/ai/engine'
-import { useAiEngineSwitch } from '@/features/assistant/useAiEngineSwitch'
-import { AI_LABEL } from '@/ai/prompts'
 import { suggestions } from '@/ai/protocol'
 
 export function AssistantPage() {
-  const { aiMode, switchTo, loading, notice, setNotice } = useAiEngineSwitch()
   const simNowIso = useAppStore((s) => s.simNowIso)
 
   // Contexto montado pelo motor de regras, com a privacidade do perfil (AI-07, ENV-05, §6.7).
@@ -33,8 +29,7 @@ export function AssistantPage() {
     setHistory((h) => [...h, user])
     setInput('')
     setBusy(true)
-    const r = await replyWithFallback(aiMode, ctx, history, q)
-    if (r.fellBack) setNotice('The onboard model did not answer safely in time — protocol mode answered instead.')
+    const r = await replyWithFallback('protocol', ctx, history, q)
     setHistory((h) => [...h, { role: 'assistant', text: r.text, engine: r.engine, at: simNowIso }])
     setBusy(false)
     queueMicrotask(() => listRef.current?.lastElementChild?.scrollIntoView?.({ block: 'nearest' }))
@@ -55,39 +50,11 @@ export function AssistantPage() {
               <Bot aria-hidden className="size-7" /> Ask about your data
             </h1>
           </div>
-          <div role="group" aria-label="AI engine" className="flex gap-2">
-            <Button
-              variant={aiMode === 'protocol' ? 'secondary' : 'outline'}
-              aria-pressed={aiMode === 'protocol'}
-              onClick={() => void switchTo('protocol')}
-            >
-              <ListChecks aria-hidden /> Protocol mode
-            </Button>
-            <Button
-              variant={aiMode === 'onboard-model' ? 'secondary' : 'outline'}
-              aria-pressed={aiMode === 'onboard-model'}
-              onClick={() => void switchTo('onboard-model')}
-              disabled={loading !== null}
-            >
-              <Cpu aria-hidden /> Onboard model
-            </Button>
-          </div>
         </div>
         <p className="mt-3 text-sm text-muted">
           The assistant only asks about symptoms and summarizes your data. Colors, alerts and escalation come from the
           rule engine and never change here.
         </p>
-        {loading && (
-          <div className="mt-3 space-y-1">
-            <Progress value={Math.round(loading.p * 100)} aria-label="Model download progress" />
-            <p className="text-xs text-muted">{loading.text}</p>
-          </div>
-        )}
-        {notice && (
-          <p role="status" className="mt-3 text-sm text-attention">
-            ▲ {notice}
-          </p>
-        )}
       </section>
 
       <section aria-label="Conversation" className="flex min-h-80 flex-1 flex-col rounded-lg bg-surface p-6">
@@ -102,9 +69,7 @@ export function AssistantPage() {
               {m.role === 'assistant' && (
                 <p className="mt-2 text-xs text-muted">
                   {/* Protocol mode é determinístico: não é "AI-generated" (AI-06 vale só para o WebLLM). */}
-                  {m.engine === 'onboard-model'
-                    ? `${AI_LABEL.replace(/\.$/, '')} · Onboard model`
-                    : 'Rule-based response · Protocol mode'}
+                  Rule-based response · Protocol mode
                 </p>
               )}
             </li>

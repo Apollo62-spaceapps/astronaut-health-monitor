@@ -72,7 +72,6 @@ export function GroundReplyWindow() {
 
 export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
   const role = useAppStore((s) => s.role)
-  const aiMode = useAppStore((s) => s.aiMode)
   const routine = useAppStore((s) => s.routine)
   const environment = useAppStore((s) => s.environment)
   const shelterActive = useAppStore((s) => s.shelterActive)
@@ -97,9 +96,6 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
         {envSlot}
 
-        <span className="rounded bg-black/25 px-2 py-1 text-sm" aria-label="AI mode">
-          AI: {aiMode === 'onboard-model' ? 'onboard model' : 'protocol mode'}
-        </span>
 
         <div className="ml-auto">
           <GroundReplyWindow />

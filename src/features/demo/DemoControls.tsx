@@ -4,8 +4,6 @@ import { useState } from 'react'
 import { FlaskConical, RotateCcw, Sun, Timer, X } from 'lucide-react'
 import { useAppStore } from '@/state/store'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
-import { useAiEngineSwitch } from '@/features/assistant/useAiEngineSwitch'
 
 export function DemoControls() {
   const [open, setOpen] = useState(false)
@@ -16,8 +14,6 @@ export function DemoControls() {
   const shelterActive = useAppStore((s) => s.shelterActive)
   const acceleration = useAppStore((s) => s.timeAcceleration)
   const setTimeAcceleration = useAppStore((s) => s.setTimeAcceleration)
-  // Mesma troca de motor da aba Assistant: o modelo de bordo passa pelo init() (AI-03).
-  const { aiMode, switchTo, loading, notice } = useAiEngineSwitch()
 
   return (
     <div className="fixed right-4 bottom-14 z-40 flex flex-col items-end gap-2">
@@ -55,29 +51,6 @@ export function DemoControls() {
             </div>
           </div>
 
-          <div className="space-y-1">
-            <p className="text-sm font-semibold">AI engine</p>
-            <p className="text-xs text-muted">Alerts stay rule-driven in both engines.</p>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={loading !== null}
-              onClick={() => void switchTo(aiMode === 'protocol' ? 'onboard-model' : 'protocol')}
-            >
-              Switch to {aiMode === 'protocol' ? 'onboard model' : 'protocol mode'} · demo
-            </Button>
-            {loading && (
-              <div aria-live="polite" className="space-y-1">
-                <Progress value={Math.round(loading.p * 100)} aria-label="Onboard model loading" />
-                <p className="text-xs text-muted">{loading.text}</p>
-              </div>
-            )}
-            {notice && (
-              <p role="status" className="text-xs text-muted">
-                {notice}
-              </p>
-            )}
-          </div>
 
           <div className="flex flex-wrap items-end justify-between gap-4">
             <label htmlFor="demo-time" className="space-y-1 text-sm font-semibold">
