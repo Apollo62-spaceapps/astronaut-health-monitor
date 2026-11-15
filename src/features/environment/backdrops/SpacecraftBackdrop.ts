@@ -16,6 +16,8 @@ interface Particle {
 export class SpacecraftBackdrop extends CanvasBackdrop {
   private first = true
   private p: Particle[] = []
+  /** Os rastros somem 30% por quadro: depois de 20 quadros o resto do início é < 0,1%. */
+  protected warmupSteps = 20
 
   protected init() {
     this.first = true

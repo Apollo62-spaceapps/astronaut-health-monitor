@@ -6,8 +6,19 @@
 export const rnd = (a: number, b: number) => a + Math.random() * (b - a)
 export const TAU = Math.PI * 2
 
-/** Passos de aquecimento ao montar ou redimensionar; também dão o quadro estático do reduced-motion. */
-export const WARMUP_STEPS = 90
+/**
+ * Passos de aquecimento ao montar ou redimensionar; também dão o quadro estático do reduced-motion.
+ * O arquivo roda 90 em todos, mas eles rodam de uma vez na troca de modo (na Moon, 1–2 s de tela travada).
+ * Só a Spacecraft precisa deles (os rastros se acumulam); nos outros, 1 quadro dá a mesma imagem.
+ */
+export const WARMUP_STEPS = 1
+
+/**
+ * Resolução interna do bitmap em relação ao desenho (0,5 = metade em cada eixo, ~1/4 dos pixels).
+ * A geometria é a mesma (ctx.scale); o navegador amplia o canvas, e as linhas ficam um pouco mais suaves.
+ * O fundo desenha na thread principal: em resolução cheia ele deixava o app lento num Intel HD 620.
+ */
+export const RENDER_SCALE = 0.5
 
 export interface Backdrop {
   /** Pega o contexto 2D. false = sem canvas (o chamador cai no gradiente CSS). */
@@ -26,6 +37,7 @@ export abstract class CanvasBackdrop implements Backdrop {
   /** Largura e altura em pixels do dispositivo (o `w`/`h` das classes do arquivo). */
   protected w = 0
   protected h = 0
+  protected warmupSteps = WARMUP_STEPS
 
   /** Equivale ao constructor(w, h) do arquivo. */
   protected abstract init(w: number, h: number): void
@@ -43,10 +55,12 @@ export abstract class CanvasBackdrop implements Backdrop {
     if (!canvas || !ctx) return
     this.w = Math.max(1, Math.round(cssW * dpr))
     this.h = Math.max(1, Math.round(cssH * dpr))
-    canvas.width = this.w
-    canvas.height = this.h
+    canvas.width = Math.max(1, Math.round(this.w * RENDER_SCALE))
+    canvas.height = Math.max(1, Math.round(this.h * RENDER_SCALE))
+    // Mudar o tamanho zera o estado do contexto; a escala vem depois.
+    ctx.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0)
     this.init(this.w, this.h)
-    for (let i = 0; i < WARMUP_STEPS; i++) this.draw(ctx, i / 30, 1 / 30)
+    for (let i = 0; i < this.warmupSteps; i++) this.draw(ctx, i / 30, 1 / 30)
   }
 
   frame(t: number, dt: number) {

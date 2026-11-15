@@ -8,6 +8,9 @@ import { capDpr, MAX_DT, useElementSize, usePageVisible, useReducedMotion } from
 
 type BackdropCtor = new () => Backdrop
 
+/** Intervalo mínimo entre quadros (30 fps, com folga de 2 ms para não pular para 20 fps em telas de 60 Hz). */
+const FRAME_MS = 1000 / 30 - 2
+
 const LOADERS: Record<MissionMode, () => Promise<BackdropCtor>> = {
   EARTH: () => import('./EarthBackdrop').then((m) => m.EarthBackdrop),
   ISS: () => import('./StationBackdrop').then((m) => m.StationBackdrop),
@@ -128,6 +131,11 @@ export default function BackdropStage({ environment }: { environment: MissionMod
     let raf = 0
     let last = performance.now()
     const loop = (now: number) => {
+      // Até 30 fps: o canvas desenha na thread principal, e a 60 fps o fundo disputava com cliques e telas.
+      if (now - last < FRAME_MS) {
+        raf = requestAnimationFrame(loop)
+        return
+      }
       const dt = Math.min(MAX_DT, Math.max(0, (now - last) / 1000))
       last = now
       try {

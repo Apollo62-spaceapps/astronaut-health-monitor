@@ -71,10 +71,8 @@
    pior pixel a 1,3:1 (percentil 98: 7,9:1); uma nuvem da Earth, a 3,4:1. Pelo WCAG (Understanding 1.4.3),
    um halo largo em volta da letra conta como o fundo dela. Dentro de superfícies opacas o halo é desligado. */
 .on-backdrop {
-  text-shadow:
-    0 0 2px var(--color-ground),
-    0 0 4px var(--color-ground),
-    0 0 10px var(--color-ground);
+  /* Uma sombra só (eram três): cada desfoque encarece a repintura do texto. */
+  text-shadow: 0 0 4px var(--color-ground);
 }
 .on-backdrop :is(.bg-surface, .bg-surface-2, .bg-card, .bg-popover, .bg-ground, .bg-banner, .bg-action, [data-slot='card']) {
   text-shadow: none;

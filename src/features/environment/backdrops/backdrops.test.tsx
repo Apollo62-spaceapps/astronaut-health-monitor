@@ -179,7 +179,7 @@ describe('Fundo por ambiente (L6) — as 4 classes portadas', () => {
     const bd = new Ctor()
     expect(bd.start(canvas)).toBe(true)
     bd.resize(800, 500, 1.5)
-    expect([canvas.width, canvas.height]).toEqual([1200, 750])
+    expect([canvas.width, canvas.height]).toEqual([600, 375]) // 800×500 × DPR 1,5 × RENDER_SCALE 0,5
     const before = calls.draw
     bd.frame(1, 0.016)
     expect(calls.draw).toBeGreaterThan(before)
