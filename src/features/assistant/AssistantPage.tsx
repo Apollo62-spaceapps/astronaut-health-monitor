@@ -1,20 +1,20 @@
 // Assistente (K7 #48) — SPEC §6.6, AI-01..08. A IA só conversa e resume; nunca muda status/alertas.
 import { useMemo, useRef, useState, type FormEvent } from 'react'
 import { Bot, Cpu, ListChecks } from 'lucide-react'
-import type { AiMode, ChatMessage } from '@/domain/types'
+import type { ChatMessage } from '@/domain/types'
 import { useAppStore } from '@/state/store'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 import { buildAssistantContext } from '@/domain/rules/engine'
 import { useEngineInput } from '@/state/useEngine'
-import { canUseOnboardModel, engineFor, replyWithFallback } from '@/ai/engine'
+import { replyWithFallback } from '@/ai/engine'
+import { useAiEngineSwitch } from '@/features/assistant/useAiEngineSwitch'
 import { AI_LABEL } from '@/ai/prompts'
 import { suggestions } from '@/ai/protocol'
 
 export function AssistantPage() {
-  const aiMode = useAppStore((s) => s.aiMode)
-  const setAiMode = useAppStore((s) => s.setAiMode)
+  const { aiMode, switchTo, loading, notice, setNotice } = useAiEngineSwitch()
   const simNowIso = useAppStore((s) => s.simNowIso)
 
   // Contexto montado pelo motor de regras, com a privacidade do perfil (AI-07, ENV-05, §6.7).
@@ -24,8 +24,6 @@ export function AssistantPage() {
   const [history, setHistory] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
-  const [loading, setLoading] = useState<{ p: number; text: string } | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
   const listRef = useRef<HTMLOListElement>(null)
 
   const ask = async (text: string) => {
@@ -40,25 +38,6 @@ export function AssistantPage() {
     setHistory((h) => [...h, { role: 'assistant', text: r.text, engine: r.engine, at: simNowIso }])
     setBusy(false)
     queueMicrotask(() => listRef.current?.lastElementChild?.scrollIntoView({ block: 'nearest' }))
-  }
-
-  const switchTo = async (mode: AiMode) => {
-    setNotice(null)
-    if (mode === 'protocol') return setAiMode('protocol')
-    if (!canUseOnboardModel()) {
-      setNotice('WebGPU is not available here (or ?ai=protocol is set) — staying in protocol mode.')
-      return setAiMode('protocol')
-    }
-    try {
-      setLoading({ p: 0, text: 'Loading onboard model…' })
-      await engineFor('onboard-model').init((p, text) => setLoading({ p, text }))
-      setAiMode('onboard-model')
-    } catch {
-      setNotice('The onboard model could not start — protocol mode is active. The alerts do not change.')
-      setAiMode('protocol')
-    } finally {
-      setLoading(null)
-    }
   }
 
   const onSubmit = (e: FormEvent) => {

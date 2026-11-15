@@ -4,13 +4,15 @@ import { SOURCES, DONKI_ACKNOWLEDGEMENT } from '@/data/sources'
 import { useAppStore } from '@/state/store'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { useAiEngineSwitch } from '@/features/assistant/useAiEngineSwitch'
 
 export function SourcesPage() {
   const replaySolarEvent = useAppStore((s) => s.replaySolarEvent)
   const resetScenario = useAppStore((s) => s.resetScenario)
   const eventReplayed = useAppStore((s) => s.eventReplayed)
-  const aiMode = useAppStore((s) => s.aiMode)
-  const setAiMode = useAppStore((s) => s.setAiMode)
+  // Mesma troca de motor da aba Assistant: o modelo de bordo passa pelo init() (AI-03).
+  const { aiMode, switchTo, loading, notice } = useAiEngineSwitch()
   const acceleration = useAppStore((s) => s.timeAcceleration)
   const setTimeAcceleration = useAppStore((s) => s.setTimeAcceleration)
   const [open, setOpen] = useState(false)
@@ -67,7 +69,6 @@ export function SourcesPage() {
                     <td className="min-w-48 p-3 text-muted">{source.use}</td>
                     <td className="min-w-40 p-3">
                       <span className="font-mono text-xs">{source.accessed}</span>
-                      <span className="ml-1 text-xs text-muted">· SIMULATED access record</span>
                       <p className="mt-2 text-muted">{source.terms}</p>
                     </td>
                   </tr>
@@ -110,7 +111,7 @@ export function SourcesPage() {
             <div className="space-y-2">
               <p className="font-semibold">Solar event replay</p>
               <p className="text-sm text-muted">Starts the simulated shelter flow and postpones today's exercise.</p>
-              <Button onClick={replaySolarEvent} disabled={eventReplayed}>
+              <Button variant="outline" onClick={replaySolarEvent} disabled={eventReplayed}>
                 <Sun aria-hidden />
                 {eventReplayed ? 'Event replayed · demo' : 'Replay solar event · demo'}
               </Button>
@@ -118,10 +119,25 @@ export function SourcesPage() {
             <div className="space-y-2">
               <p className="font-semibold">AI engine</p>
               <p className="text-sm text-muted">Switches the selected assistant engine. Alerts remain rule-driven.</p>
-              <Button variant="outline" onClick={() => setAiMode(aiMode === 'protocol' ? 'onboard-model' : 'protocol')}>
+              <Button
+                variant="outline"
+                disabled={loading !== null}
+                onClick={() => void switchTo(aiMode === 'protocol' ? 'onboard-model' : 'protocol')}
+              >
                 Switch to {aiMode === 'protocol' ? 'onboard model' : 'protocol mode'} · demo
               </Button>
               <p className="text-xs text-muted">Current: {aiMode === 'protocol' ? 'Protocol mode' : 'Onboard model'}</p>
+              {loading && (
+                <div aria-live="polite" className="space-y-1">
+                  <Progress value={Math.round(loading.p * 100)} aria-label="Onboard model loading" />
+                  <p className="text-xs text-muted">{loading.text}</p>
+                </div>
+              )}
+              {notice && (
+                <p role="status" className="text-xs text-muted">
+                  {notice}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <label htmlFor="demo-time" className="font-semibold">
