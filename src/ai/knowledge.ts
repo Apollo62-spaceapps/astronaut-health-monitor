@@ -206,7 +206,6 @@ const CORE: Passage[] = [
   },
   {
     id: 'moon-delay',
-    kind: 'app',
     title: 'Communication delay to the Moon',
     text: 'The Moon is about 384,400 km away, so a radio signal takes about 1.3 seconds each way, and a reply about 2.6 seconds (physical calculation: average Earth–Moon distance ÷ speed of light).',
     sourceIds: [],

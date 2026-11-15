@@ -28,12 +28,12 @@ export function engineFor(mode: AiMode): AssistantEngine {
   return onboard
 }
 
-/** Motor de bordo compartilhado (o mesmo da escolha de modo). */
 /** Modelo do motor já criado (sem criar um novo): o rótulo do modo de IA mostra o que está carregado de fato. */
 export function currentOnboardModelId(): string | undefined {
   return onboard?.modelId
 }
 
+/** Motor de bordo compartilhado (o mesmo da escolha de modo). */
 export function onboardEngine(modelId?: string): OnboardModelEngine {
   // Trocar de modelo cria outro motor (o anterior fica para o coletor de lixo).
   if (modelId && onboard?.modelId !== modelId) onboard = new OnboardModelEngine(modelId)

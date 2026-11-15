@@ -495,7 +495,7 @@ function about(): Narration {
   return {
     prose: [
       `I am ${ASSISTANT_NAME}, the health copilot that flies with you. I read the data the rule engine already checked, explain it in plain words and help you decide when to call the CMO.`,
-      `Everything runs onboard, without a connection: a deterministic rule layer decides every color, alert and escalation, and I answer from a local library of ${KNOWLEDGE.length} passages: the ones about health and space cite their sources (mostly NASA), the rest explain how this app works. An optional on-device model can only rephrase my wording. The idea follows NASA work on Earth-independent medical operations.${cite(['S12'])}`,
+      `Everything runs onboard, without a connection: a deterministic rule layer decides every color, alert and escalation, and I answer from a local library of ${KNOWLEDGE.length} passages: the ones about health and space cite their sources (mostly NASA), the rest explain how this app works or are simple physical calculations. An optional on-device model can only rephrase my wording. The idea follows NASA work on Earth-independent medical operations.${cite(['S12'])}`,
       'I never change an alert, never name a condition and never replace the flight surgeon. You stay in the loop for every action.',
     ],
     consulted: consult('eimo', 'ssm-caveat'),

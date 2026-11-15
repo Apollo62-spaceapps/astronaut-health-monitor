@@ -53,5 +53,12 @@ describe('intent.ts (Orbit)', () => {
     expect(classify('hi').intent).toBe('smalltalk')
     expect(classify("thanks, what's my heart rate?").intent).not.toBe('smalltalk')
     expect(classify('hi, how am I doing?').intent).toBe('status')
+    // Sem pergunta, continua smalltalk (não abre a triagem nem responde outro assunto).
+    for (const t of ['thanks, I feel better', 'thanks for the report', 'ok, thanks for today', 'thanks, my heart is fine'])
+      expect(classify(t).intent, t).toBe('smalltalk')
+  })
+
+  it('erro de digitação junto com "hard to" não perde a emergência', () => {
+    expect(isEmergency('hard to breth')).toBe(true)
   })
 })
