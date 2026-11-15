@@ -83,7 +83,8 @@ export function CommsPage() {
         </dl>
         <p className="mt-3 text-xs text-muted">{env.delayNote}</p>
         <div className="mt-5 flex flex-wrap items-center gap-4">
-          <Button onClick={sendSummary}>
+          {/* Secundário: o primário vermelho da tela é o "Log measurement" da faixa (ROUT-03, DESIGN-SYSTEM §3). */}
+          <Button variant="secondary" onClick={sendSummary}>
             <Send aria-hidden />
             Send summary to ground
           </Button>
