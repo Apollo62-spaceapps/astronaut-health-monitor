@@ -75,6 +75,7 @@ export function OverviewPage() {
   const shelterActive = useAppStore((s) => s.shelterActive)
   const simNowIso = useAppStore((s) => s.simNowIso)
   const addReading = useAppStore((s) => s.addReading)
+  const advanceDay = useAppStore((s) => s.advanceDay)
   const setRoutineStatus = useAppStore((s) => s.setRoutineStatus)
   const [selected, setSelected] = useState<MapTarget>('heart')
   const [logOpen, setLogOpen] = useState(false)
@@ -124,6 +125,16 @@ export function OverviewPage() {
             >
               Log measurement
             </Button>
+            <Button
+              variant="outline"
+              onClick={() => advanceDay(1)}
+              title="Demo control: moves the simulated mission clock forward one day (BODY-08)"
+            >
+              Advance day{' '}
+              <span className="ml-1 rounded border border-white/30 px-1 text-[11px] uppercase tracking-wider">
+                Demo
+              </span>
+            </Button>
             <IllustrativeThresholds />
           </div>
 
@@ -172,6 +183,8 @@ export function OverviewPage() {
               }}
               selected={selected}
               onSelect={setSelected}
+              showLegs
+              pulse
             />
             <p className="text-center text-xs text-muted">
               Select a zone (click, Enter or Space) to see its card. Some data simulated.

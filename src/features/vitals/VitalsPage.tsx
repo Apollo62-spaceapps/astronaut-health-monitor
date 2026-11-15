@@ -108,6 +108,7 @@ export function VitalsPage() {
                 <VitalChart
                   kind={kind}
                   baseline={ev.baseline}
+                  xDomain={[Math.max(0, missionDay - 120), missionDay]}
                   points={chartPoints(
                     vitals.filter((r) => r.kind === kind),
                     MISSION_START_ISO,
