@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { cn } from '@/lib/utils'
+import { useHashParam } from '@/lib/useHashTab'
 import { ChevronDown, ExternalLink, RotateCcw, Sun, Timer } from 'lucide-react'
 import { SOURCES, DONKI_ACKNOWLEDGEMENT } from '@/data/sources'
 import { useAppStore } from '@/state/store'
@@ -16,6 +18,11 @@ export function SourcesPage() {
   const acceleration = useAppStore((s) => s.timeAcceleration)
   const setTimeAcceleration = useAppStore((s) => s.setTimeAcceleration)
   const [open, setOpen] = useState(false)
+  // SRC-02: o selo clicado chega aqui como #/sources?src=S07 → destaca e rola até a linha.
+  const selected = useHashParam('src')
+  useEffect(() => {
+    if (selected) document.getElementById(`source-${selected}`)?.scrollIntoView?.({ block: 'center' })
+  }, [selected])
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -24,6 +31,23 @@ export function SourcesPage() {
         <h1 className="mt-2 text-3xl">Data &amp; Sources</h1>
         <p className="mt-2 text-muted">Sources and terms behind the prototype.</p>
       </header>
+
+      <Card
+        id="source-simulated"
+        className={cn(selected === 'simulated' && 'ring-2 ring-link')}
+        aria-current={selected === 'simulated' ? 'true' : undefined}
+      >
+        <CardHeader>
+          <CardTitle>About SIMULATED data</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2 text-sm text-muted">
+          <p>
+            Values marked SIMULATED are synthetic: generated with a fixed seed for this demo scenario. They are not real
+            health data from any person.
+          </p>
+          <p>When a simulated value is based on a published figure, its badge opens that source below.</p>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
@@ -42,7 +66,15 @@ export function SourcesPage() {
               </thead>
               <tbody>
                 {SOURCES.map((source) => (
-                  <tr key={source.id} className="border-b border-border align-top last:border-0">
+                  <tr
+                    key={source.id}
+                    id={`source-${source.id}`}
+                    aria-current={selected === source.id ? 'true' : undefined}
+                    className={cn(
+                      'scroll-mt-24 border-b border-border align-top last:border-0',
+                      selected === source.id && 'bg-link/10 outline-2 outline-link',
+                    )}
+                  >
                     <td className="p-3">
                       <span className="font-mono">{source.id}</span>
                       <br />

@@ -1,7 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { z } from 'zod'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { History, LockKeyhole, ShieldAlert } from 'lucide-react'
+import { History, Info, LockKeyhole, ShieldAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -41,6 +41,7 @@ export function WellbeingPage() {
   const [reason, setReason] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
   const [error, setError] = useState('')
+  const [privacyInfoOpen, setPrivacyInfoOpen] = useState(false)
   const privacy = {
     role,
     consentShareWellbeingAlerts: consent.shareWellbeingAlertsWithCmo,
@@ -96,6 +97,30 @@ export function WellbeingPage() {
         <p className="text-xs font-semibold uppercase tracking-wider text-muted">Wellbeing · private</p>
         <h1 className="mt-2 text-3xl">Daily check-in</h1>
         <p className="mt-2 text-muted">Self-report, not a clinical assessment.</p>
+        {/* PRIV-05: contexto da privacidade, com fonte (S02, S04). */}
+        <button
+          type="button"
+          aria-expanded={privacyInfoOpen}
+          aria-controls="privacy-info"
+          onClick={() => setPrivacyInfoOpen((v) => !v)}
+          className="mt-3 inline-flex items-center gap-1 text-sm text-link"
+        >
+          <Info aria-hidden className="size-4" /> Why is this private?
+        </button>
+        {privacyInfoOpen && (
+          <p id="privacy-info" className="mt-2 max-w-3xl rounded-md bg-surface px-4 py-3 text-sm">
+            NASA treats private medical communications as private{' '}
+            <a href="#/sources?src=S02" className="num">
+              [S02]
+            </a>
+            , and crew medical data are handled under the Privacy Act of 1974{' '}
+            <a href="#/sources?src=S04" className="num">
+              [S04]
+            </a>
+            . That is why the CMO sees only the alert level with your consent, or the details through audited emergency
+            access.
+          </p>
+        )}
       </header>
       {role === 'ASTRONAUT' && notification && (
         <p role="status" className="rounded-md border border-border bg-surface px-4 py-3 text-sm">
