@@ -3,7 +3,7 @@
 // as regras inegociáveis que dá para checar automaticamente (CLAUDE.md §0, DESIGN-SYSTEM §6).
 // Se este teste falhar, a tela que quebrou aparece no nome do caso: "<aba> · <perfil> · <ambiente>".
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { cleanup, render } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import App from '@/app/App'
 import { DISCLAIMER } from '@/app/AppShell'
 import { TABS } from '@/app/tabs'
@@ -57,4 +57,42 @@ describe('varredura da demo (K8)', () => {
       }
     }
   }
+})
+
+const primaryLabels = (root: HTMLElement) =>
+  [...root.querySelectorAll('[data-slot="button"][data-variant="default"]')].map((b) => b.textContent?.trim())
+
+describe('roteiro da demo (K8, SPEC §10)', () => {
+  it('Demo controls aberto continua com no máximo um botão vermelho (DEMO-01)', () => {
+    const { container } = renderTab('sources', 'ASTRONAUT', 'SPACECRAFT')
+    fireEvent.click(screen.getByRole('button', { name: /demo controls/i }))
+    expect(screen.getByText(/Replay solar event · demo/)).toBeTruthy()
+    expect(primaryLabels(container).length, primaryLabels(container).join(' | ')).toBeLessThanOrEqual(1)
+  })
+
+  it('exercício segue o ambiente: aparelhos com fonte só na Space Station (§5.1, P-18)', () => {
+    renderTab('exercise', 'ASTRONAUT', 'ISS')
+    expect(screen.getAllByText(/ARED/).length).toBeGreaterThan(0)
+    cleanup()
+    const { container } = renderTab('exercise', 'ASTRONAUT', 'LUNAR')
+    expect(container.textContent).toMatch(/simulated habitat equipment/i)
+    expect(container.textContent).not.toMatch(/Advanced Resistive Exercise Device/)
+  })
+
+  it('passo 5: CMO vê o bem-estar bloqueado, faz break-glass e o acesso aparece na auditoria (PRIV-02/03/04)', () => {
+    const { container } = renderTab('wellbeing', 'CMO', 'SPACECRAFT')
+    expect(container.textContent).toContain('Restricted — private medical data')
+    expect(container.textContent).not.toContain('Last 14 days')
+
+    useAppStore.getState().breakGlassAccess('Crew member unresponsive during shelter')
+    cleanup()
+    const cmo = renderTab('wellbeing', 'CMO', 'SPACECRAFT')
+    expect(cmo.container.textContent).toContain('Last 14 days')
+    expect(cmo.container.textContent).toContain('reason: Crew member unresponsive during shelter')
+
+    cleanup()
+    const astronaut = renderTab('wellbeing', 'ASTRONAUT', 'SPACECRAFT')
+    expect(astronaut.container.textContent).toContain('CMO accessed your wellbeing data')
+    expect(screen.getByRole('list', { name: 'Audit log entries' })).toBeTruthy()
+  })
 })

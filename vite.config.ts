@@ -17,5 +17,7 @@ export default defineConfig({
     // Testes de componente declaram `// @vitest-environment jsdom` na primeira linha.
     environment: 'node',
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.{ts,mjs}'],
+    // Os testes de tela (varredura K8, gráficos) rodam em paralelo e podem passar de 5 s em notebook mais lento.
+    testTimeout: 15_000,
   },
 })

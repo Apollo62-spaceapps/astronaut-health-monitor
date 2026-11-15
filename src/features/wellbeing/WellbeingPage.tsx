@@ -1,7 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { z } from 'zod'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { LockKeyhole, ShieldAlert } from 'lucide-react'
+import { History, LockKeyhole, ShieldAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/dialog'
 import { ProvenanceBadge } from '@/components/ProvenanceBadge'
 import { useAppStore } from '@/state/store'
-import { accessLevel } from '@/domain/rules/privacy'
+import { accessLevel, visibleAuditEntries } from '@/domain/rules/privacy'
 import type { WellbeingEntry } from '@/domain/types'
 
 const checkInSchema = z.object({ mood: z.number().int().min(1).max(5), sleepHours: z.number().min(0).max(24) })
@@ -47,6 +47,8 @@ export function WellbeingPage() {
     breakGlassActive: breakGlass.active,
   }
   const canSeeDetails = accessLevel('wellbeingDetail', privacy) === 'full'
+  // Log de auditoria por perfil (matriz §6.7): CMO vê só os próprios acessos.
+  const auditEntries = visibleAuditEntries(auditLog, privacy).slice().reverse()
   const today = simNowIso.slice(0, 10)
   const chartData = useMemo(
     () =>
@@ -139,7 +141,9 @@ export function WellbeingPage() {
           <CardContent className="space-y-4">
             <p className="text-muted">Mood and sleep entries are private. Emergency access is audited.</p>
             {role === 'CMO' && !breakGlass.active && (
-              <Button onClick={() => setDialogOpen(true)}>Emergency access</Button>
+              <Button variant="secondary" onClick={() => setDialogOpen(true)}>
+                Emergency access
+              </Button>
             )}
             {breakGlass.active && (
               <Button variant="outline" onClick={endBreakGlass}>
@@ -200,7 +204,9 @@ export function WellbeingPage() {
                         {error}
                       </p>
                     )}
-                    <Button type="submit">Save check-in</Button>
+                    <Button type="submit" variant="secondary">
+                      Save check-in
+                    </Button>
                   </form>
                 </CardContent>
               </Card>
@@ -280,6 +286,40 @@ export function WellbeingPage() {
           )}
         </>
       )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <History aria-hidden className="size-5" />
+            Audit log
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {role === 'CMO' && <p className="mb-3 text-xs text-muted">Showing your own access entries only.</p>}
+          {auditEntries.length === 0 ? (
+            <p className="text-sm text-muted">No access or consent changes recorded yet.</p>
+          ) : (
+            <ol className="divide-y divide-border text-sm" aria-label="Audit log entries">
+              {auditEntries.map((entry) => (
+                <li
+                  key={`${entry.at}-${entry.action}-${entry.actor}`}
+                  className="grid grid-cols-[170px_150px_1fr] gap-3 py-2"
+                >
+                  <span className="num text-muted">{entry.at.slice(0, 16).replace('T', ' ')} UTC</span>
+                  <span>
+                    {entry.actor === 'FLIGHT_SURGEON' ? 'Flight surgeon' : entry.actor === 'CMO' ? 'CMO' : 'Astronaut'}
+                  </span>
+                  <span>
+                    {entry.action === 'BREAK_GLASS_VIEW' ? 'Emergency access to wellbeing' : 'Consent changed'}
+                    {entry.reason ? ` — reason: ${entry.reason}` : ''}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
+          <p className="mt-3 text-xs text-muted">Simulated mission clock · demo.</p>
+        </CardContent>
+      </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>

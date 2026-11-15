@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { ProvenanceBadge } from '@/components/ProvenanceBadge'
 import { useAppStore } from '@/state/store'
 import { applyShelter, weeklyAdherence } from '@/domain/rules/exercise'
+import { ENVIRONMENTS } from '@/domain/config/environments'
 import type { ExerciseSession } from '@/domain/types'
 
 const DEVICES = ['ARED', 'T2', 'CEVIS'] as const
@@ -15,9 +16,20 @@ const DEVICE_NAMES = {
   T2: 'Treadmill 2',
   CEVIS: 'Cycle Ergometer with Vibration Isolation System',
 }
+// Fora da Space Station não há fonte para os aparelhos (P-18): mostra só o tipo de sessão.
+const SESSION_KIND = { ARED: 'Resistance session', T2: 'Treadmill session', CEVIS: 'Cycle session' }
 
 export function ExercisePage() {
   const sessions = useAppStore((s) => s.exercise)
+  const environment = useAppStore((s) => s.environment)
+  const env = ENVIRONMENTS[environment]
+  // §5.1: só a Space Station tem equipamentos com fonte [S13]; Earth = plano de solo; Moon/Spacecraft = P-18.
+  const sourcedDevices = env.exerciseDevices !== null
+  const equipmentNote = sourcedDevices
+    ? `${env.label} equipment: ARED, T2, CEVIS (NASA, S13).`
+    : environment === 'EARTH'
+      ? 'Earth: ground training plan (simulated).'
+      : `${env.label}: simulated habitat equipment — equipment not sourced for this environment (P-18).`
   const simNowIso = useAppStore((s) => s.simNowIso)
   const shelterActive = useAppStore((s) => s.shelterActive)
   const loadScenario = useAppStore((s) => s.loadScenario)
@@ -28,6 +40,7 @@ export function ExercisePage() {
     [todaySessions, simNowIso, shelterActive],
   )
   const adherence = weeklyAdherence(sessions, simNowIso)
+  const plannedMin = todaySessions.reduce((sum, s) => sum + s.prescribedMin, 0)
 
   function updateSession(device: ExerciseSession['device'], status: ExerciseSession['status'], doneMin: number) {
     const next = sessions.map((session) =>
@@ -67,17 +80,22 @@ export function ExercisePage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Dumbbell aria-hidden className="size-5" />
-            Sessions · 120 min planned · SIMULATED
+            Sessions · <span className="num">{plannedMin}</span> min planned · SIMULATED
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted">Prescribed by ASCR team (simulated).</p>
+          <p className="text-sm">{equipmentNote}</p>
           <ProvenanceBadge
-            provenance={{
-              kind: 'simulated',
-              basis: 'S13',
-              note: 'Illustrative scenario plan based on ISS exercise equipment.',
-            }}
+            provenance={
+              sourcedDevices
+                ? {
+                    kind: 'simulated',
+                    basis: 'S13',
+                    note: 'Illustrative scenario plan based on ISS exercise equipment.',
+                  }
+                : { kind: 'simulated', note: 'Illustrative scenario plan; equipment not sourced (P-18).' }
+            }
           />
           {DEVICES.map((device) => {
             const session = displayedToday.find((item) => item.device === device)
@@ -85,7 +103,7 @@ export function ExercisePage() {
               return (
                 <div key={device} className="rounded-md border border-border bg-surface-2 p-4">
                   <p className="font-semibold">
-                    {device} · {DEVICE_NAMES[device]}
+                    {sourcedDevices ? `${device} · ${DEVICE_NAMES[device]}` : SESSION_KIND[device]}
                   </p>
                   <p className="mt-2 text-sm text-muted">No session scheduled for this environment today.</p>
                 </div>
@@ -96,8 +114,14 @@ export function ExercisePage() {
                 className="grid grid-cols-[1fr_110px_230px] items-center gap-4 rounded-md border border-border bg-surface-2 p-4"
               >
                 <div>
-                  <h2 className="font-semibold">{device}</h2>
-                  <p className="text-sm text-muted">{DEVICE_NAMES[device]}</p>
+                  <h2 className="font-semibold">{sourcedDevices ? device : SESSION_KIND[device]}</h2>
+                  <p className="text-sm text-muted">
+                    {sourcedDevices
+                      ? DEVICE_NAMES[device]
+                      : environment === 'EARTH'
+                        ? 'Ground training'
+                        : 'Simulated habitat equipment'}
+                  </p>
                   <p className="mt-1 text-xs text-muted">
                     {session.status === 'postponed'
                       ? 'Postponed · shelter active'
