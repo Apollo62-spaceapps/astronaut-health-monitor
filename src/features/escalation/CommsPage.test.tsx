@@ -14,7 +14,7 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
-describe('escalonamento temporário (ESC-02, até a L2)', () => {
+describe('escalonamento R-ESC-01 (ESC-02)', () => {
   it('normal não escala; attention põe na fila; urgent é prioritário', () => {
     expect(escalate('normal', 'SPACECRAFT')).toMatchObject({ enqueue: false, escalateTo: [] })
     expect(escalate('attention', 'SPACECRAFT')).toMatchObject({
