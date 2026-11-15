@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { ENVIRONMENTS, groundReplySec } from '@/domain/config/environments'
 import type { Role } from '@/domain/types'
 import { useAppStore } from '@/state/store'
+import { isBlackoutActive } from '@/features/escalation/blackout'
 import { Button } from '@/components/ui/button'
 import { MeasurementDialog } from '@/features/routine/MeasurementDialog'
 import { useState } from 'react'
@@ -27,6 +28,10 @@ export function GroundReplyWindow() {
   const environment = useAppStore((st) => st.environment)
   const env = ENVIRONMENTS[environment]
   const total = groundReplySec(environment)
+  const blackout = useAppStore((st) => isBlackoutActive(st.environment, st.commBlackout))
+  if (blackout) {
+    return <p className="text-sm font-semibold">Comm blackout · {env.label} · no ground link (demo)</p>
+  }
   if (environment === 'EARTH') {
     return <p className="text-sm font-semibold">Flight surgeon available now</p>
   }

@@ -1,6 +1,6 @@
 // Comunicação e fila ao solo (K6 #46) — SPEC ESC-02, ESC-03, ESC-04, DEMO-02, ENV-05.
 // O atraso faz parte da interface: o mesmo alerta tem resposta em ~40 min na Spacecraft e na hora na Earth.
-import { RadioTower, Send } from 'lucide-react'
+import { RadioTower, Send, WifiOff } from 'lucide-react'
 import { ENVIRONMENTS, groundReplySec } from '@/domain/config/environments'
 import type { AlertLevel, OutboundPacket } from '@/domain/types'
 import { useAppStore } from '@/state/store'
@@ -9,9 +9,12 @@ import { StatusBadge } from '@/components/StatusBadge'
 import { ProvenanceBadge } from '@/components/ProvenanceBadge'
 import { escalate } from '@/features/escalation/escalateTemp'
 import { usePacketProgress } from '@/features/escalation/usePacketProgress'
+import { BLACKOUT_NOTE, blackoutPossible, isBlackoutActive } from '@/features/escalation/blackout'
+import { Switch } from '@/components/ui/switch'
 
 /** Texto do tempo de resposta do solo, em linguagem simples. */
-export function replyText(sec: number): string {
+export function replyText(sec: number, blackout = false): string {
+  if (blackout) return 'Comm blackout — no ground link. Follow these safe actions now.'
   if (sec === 0) return 'Flight surgeon available now.'
   if (sec < 60) return `Ground reply in ~${sec.toFixed(1)} s.`
   return `Ground reply in ~${Math.round(sec / 60)} min. Follow these safe actions now.`
@@ -35,6 +38,9 @@ export function CommsPage() {
   const enqueuePacket = useAppStore((s) => s.enqueuePacket)
   const acceleration = useAppStore((s) => s.timeAcceleration)
   const setTimeAcceleration = useAppStore((s) => s.setTimeAcceleration)
+  const commBlackout = useAppStore((s) => s.commBlackout)
+  const setCommBlackout = useAppStore((s) => s.setCommBlackout)
+  const blackout = isBlackoutActive(environment, commBlackout)
 
   const env = ENVIRONMENTS[environment]
   const eta = groundReplySec(environment)
@@ -59,8 +65,8 @@ export function CommsPage() {
       <section aria-labelledby="comms-title" className="rounded-lg bg-surface p-6">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted">Communications · {env.label}</p>
         <h1 id="comms-title" className="mt-1 flex items-center gap-2 text-3xl">
-          <RadioTower aria-hidden className="size-7" />
-          {replyText(eta)}
+          {blackout ? <WifiOff aria-hidden className="size-7" /> : <RadioTower aria-hidden className="size-7" />}
+          {replyText(eta, blackout)}
         </h1>
         <dl className="mt-4 grid grid-cols-3 gap-4 text-sm">
           <div>
@@ -82,6 +88,24 @@ export function CommsPage() {
           </div>
         </dl>
         <p className="mt-3 text-xs text-muted">{env.delayNote}</p>
+        {blackoutPossible(environment) && (
+          <div className="mt-4 flex flex-wrap items-center gap-3 rounded-md bg-surface-2 p-3 text-sm">
+            <Switch
+              id="comm-blackout"
+              className="data-[state=checked]:bg-link"
+              checked={commBlackout}
+              onCheckedChange={setCommBlackout}
+            />
+            <label htmlFor="comm-blackout" className="font-semibold">
+              Comm blackout · demo
+            </label>
+            <span className="text-muted">
+              {blackout ? 'Packets stay queued until the blackout ends.' : BLACKOUT_NOTE}
+            </span>
+            <ProvenanceBadge provenance={{ kind: 'real', sourceId: 'S10' }} />
+            <ProvenanceBadge provenance={{ kind: 'real', sourceId: 'S11' }} />
+          </div>
+        )}
         <div className="mt-5 flex flex-wrap items-center gap-4">
           {/* Secundário: o primário vermelho da tela é o "Log measurement" da faixa (ROUT-03, DESIGN-SYSTEM §3). */}
           <Button variant="secondary" onClick={sendSummary}>
@@ -123,7 +147,9 @@ export function CommsPage() {
                 <div>
                   <p className="font-semibold">
                     {p.priority === 'priority' && <span className="mr-2 text-urgent">● Priority</span>}
-                    {STATUS_TEXT[p.status]}
+                    {blackout && p.status === 'queued'
+                      ? 'Queued — held until the blackout ends'
+                      : STATUS_TEXT[p.status]}
                   </p>
                   <p className="text-sm text-muted">{p.summary}</p>
                 </div>

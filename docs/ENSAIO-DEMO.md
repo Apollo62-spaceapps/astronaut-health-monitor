@@ -38,10 +38,12 @@ Antes de começar: **Data & Sources → Demo controls → Reset scenario · demo
 | 2 | **Radiation → Replay event · demo** | ● Urgent com os 3 passos do abrigo da Orion; "Real event observed near Earth (NASA DONKI), replayed in this scenario."; rotina e exercício em Postponed |
 | 3 | **Assistant**: perguntar "How am I doing?" | Resposta com o rótulo "AI-generated — verify with CMO/flight surgeon."; selo do modo de IA |
 | 4 | **Comms** na Spacecraft → Send summary to ground | "Ground reply in ~40 min"; pacote na fila. Trocar para Space Station/Earth: resposta quase imediata |
+| 4a | *(opcional, K9)* Ligar **Comm blackout · demo** na Comms | A faixa mostra "Comm blackout · no ground link"; o pacote fica "Queued — held until the blackout ends". Desligar: a fila volta a andar [S10, S11] |
 | 5 | Perfil **CMO** → Overview e Wellbeing | Head cinza com cadeado (◼ Restricted); "Restricted — private medical data" → **Emergency access** → motivo → dados aparecem + entrada no **Audit log** |
 | 5a | Voltar para **Astronaut** → Wellbeing | "CMO accessed your wellbeing data — reason: …" e a entrada no Audit log |
 | 6 | **Data & Sources → Demo controls → Switch to protocol mode · demo** | Faixa "AI: protocol mode"; alertas e cores **não mudam** |
 | 7 | **Data & Sources** | Tabela S01–S19 com URLs e termos; agradecimento ao DONKI |
+| 7a | *(opcional, K9)* Clicar num selo `REAL · DONKI` (Radiation) | Abre Data & Sources com a linha S07 destacada. Na Wellbeing, **Why is this private?** mostra o texto com [S02] e [S04] |
 
 ## 4. Varredura final (já automatizada)
 

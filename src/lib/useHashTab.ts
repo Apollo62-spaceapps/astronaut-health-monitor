@@ -22,3 +22,20 @@ export function useHashTab(): [TabId, (tab: TabId) => void] {
 
   return [tab, go]
 }
+
+/** Lê um parâmetro depois do "?" no hash (ex.: #/sources?src=S07 → "S07"). */
+export function readHashParam(name: string, hash = window.location.hash): string | null {
+  const query = hash.split('?')[1]
+  return query ? new URLSearchParams(query).get(name) : null
+}
+
+/** Parâmetro do hash que acompanha a navegação (SRC-02: selo → linha da fonte). */
+export function useHashParam(name: string): string | null {
+  const [value, setValue] = useState(() => readHashParam(name))
+  useEffect(() => {
+    const onHash = () => setValue(readHashParam(name))
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [name])
+  return value
+}

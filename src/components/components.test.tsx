@@ -38,7 +38,7 @@ describe('ProvenanceBadge (NFR-05)', () => {
     expect(provenanceLabel({ kind: 'real', sourceId: 'S07' })).toBe('REAL · DONKI')
     expect(provenanceLabel({ kind: 'simulated' })).toBe('SIMULATED')
     render(<ProvenanceBadge provenance={{ kind: 'simulated' }} />)
-    expect(screen.getByRole('link', { name: 'SIMULATED' }).getAttribute('href')).toBe('#/sources')
+    expect(screen.getByRole('link', { name: /^SIMULATED/ }).getAttribute('href')).toBe('#/sources?src=simulated')
   })
 })
 
