@@ -1,7 +1,8 @@
 // Demo controls (DEMO-01, DEMO-02): botão fixo "Demo" no canto inferior direito, em todas as telas,
 // visualmente separado do produto (borda tracejada, rótulo "Demo"). Tudo o que ele dispara leva "demo" na UI.
 import { useState } from 'react'
-import { FlaskConical, RotateCcw, Sun, Timer, X } from 'lucide-react'
+import { FlaskConical, RotateCcw, Sparkles, Sun, Timer, X } from 'lucide-react'
+import { useOrbitStore } from '@/features/assistant/orbitStore'
 import { useAppStore } from '@/state/store'
 import { Button } from '@/components/ui/button'
 
@@ -51,6 +52,35 @@ export function DemoControls() {
             </div>
           </div>
 
+
+          {/* L7 §9.6: roteiro do Orbit (§11) como atalho. Cada botão faz a pergunta e abre a gaveta. */}
+          <div className="space-y-1">
+            <p className="text-sm font-semibold">Ask Orbit · demo script</p>
+            <div className="flex flex-wrap gap-2">
+              {(
+                [
+                  { label: 'Heart zone', q: { text: 'Why is my heart zone attention?', intent: 'zoneExplain', zone: 'heart' } },
+                  { label: 'Solar event', q: { text: 'What do I do about the solar event?', intent: 'solarEvent' } },
+                  { label: 'I feel dizzy', q: { text: 'I feel dizzy' } },
+                  { label: 'Crew outlook', q: { text: 'Who is at higher risk?', intent: 'riskOutlook' } },
+                  { label: 'Drift', q: { text: 'Am I drifting from my baseline?', intent: 'drift' } },
+                ] as const
+              ).map(({ label, q }) => (
+                <Button
+                  key={label}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    useOrbitStore.getState().ask({ ...q }, { openDrawer: true })
+                    setOpen(false)
+                  }}
+                >
+                  <Sparkles aria-hidden />
+                  {label}
+                </Button>
+              ))}
+            </div>
+          </div>
 
           <div className="flex flex-wrap items-end justify-between gap-4">
             <label htmlFor="demo-time" className="space-y-1 text-sm font-semibold">

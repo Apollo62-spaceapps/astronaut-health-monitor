@@ -19,6 +19,22 @@ import { ADAPTATION_WINDOW_DAYS } from '@/domain/rules/phase'
 import { shownLevel } from '@/features/overview/phaseDisplay'
 import { CONSULT, ZONE_ACTIONS, ZONE_CONTENT } from '@/features/overview/zoneContent'
 import type { MapTarget } from '@/features/overview/BodyMap'
+import { Sparkles } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useOrbitStore } from '@/features/assistant/orbitStore'
+
+/** "Explain with Orbit" (L7 §9.2): abre a gaveta com a explicação da zona. O Orbit só explica. */
+function ExplainWithOrbit({ zone, label, status }: { zone: MapTarget; label: string; status?: ZoneStatus | null }) {
+  const ask = useOrbitStore((s) => s.ask)
+  const text = status ? `Why is my ${label.toLowerCase()} zone ${status}?` : `Explain my ${label.toLowerCase()} zone`
+  return (
+    <div>
+      <Button variant="outline" size="sm" onClick={() => ask({ text, intent: 'zoneExplain', zone }, { openDrawer: true })}>
+        <Sparkles aria-hidden /> Explain with Orbit
+      </Button>
+    </div>
+  )
+}
 
 const isVital = (i: BodyIndicator): i is VitalKind => (VITAL_KINDS as readonly string[]).includes(i)
 
@@ -213,6 +229,7 @@ export function ZoneCard({
             <p>No active solar particle event. See the Radiation screen for the dose details.</p>
           )}
         </Section>
+        <ExplainWithOrbit zone="radiation" label="Radiation" status={shelter ? 'urgent' : null} />
         <Section title="Source">
           <Sources ids={[...RADIATION_OVERLAY.sourceIds, 'S05', 'S08', 'S09']} />
         </Section>
@@ -256,6 +273,7 @@ export function ZoneCard({
         <WhatToDo status={status} gravityZone={zone.hazard === 'gravity'} adaptationActive={adaptationActive} />
         {(status === 'attention' || status === 'urgent') && <p className="mt-1 text-muted">{CONSULT}</p>}
       </Section>
+      <ExplainWithOrbit zone={zone.id} label={zone.label} status={status} />
       <Section title="Source">
         <Sources ids={content.whyItMatters?.sourceIds ?? zone.sourceIds} />
       </Section>

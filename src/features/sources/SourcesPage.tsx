@@ -4,7 +4,8 @@ import { useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { useHashParam } from '@/lib/useHashTab'
 import { ExternalLink } from 'lucide-react'
-import { SOURCES, DONKI_ACKNOWLEDGEMENT } from '@/data/sources'
+import { SOURCES, DONKI_ACKNOWLEDGEMENT, SSM_CAVEAT } from '@/data/sources'
+import { SourceRef } from '@/components/SourceRef'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatUtc } from '@/lib/format'
 
@@ -115,6 +116,22 @@ export function SourcesPage() {
 
       {/* L6: menção de inspiração dos fundos. Nada foi copiado do OriginKit (docs/reference/backdrops.html foi
           desenhado do zero), então não há fonte nova no catálogo — S20 já é o NTRS 20220013418. */}
+      {/* L7 §9.5 e §5C: como o Orbit funciona e a ressalva das Standard Measures. */}
+      <Card id="source-orbit">
+        <CardHeader>
+          <CardTitle>How Orbit works</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2 text-sm text-muted">
+          <p>
+            Orbit reads the data the rule engine already checked and explains it. Every answer is built from rules; the
+            optional onboard model only rewrites the wording, and never changes a status, an alert or the escalation.
+            Idea inspired by NASA research on Earth-independent medical operations <SourceRef ids={['S12']} />; related
+            context <SourceRef ids={['S15']} />. Not endorsed by or used by NASA.
+          </p>
+          <p>{SSM_CAVEAT} <SourceRef ids={['S28']} /></p>
+        </CardContent>
+      </Card>
+
       <Card id="source-visual">
         <CardHeader>
           <CardTitle>Visual inspiration</CardTitle>

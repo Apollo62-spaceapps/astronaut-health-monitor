@@ -36,6 +36,21 @@ export class OnboardModelEngine implements AssistantEngine {
     })) as unknown as Engine
   }
 
+  /** L7 (Orbit): gera só o JSON do resumo, com temperatura baixa e poucos tokens. */
+  async generate(messages: { role: 'system' | 'user'; content: string }[]): Promise<string> {
+    if (!this.engine) throw new Error('Onboard model not initialized')
+    const timeout = new Promise<never>((_, rej) => setTimeout(() => rej(new Error('timeout')), GENERATION_TIMEOUT_MS))
+    const res = await Promise.race([
+      this.engine.chat.completions.create({ messages, temperature: 0.1, max_tokens: 120 }),
+      timeout,
+    ])
+    return res.choices[0]?.message.content?.trim() || ''
+  }
+
+  get ready(): boolean {
+    return this.engine !== null
+  }
+
   async reply(ctx: AssistantContext, history: ChatMessage[], userText: string) {
     if (!this.engine) throw new Error('Onboard model not initialized')
     const messages = [

@@ -2,16 +2,26 @@
 import {
   Activity,
   BookOpen,
-  Bot,
   Dumbbell,
   HeartPulse,
+  Orbit,
   Radiation,
+  Ruler,
   Smile,
+  Users,
   type LucideIcon,
 } from 'lucide-react'
 
 export type TabId =
-  'overview' | 'vitals' | 'radiation' | 'wellbeing' | 'exercise' | 'assistant' | 'sources'
+  | 'overview'
+  | 'vitals'
+  | 'reference'
+  | 'radiation'
+  | 'wellbeing'
+  | 'exercise'
+  | 'outlook'
+  | 'assistant'
+  | 'sources'
 
 export interface TabDef {
   id: TabId
@@ -24,10 +34,13 @@ export interface TabDef {
 export const TABS: readonly TabDef[] = [
   { id: 'overview', label: 'Overview', icon: Activity, owner: 'Lucas', task: 'L3 #54' },
   { id: 'vitals', label: 'Vitals', icon: HeartPulse, owner: 'Lucas', task: 'L4 #55' },
+  { id: 'reference', label: 'Baseline', icon: Ruler, owner: 'Lucas', task: 'L7 · T7/T8' },
   { id: 'radiation', label: 'Radiation', icon: Radiation, owner: 'Felipe', task: 'F2 #45' },
   { id: 'exercise', label: 'Exercise', icon: Dumbbell, owner: 'Felipe', task: 'F3 #56' },
   { id: 'wellbeing', label: 'Wellbeing', icon: Smile, owner: 'Felipe', task: 'F4 #47' },
-  { id: 'assistant', label: 'Assistant', icon: Bot, owner: 'Kayque', task: 'K7 #48' },
+  { id: 'outlook', label: 'Crew outlook', icon: Users, owner: 'Lucas', task: 'L7 · T9' },
+  // Orbit (L7) substitui o assistente antigo; o id 'assistant' fica para não quebrar links (#/assistant).
+  { id: 'assistant', label: 'Orbit', icon: Orbit, owner: 'Kayque', task: 'K7 #48 · L7' },
   { id: 'sources', label: 'Data & Sources', icon: BookOpen, owner: 'Felipe', task: 'F5 #49' },
 ]
 

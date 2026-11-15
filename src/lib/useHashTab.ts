@@ -39,3 +39,8 @@ export function useHashParam(name: string): string | null {
   }, [name])
   return value
 }
+
+/** Navega para uma aba (fora de componente: usado pelas ações propostas do Orbit). */
+export function goToTab(tab: TabId): void {
+  window.location.hash = `/${tab}`
+}

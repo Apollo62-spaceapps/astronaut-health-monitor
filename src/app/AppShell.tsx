@@ -9,19 +9,28 @@ import { VitalsPage } from '@/features/vitals/VitalsPage'
 import { RadiationPage } from '@/features/radiation/RadiationPage'
 import { ExercisePage } from '@/features/exercise/ExercisePage'
 import { WellbeingPage } from '@/features/wellbeing/WellbeingPage'
-import { AssistantPage } from '@/features/assistant/AssistantPage'
 import { SourcesPage } from '@/features/sources/SourcesPage'
+import { OrbitHost } from '@/features/assistant/OrbitHost'
+import { ShieldCheck, WifiOff } from 'lucide-react'
+import { useOnline } from '@/lib/useOnline'
 import { DemoControls } from '@/features/demo/DemoControls'
 import { EnvironmentBackdrop } from '@/features/environment/backdrops/EnvironmentBackdrop'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useAppStore } from '@/state/store'
+
+// L7: as telas do Orbit, do Crew outlook e do Baseline são carregadas sob demanda (o chunk inicial não cresce).
+const AssistantPage = lazy(() => import('@/features/assistant/AssistantPage').then((m) => ({ default: m.AssistantPage })))
+const OutlookPage = lazy(() => import('@/features/outlook/OutlookPage').then((m) => ({ default: m.OutlookPage })))
+const ReferencePage = lazy(() => import('@/features/reference/ReferencePage').then((m) => ({ default: m.ReferencePage })))
 
 const PAGES: Record<TabId, ComponentType> = {
   overview: OverviewPage,
   vitals: VitalsPage,
+  reference: ReferencePage,
   radiation: RadiationPage,
   exercise: ExercisePage,
   wellbeing: WellbeingPage,
+  outlook: OutlookPage,
   assistant: AssistantPage,
   sources: SourcesPage,
 }
@@ -32,6 +41,7 @@ export const DISCLAIMER = 'Decision-support prototype — not a medical device, 
 export function AppShell() {
   const [tab, go] = useHashTab()
   const Page = PAGES[tab]
+  const online = useOnline()
   const acceleration = useAppStore((s) => s.timeAcceleration)
   const advanceDemoMinutes = useAppStore((s) => s.advanceDemoMinutes)
   useEffect(() => {
@@ -48,7 +58,14 @@ export function AppShell() {
       {/* Header (ground #000) — DESIGN-SYSTEM §4 */}
       <header className="flex h-11 items-center justify-between gap-4 bg-ground px-6">
         <span className="text-lg font-semibold tracking-wider">APOLLO 62</span>
-        <span className="truncate text-sm text-muted">Astronaut health monitor · prototype</span>
+        <span className="flex min-w-0 items-center gap-4">
+          {/* L7 §9.7: tudo roda local; o selo sustenta o "works without Earth" (ícone + texto). */}
+          <span className="inline-flex shrink-0 items-center gap-1.5 text-xs text-muted" role="status">
+            {online ? <ShieldCheck aria-hidden className="size-3.5" /> : <WifiOff aria-hidden className="size-3.5" />}
+            {online ? 'Online · works offline' : 'Offline · running locally'}
+          </span>
+          <span className="truncate text-sm text-muted">Astronaut health monitor · prototype</span>
+        </span>
       </header>
 
       {/* Faixa da missão (K4) com o botão de modo de ambiente (K5). */}
@@ -88,13 +105,17 @@ export function AppShell() {
         <main className="on-backdrop min-w-0 flex-1 p-6">
           {/* Regra única de largura para todas as telas (polimento 15/11). */}
           <div className="mx-auto w-full max-w-[1280px]">
-            <Page />
+            <Suspense fallback={<p className="text-muted">Loading…</p>}>
+              <Page />
+            </Suspense>
           </div>
         </main>
       </div>
 
       <footer className="border-t border-border bg-ground px-6 py-3 text-sm text-muted">{DISCLAIMER}</footer>
       <DemoControls />
+      {/* Orbit (L7): gaveta global, atalho A, e os diálogos das ações propostas. */}
+      <OrbitHost showLauncher={tab !== 'assistant'} />
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { Clock3 } from 'lucide-react'
 import { useAppStore } from '@/state/store'
 import { Button } from '@/components/ui/button'
 import { MeasurementDialog } from '@/features/routine/MeasurementDialog'
+import { useOrbitStore } from '@/features/assistant/orbitStore'
 
 /** Divide segundos em horas, minutos e segundos. */
 export function splitHms(totalSec: number) {
@@ -69,6 +70,16 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
               <Button size="sm" className="h-7" onClick={() => setLogItemId(reminder.id)}>
                 Log measurement
               </Button>
+              {/* L7 §9.4: o mesmo lembrete pode ser pedido ao Orbit. */}
+              <button
+                type="button"
+                className="cursor-pointer text-sm text-white underline-offset-2 hover:underline"
+                onClick={() =>
+                  useOrbitStore.getState().ask({ text: 'Remind me of my measurements', intent: 'routine' }, { openDrawer: true })
+                }
+              >
+                Ask Orbit
+              </button>
             </div>
           )
         )}

@@ -9,6 +9,7 @@ import { DISCLAIMER } from '@/app/AppShell'
 import { TABS } from '@/app/tabs'
 import type { MissionMode, Role } from '@/domain/types'
 import { useAppStore } from '@/state/store'
+import { OUTLOOK_DISCLAIMER } from '@/ai/identity'
 
 const ROLES: Role[] = ['ASTRONAUT', 'CMO', 'FLIGHT_SURGEON']
 const ENVIRONMENTS: MissionMode[] = ['EARTH', 'ISS', 'LUNAR', 'SPACECRAFT']
@@ -38,15 +39,18 @@ describe('varredura da demo (K8)', () => {
   for (const tab of TABS) {
     for (const role of ROLES) {
       for (const environment of ENVIRONMENTS) {
-        it(`${tab.id} · ${role} · ${environment}`, () => {
+        it(`${tab.id} · ${role} · ${environment}`, async () => {
           const { container } = renderTab(tab.id, role, environment)
+          // Telas carregadas sob demanda (L7): espera o título da página antes de varrer.
+          await screen.findByRole('heading', { level: 1 })
           const text = container.textContent ?? ''
 
           // NFR-08: rodapé fixo em toda tela.
           expect(text).toContain(DISCLAIMER)
 
           // BODY-07: nunca "fit", "healthy", "apto" nem diagnóstico.
-          const match = text.replace(DISCLAIMER, '').match(FORBIDDEN_UI)
+          // O aviso do Crew outlook (L7 §5A) é uma negação obrigatória, como o rodapé.
+          const match = text.replace(DISCLAIMER, '').replaceAll(OUTLOOK_DISCLAIMER, '').match(FORBIDDEN_UI)
           expect(match?.[0], `palavra proibida na UI: "${match?.[0]}"`).toBeUndefined()
 
           // DESIGN-SYSTEM §4/§9: no máximo uma ação primária vermelha por tela.

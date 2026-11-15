@@ -27,7 +27,10 @@ import { IllustrativeThresholds } from '@/components/IllustrativeThresholds'
 import { MeasurementDialog } from '@/features/routine/MeasurementDialog'
 import { BodyMap, type MapTarget } from '@/features/overview/BodyMap'
 import { ZoneCard } from '@/features/overview/ZoneCard'
-import { shownLevel } from '@/features/overview/phaseDisplay'
+import { shownLevel, zoneOfVital } from '@/features/overview/phaseDisplay'
+import { useOrbitStore } from '@/features/assistant/orbitStore'
+import { Sparkles } from 'lucide-react'
+import type { Alert } from '@/domain/types'
 import { VITAL_LABEL, formatDuration, formatMSv, formatVitalValue } from '@/lib/format'
 
 const ZONE_LABELS = Object.fromEntries(BODY_ZONES.map((z) => [z.id, z.id === 'skin' ? 'Skin' : z.label])) as Record<
@@ -104,6 +107,16 @@ function vitalCardProps(out: EngineOutput, kind: VitalKind) {
     caption: shown === 'adapting' ? 'Measured deviation; shown as Adapting during the 3-day window.' : undefined,
     provenance: ev.latest.provenance,
   }
+}
+
+/** "Ask Orbit" num alerta (L7 §9.1): abre a gaveta com a explicação; o motor continua dono do alerta. */
+function askAboutAlert(a: Alert, out: EngineOutput) {
+  const ask = useOrbitStore.getState().ask
+  const q = { text: 'Why is this alert active?' }
+  if (a.ruleId === 'R-RAD-03') return ask({ ...q, intent: 'solarEvent' }, { openDrawer: true })
+  if (a.ruleId === 'R-MH-01') return ask({ ...q, intent: 'zoneExplain', zone: 'head' }, { openDrawer: true })
+  const ev = out.vitals.find((v) => a.id.startsWith(`R-VIT-02:${v.kind}`))
+  return ask({ ...q, intent: 'zoneExplain', zone: (ev && zoneOfVital(ev.kind)) || undefined }, { openDrawer: true })
 }
 
 export function OverviewPage() {
@@ -249,6 +262,9 @@ export function OverviewPage() {
                     ) && <>Shown as Adapting on the body map during the adaptation window. </>}
                     <span className="num text-xs">Rule {a.ruleId}</span>
                   </p>
+                  <Button variant="ghost" size="sm" className="mt-1 -ml-2 h-7 text-link" onClick={() => askAboutAlert(a, out)}>
+                    <Sparkles aria-hidden /> Ask Orbit
+                  </Button>
                 </li>
               ))}
             </ul>

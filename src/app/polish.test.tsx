@@ -104,7 +104,9 @@ describe('perfis (CMO / Flight Surgeon)', () => {
 describe('assistente', () => {
   it('protocol mode não se diz "AI-generated"', async () => {
     renderTab('assistant')
-    fireEvent.click(screen.getAllByRole('button').find((b) => b.className.includes('rounded-full'))!)
+    // A tela do Orbit é carregada sob demanda (L7): espera os chips aparecerem.
+    const chips = await screen.findAllByRole('button', { name: /\?$/ })
+    fireEvent.click(chips.find((b) => b.className.includes('rounded-full'))!)
     expect(await screen.findByText('Rule-based response · Protocol mode')).toBeTruthy()
     expect(document.body.textContent).not.toContain('AI-generated')
   })
