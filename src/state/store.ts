@@ -208,7 +208,7 @@ function updateRoutineForClock(routine: RoutineItem[], nowIso: string, shelterAc
   const minutesNow = now.getUTCHours() * 60 + now.getUTCMinutes()
   return routine.map((item) => {
     if (item.status === 'done' || item.status === 'postponed') return item
-    const [hours, minutes] = item.time.split(':').map(Number)
+    const [hours = 0, minutes = 0] = item.time.split(':').map(Number)
     return { ...item, status: minutesNow > hours * 60 + minutes ? 'overdue' : 'due' }
   })
 }
