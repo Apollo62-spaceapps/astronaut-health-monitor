@@ -120,7 +120,7 @@ export function OverviewPage() {
   const pending = measures.find((r) => r.status === 'due' || r.status === 'overdue')
   const logItem = pending ?? measures.find((r) => r.vital === 'heartRate') ?? null
   const shelterAlertActive = out.alerts.some((a) => a.ruleId === 'R-RAD-03')
-  // Só um botão vermelho por tela (DESIGN-SYSTEM §6): durante o abrigo o primário é o procedimento;
+  // Só um botão vermelho por tela (DESIGN-SYSTEM §4): durante o abrigo o primário é o procedimento;
   // se a faixa da missão já mostra o lembrete (com o primário), o "Log measurement" daqui fica secundário.
   const bannerHasPrimary = astronaut && !!pending && !shelterActive
   const logIsPrimary = astronaut && !shelterActive && !bannerHasPrimary
@@ -154,7 +154,8 @@ export function OverviewPage() {
       <div className="grid gap-6 xl:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
         <section aria-labelledby="overview-title" className="flex flex-col gap-3">
           <DayLabel />
-          <h1 id="overview-title" className="text-4xl leading-tight font-extrabold tracking-tight xl:text-5xl">
+          {/* DESIGN-SYSTEM v2 §2: título de página em text-3xl, peso 600. */}
+          <h1 id="overview-title" className="text-3xl leading-tight font-semibold">
             {astronaut ? (
               <>
                 Your body, day <span className="num">{missionDay}</span>.
@@ -298,8 +299,11 @@ export function OverviewPage() {
             }
             provenance={dose.provenance ?? { kind: 'simulated' }}
           >
-            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10" role="presentation">
-              <div className="h-full bg-link" style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }} />
+            <div className="h-2 w-full overflow-hidden rounded-sm bg-surface-2" role="presentation">
+              <div
+                className="h-full rounded-sm bg-foreground"
+                style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }}
+              />
             </div>
           </MetricCard>
         )}

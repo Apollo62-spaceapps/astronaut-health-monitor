@@ -37,7 +37,6 @@ function Trend({ pct }: { pct: number | null }) {
 export function VitalsPage() {
   const out = useEngine()
   const vitals = useAppStore((s) => s.vitals)
-  const preflight = useAppStore((s) => s.preflight)
   const simNowIso = useAppStore((s) => s.simNowIso)
   const missionDay = useAppStore((s) => s.missionDay)
 
@@ -46,10 +45,8 @@ export function VitalsPage() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <DayLabel />
-          <h1 className="mt-1 text-4xl font-extrabold tracking-tight">Vitals</h1>
-          <p className="mt-2 text-muted">
-            Today's value against your own baselines: pre-flight exam and the last in-flight days.
-          </p>
+          <h1 className="mt-1 text-3xl font-semibold">Vitals</h1>
+          <p className="mt-2 text-muted">Today&apos;s value against your own normal range, set from your pre-flight exam.</p>
         </div>
         <IllustrativeThresholds />
       </header>
@@ -59,7 +56,7 @@ export function VitalsPage() {
           const ev = out.vitals.find((v) => v.kind === kind)
           const why = whyItMatters(kind)
           return (
-            <li key={kind} className="grid gap-4 rounded-lg bg-surface p-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+            <li key={kind} className="grid gap-6 rounded-lg bg-surface p-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
               {ev ? (
                 <MetricCard
                   label={VITAL_LABEL[kind]}
@@ -115,13 +112,9 @@ export function VitalsPage() {
                 <VitalChart
                   kind={kind}
                   baseline={ev.baseline}
-                  xDomain={[-14, missionDay]}
-                  points={chartPoints(
-                    [...preflight, ...vitals].filter((r) => r.kind === kind),
-                    MISSION_START_ISO,
-                    simNowIso,
-                    missionDay + 15,
-                  )}
+                  status={ev.level}
+                  xDomain={[Math.max(0, missionDay - 120), missionDay]}
+                  points={chartPoints(vitals.filter((r) => r.kind === kind), MISSION_START_ISO, simNowIso)}
                 />
               ) : (
                 <p className="self-center text-muted">No readings to chart.</p>

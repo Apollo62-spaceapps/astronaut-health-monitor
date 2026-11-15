@@ -1,4 +1,4 @@
-/* Tokens do docs/DESIGN-SYSTEM.md (Apollo 62 · NASA style). Não invente cores fora daqui.
+/* Tokens do docs/DESIGN-SYSTEM.md (Apollo 62 · Design System v2). Não invente cores fora daqui.
    O visual é sempre escuro: NÃO existe tema claro nem "modo noturno". O botão de modo de
    ambiente só troca --color-banner (via data-environment) e o comportamento da plataforma. */
 @import 'tailwindcss';
@@ -7,27 +7,27 @@
 @theme {
   /* Marca e superfícies */
   --color-ground: #000000; /* header e fundo da página */
-  --color-surface: #181a1b; /* cards e painéis — branco 17,5:1 */
-  --color-surface-2: #22252a; /* superfície elevada (hover de card, inputs) — DECISÃO */
-  --color-border: #34383d; /* bordas sutis — DECISÃO */
+  --color-surface: #1c1c1e; /* cards e painéis (cinza elevado estilo iOS) — branco 17,0:1 */
+  --color-surface-2: #2c2c2e; /* superfície interna (linhas agrupadas, inputs) — branco 13,9:1 */
+  --color-border: #38383a; /* separadores finos */
   --color-banner: #093174; /* faixa da missão — muda por ambiente (data-environment) */
   --color-action: #a52420; /* SÓ o botão primário — branco 7,3:1 */
   --color-action-hover: #920107; /* hover/pressed — branco 9,4:1 */
-  --color-link: #6fa8ff; /* links — 7,3:1 sobre surface */
-  --color-muted: #a9afb5; /* texto secundário, Restricted e Adapting — 7,9:1 */
+  --color-link: #6fa8ff; /* links e foco — 7,1:1 sobre surface */
+  --color-muted: #a9afb5; /* texto secundário, Restricted e Adapting — 7,7:1 */
   --color-foreground: #ffffff;
 
   /* Status (sempre com ícone + texto; hachura no Urgent). Nunca use --color-action para status. */
-  --color-normal: #3ddc97; /* ✓ Normal — 9,9:1 */
-  --color-attention: #f5b83d; /* ▲ Attention — 9,8:1 */
-  --color-urgent: #ff6b63; /* ● Urgent — 6,3:1 */
+  --color-normal: #3ddc97; /* ✓ Normal — 9,6:1 */
+  --color-attention: #f5b83d; /* ▲ Attention — 9,6:1 */
+  --color-urgent: #ff6b63; /* ● Urgent — 6,1:1 */
 
   /* Tipografia */
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-/* Cor da faixa da missão por ambiente (DESIGN-SYSTEM §5). Só a faixa muda; status e ação não. */
+/* Cor da faixa da missão por ambiente (DESIGN-SYSTEM §7). Só a faixa muda; status e ação não. */
 :root[data-environment='earth'] {
   --color-banner: #093174;
 }
@@ -44,7 +44,7 @@
 /* Variáveis que os componentes shadcn/ui esperam, apontando para os tokens acima */
 :root {
   color-scheme: dark;
-  --radius: 0.5rem;
+  --radius: 1rem; /* card 16px; filhos usam raio concêntrico = pai − padding */
   --background: var(--color-ground);
   --foreground: var(--color-foreground);
   --card: var(--color-surface);
@@ -79,10 +79,10 @@
   --color-destructive: var(--destructive);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 6px; /* elementos pequenos dentro de controles */
+  --radius-md: 10px; /* botões, inputs, linhas agrupadas */
+  --radius-lg: var(--radius); /* cards */
+  --radius-xl: 24px; /* painéis grandes */
 }
 
 @layer base {
@@ -97,8 +97,15 @@
   h1,
   h2,
   h3 {
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  /* Cantos contínuos estilo iOS onde o navegador suporta (Chrome/Edge 139+); senão, arredondado comum.
+     Círculos e pílulas (rounded-full: switch, progress, chips) ficam de fora para não virarem quadrados. */
+  @supports (corner-shape: squircle) {
+    [class*='rounded']:not([class*='rounded-full']) {
+      corner-shape: squircle;
+    }
   }
   a {
     @apply text-link underline-offset-2 hover:underline;

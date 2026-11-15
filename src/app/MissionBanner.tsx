@@ -1,4 +1,4 @@
-// Faixa da missão (K4 #44) — DESIGN-SYSTEM §3/§4. A cor vem de --color-banner, que muda com o
+// Faixa da missão (K4 #44) — DESIGN-SYSTEM §4/§7. A cor vem de --color-banner, que muda com o
 // modo de ambiente (data-environment). O botão de modo de ambiente (K5) entra no `envSlot`.
 // O tempo de resposta do solo é texto estático ("Ground reply ≈ 40 min (2 × 20 min delay)"); uma contagem
 // regressiva só aparece quando há um pacote enviado esperando resposta (ESC-04).

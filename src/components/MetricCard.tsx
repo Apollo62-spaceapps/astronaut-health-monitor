@@ -1,4 +1,4 @@
-// Cartão de métrica (DESIGN-SYSTEM §3/§4): rótulo pequeno em caixa alta, número grande em mono,
+// Cartão de métrica (DESIGN-SYSTEM §4): rótulo pequeno em caixa alta, número grande em mono,
 // linha de status (ícone + texto) e selo de proveniência.
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'

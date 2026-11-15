@@ -174,7 +174,7 @@ export function ZoneCard({
     const d = out.radiation
     const shelter = out.alerts.find((a) => a.ruleId === 'R-RAD-03')
     return (
-      <article aria-labelledby="zone-card-title" className="flex flex-col gap-4 rounded-lg border border-white/10 p-5">
+      <article aria-labelledby="zone-card-title" className="flex flex-col gap-4 rounded-md bg-surface-2 p-5">
         <h2 id="zone-card-title" className="text-xl">
           Radiation · whole body
         </h2>
@@ -226,7 +226,7 @@ export function ZoneCard({
   const restricted = status === 'restricted'
 
   return (
-    <article aria-labelledby="zone-card-title" className="flex flex-col gap-4 rounded-lg border border-white/10 p-5">
+    <article aria-labelledby="zone-card-title" className="flex flex-col gap-4 rounded-md bg-surface-2 p-5">
       <div className="flex flex-wrap items-center gap-3">
         <h2 id="zone-card-title" className="text-xl">
           {zone.label}

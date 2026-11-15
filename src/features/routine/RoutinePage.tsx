@@ -60,7 +60,7 @@ export function RoutinePage() {
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
           <DayLabel extra={formatUtcTime(simNowIso)} />
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Mission routine</h1>
+          <h1 className="mt-2 text-3xl font-semibold">Mission routine</h1>
           <p className="mt-2 text-muted">Today&apos;s scheduled activities for {ENVIRONMENTS[environment].label}.</p>
         </div>
         <div className="flex items-center gap-2 rounded-md border border-border bg-surface p-2">

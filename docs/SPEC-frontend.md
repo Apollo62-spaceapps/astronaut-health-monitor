@@ -96,7 +96,7 @@ No protótipo, a troca de perfil é feita por um seletor na barra superior. Não
 | Validação | Zod | Valida fixtures e entradas do usuário | — |
 | Testes | Vitest | Testes unitários do motor de regras | P0 só para as regras |
 | LLM | WebLLM (@mlc-ai/web-llm) num Web Worker + fallback roteirizado | Roda no navegador, offline após o cache, sem chave de API | Ver §6.6. Confirmar a API de Web Worker na documentação (P-03) |
-| Fontes tipográficas | @fontsource (ex.: Inter e uma mono com algarismos tabulares) | Nada via CDN | — |
+| Fontes tipográficas | @fontsource (IBM Plex Sans e IBM Plex Mono com algarismos tabulares; DESIGN-SYSTEM v2) | Nada via CDN | — |
 | Qualidade | ESLint (do template) + Prettier | Padronização | — |
 
 Regras de engenharia:
@@ -291,7 +291,7 @@ interface OutboundPacket {      // store-and-forward
 | CORE-02 | Cada indicador tem um card com o valor atual, a unidade, o desvio % em relação ao baseline, a tendência, o selo de proveniência e o status. | P0 |
 | CORE-03 | O status usa cor + ícone + texto (“Normal”, “Attention”, “Urgent”). A cor nunca é o único sinal (acessibilidade). | P0 |
 | CORE-04 | O status é calculado pelo motor de regras com limiares de config/thresholds.ts. Enquanto P-01 não for decidido, os limiares ficam como placeholders marcados e a interface exibe o selo “Illustrative thresholds”. | P0 |
-| CORE-05 | Gráfico por indicador (ECharts) com série temporal, linha de baseline pré-voo e linha de baseline em voo. As faixas coloridas só entram após P-01. | P0 |
+| CORE-05 | Gráfico por indicador com série temporal (média móvel de 7 dias), **uma** faixa de referência (baseline pré-voo ± limiar de atenção, ilustrativo até P-01) e o valor de hoje destacado com a cor do status. A média em voo aparece como texto no card, não como segunda linha. Ver `docs/DESIGN-SYSTEM.md` v2 §6. *(Alterado em 15/11/2026: dois baselines sobrepostos dificultavam a leitura; a pesquisa sobre exibição de resultados ao paciente indica uma referência única.)* | P0 |
 | CORE-06 | Formulário “Log measurement” com validação Zod. Os limites são de plausibilidade de entrada (bloquear erro de digitação), não critério clínico [DECISÃO]. | P1 |
 | CORE-07 | Lista “Today’s measurements” com as medições previstas para o dia e o status de cada uma (o briefing sugere lembretes de medição, S01). | P1 |
 | CORE-08 | Ícone ⓘ “Why this matters” em cada indicador, com uma explicação curta e um link para a fonte (o briefing pede instruções simples, S01). | P0 (texto curto) |
@@ -357,7 +357,7 @@ Com isso, os cinco hazards do briefing aparecem na interface: quatro no corpo e 
 | EX-01 | Today’s plan: sessões prescritas por equipamento (ARED, T2, CEVIS) [FATO, S13], somando cerca de 2 h/dia, a média relatada pela NASA [FATO, S13]. A distribuição entre os equipamentos é [SIMULATED]. Rótulo: “Prescribed by ASCR team (simulated).” | P0 |
 | EX-02 | Check-in por sessão: done, partial (com minutos) ou skipped. Sempre autorrelato (selfReported: true). | P0 |
 | EX-03 | Adesão semanal (%) = minutos feitos ÷ minutos prescritos. | P0 |
-| EX-04 | Gamificação em tom profissional (“mission readiness”): sequência de dias cumpridos, anel de progresso semanal e 2 ou 3 conquistas (ex.: “7-day streak”). Sem tom infantil. A própria NASA cita parceiros de treino gerados por software como forma de motivar o exercício em missões longas (S19). | P1 |
+| EX-04 | Gamificação em tom profissional (“mission readiness”): sequência de dias cumpridos, progresso semanal em 7 colunas (o DESIGN-SYSTEM v2 §6 substituiu o anel) e 2 ou 3 conquistas (ex.: “7-day streak”). Sem tom infantil. A própria NASA cita parceiros de treino gerados por software como forma de motivar o exercício em missões longas (S19). | P1 |
 | EX-05 | O sistema não prescreve nem altera o plano. Isso é papel dos ASCRs (S04). | P0 (restrição) |
 
 ### 6.5 Modo de missão e escalonamento (pronto para EIMO)
@@ -483,7 +483,7 @@ Placeholders de limiares: config/thresholds.ts exporta constantes com o comentá
 | NFR-04 | Qualidade: TS strict, ESLint sem erros, testes Vitest das regras P0 passando antes do pitch. |
 | NFR-05 | Proveniência: nenhum número aparece sem o selo REAL ou SIMULATED. |
 | NFR-06 | Segurança: nenhuma chave ou segredo no repositório. .env no .gitignore. |
-| NFR-07 | Visual: tema escuro estilo “mission control”, sóbrio e clínico. Tipografia Inter mais uma fonte mono com algarismos tabulares. Cores de status consistentes (verde, âmbar e vermelho, com ícone e texto). Layout para notebook (≥ 1280 px). Responsivo é P2. |
+| NFR-07 | Visual: tema escuro estilo “mission control”, sóbrio e clínico. Tipografia IBM Plex Sans mais IBM Plex Mono com algarismos tabulares (DESIGN-SYSTEM v2). Cores de status consistentes (verde, âmbar e vermelho, com ícone e texto). Layout para notebook (≥ 1280 px). Responsivo é P2. |
 | NFR-08 | Aviso fixo no rodapé: “Decision-support prototype — not a medical device, not for diagnosis. Some data simulated.” |
 
 ## 9. Dados
@@ -716,7 +716,7 @@ interface MissionProfile {
 | --- | --- | --- |
 | ENV-01 | Seletor na TopBar com 4 botões (ícone + texto), acessível por teclado. O ambiente fica em `store.environment` e é salvo no localStorage | P0 |
 | ENV-02 | A troca é instantânea, não perde o estado da demo e atualiza comunicação, escalonamento, radiação, exercício e o destaque de hazards | P0 |
-| ENV-03 | O atributo `data-environment` no `<html>` muda só a cor da faixa da missão (`--color-banner`, ver DESIGN-SYSTEM §5). Os status (verde, âmbar e vermelho, com ícone e texto) não mudam de cor. Contraste AA | P0 |
+| ENV-03 | O atributo `data-environment` no `<html>` muda só a cor da faixa da missão (`--color-banner`, ver DESIGN-SYSTEM §7). Os status (verde, âmbar e vermelho, com ícone e texto) não mudam de cor. Contraste AA | P0 |
 | ENV-04 | Um ambiente sem fonte para um número não mostra o número ("rate not sourced for this environment") | P0 |
 | ENV-05 | O ambiente entra no `AssistantContext` e no `OutboundPacket` | P0 |
 | ENV-06 | A troca de gravidade (ex.: Spacecraft → Moon, Spacecraft → Earth) dispara "Adapting" pela R-PHASE-01 (urgent nunca é mascarado) | P1 |
@@ -740,7 +740,7 @@ interface MissionProfile {
 | --- | --- | --- |
 | Código de cores para o astronauta entender rápido o estado de cada indicador | CORE-03, BODY-04, StatusBadge do design system (✓ Normal · ▲ Attention · ● Urgent · ◼ Restricted) | P0 |
 | Instruções e explicações simples sobre medições, indicadores e riscos | CORE-08 (ⓘ "Why this matters"), BODY-03 (card: Function · How to measure · Why it matters · What to do · Source), card de hazard | P0 |
-| Gráficos dinâmicos de como os indicadores mudam com o tempo | CORE-05 (série temporal com baselines) + "Advance day" (BODY-08) | P0 (Advance day: P1) |
+| Gráficos dinâmicos de como os indicadores mudam com o tempo | CORE-05 v2 (série temporal com a faixa do baseline pré-voo) + "Advance day" (BODY-08) | P0 (Advance day: P1) |
 | Pedir ao astronauta, de tempos em tempos, medições e atividades específicas como parte da rotina | **ROUT-01…05 (novo, abaixo)** + CORE-06 e CORE-07, que **sobem para P0** | **P0** |
 
 **Rotina da missão e lembretes (novo):**
