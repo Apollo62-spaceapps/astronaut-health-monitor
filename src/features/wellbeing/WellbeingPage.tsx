@@ -93,7 +93,9 @@ export function WellbeingPage() {
     const note = journalDraft.trim().slice(0, 600)
     if (!note) return
     const current = environmentEntries.find((item) => item.date === today)
-    const entry: WellbeingEntry = current ? { ...current, note } : { date: today, environment, mood: 3, sleepHours: 0, note }
+    // A nota só anexa ao check-in do dia: sem ele, criar a entrada inventaria humor e sono (alimentam R-MH-01).
+    if (!current) return
+    const entry: WellbeingEntry = { ...current, note }
     loadScenario({ wellbeing: [...wellbeing.filter((item) => item.date !== today || (item.environment ?? 'EARTH') !== environment), entry] })
     setJournalDraft('')
   }
@@ -256,7 +258,7 @@ export function WellbeingPage() {
                   </form>
                 </CardContent>
               </Card>
-              <Card><CardHeader><CardTitle>Private journal</CardTitle></CardHeader><CardContent><form onSubmit={saveJournal} className="space-y-3"><p className="text-sm text-muted">{journalPrompt}</p>{todayEntry?.note && <p className="rounded-md bg-surface-2 p-3 text-sm">{todayEntry.note}</p>}<Label htmlFor="wellbeing-journal">A note for yourself · up to 600 characters</Label><textarea id="wellbeing-journal" value={journalDraft} maxLength={600} onChange={(e) => setJournalDraft(e.target.value)} rows={4} placeholder="Write only what you want to keep…" className="w-full resize-y rounded-md border border-border bg-surface-2 p-3 text-sm" /><div className="flex items-center justify-between text-xs text-muted"><span>Stored on this device for the selected environment.</span><span className="num">{journalDraft.length}/600</span></div><Button type="submit" variant="secondary" disabled={!journalDraft.trim()}>Save journal note</Button></form></CardContent></Card>
+              <Card><CardHeader><CardTitle>Private journal</CardTitle></CardHeader><CardContent><form onSubmit={saveJournal} className="space-y-3"><p className="text-sm text-muted">{journalPrompt}</p>{todayEntry?.note && <p className="rounded-md bg-surface-2 p-3 text-sm">{todayEntry.note}</p>}<Label htmlFor="wellbeing-journal">A note for yourself · up to 600 characters</Label><textarea id="wellbeing-journal" value={journalDraft} maxLength={600} onChange={(e) => setJournalDraft(e.target.value)} rows={4} placeholder="Write only what you want to keep…" className="w-full resize-y rounded-md border border-border bg-surface-2 p-3 text-sm" /><div className="flex items-center justify-between text-xs text-muted"><span>{todayEntry ? 'Stored on this device for the selected environment.' : "Save today's check-in first; the note is attached to it."}</span><span className="num">{journalDraft.length}/600</span></div><Button type="submit" variant="secondary" disabled={!journalDraft.trim() || !todayEntry}>Save journal note</Button></form></CardContent></Card>
             </div>}
             <Card className={role !== 'ASTRONAUT' ? 'col-span-2' : ''}>
               <CardHeader>

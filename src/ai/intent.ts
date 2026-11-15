@@ -212,6 +212,7 @@ const METRIC_WORDS =
   /\b(heart rate|pulse|bpm|blood pressure|bp|systolic|diastolic|glucose|sugar|temperature|temp|sleep|slept|mood|dose|radiation|exercise|adherence|workout)\b/
 const SMALLTALK =
   /^(hi|hello|hey|good (morning|afternoon|evening)|thanks|thank you|thx|ok|okay|got it|cool|great|nice|perfect|bye|goodbye|see you)\b/
+const QUESTION_CUE = /\b(what|whats|how|why|when|where|which|can you|could you|tell me|show me)\b/
 export const ENV_WORDS: [MissionMode, RegExp][] = [
   ['LUNAR', /\b(moon|lunar)\b/],
   ['ISS', /\b(space station|station|iss)\b/],
@@ -239,7 +240,9 @@ export function classifyAll(text: string): [Intent, number][] {
   // Comparar ambientes só com um ambiente citado; "baseline/reference" puxa para a referência.
   if (scores.has('environment') && !environmentIn(t)) scores.delete('environment')
   if (/\b(baseline|reference)\b/.test(t) && scores.has('reference') && !scores.has('drift')) scores.set('reference', scores.get('reference')! + 4)
-  if (SMALLTALK.test(t) && t.split(' ').length <= 5) scores.set('smalltalk', 10)
+  // Saudação só deixa de ser smalltalk quando vem com uma pergunta de verdade ("thanks, what's my heart rate?").
+  // Sem pergunta, "thanks, I feel better" ou "thanks for the report" continuam smalltalk (não abrem triagem).
+  if (SMALLTALK.test(t) && t.split(' ').length <= 5 && !(scores.size > 0 && QUESTION_CUE.test(t))) scores.set('smalltalk', 10)
   // Pergunta sobre um tripulante citado é do outlook.
   if (/\bcrew ([a-d])\b/.test(t)) scores.set('riskOutlook', (scores.get('riskOutlook') ?? 0) + 2)
   // "why is my heart zone attention" → zoneExplain quando cita uma zona.
@@ -247,9 +250,13 @@ export function classifyAll(text: string): [Intent, number][] {
   return [...scores.entries()].sort((a, b) => b[1] - a[1])
 }
 
+/**
+ * Testa o texto antes E depois da correção de digitação: a correção pode trocar uma palavra do sinal
+ * de alarme ("hard to breathe" → "hand to breath") e a emergência nunca pode se perder por isso.
+ */
 export function isEmergency(text: string): boolean {
-  const t = normalize(text)
-  return EMERGENCY.some((re) => re.test(t))
+  const candidates = [basic(text), normalize(text)]
+  return candidates.some((t) => EMERGENCY.some((re) => re.test(t)))
 }
 
 export function zoneIn(text: string): ZoneTarget | undefined {
@@ -261,7 +268,7 @@ export function classify(text: string): Classified {
   const t = normalize(text)
   const crewId = /\bcrew ([a-d])\b/.exec(t)?.[1]?.toUpperCase()
   const zone = zoneIn(t)
-  if (isEmergency(t)) return { intent: 'triage', zone, emergency: true }
+  if (isEmergency(text)) return { intent: 'triage', zone, emergency: true }
   if (!t) return { intent: 'general', emergency: false }
 
   const scores = new Map(classifyAll(t))

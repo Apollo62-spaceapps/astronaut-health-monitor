@@ -208,12 +208,14 @@ export const SOURCES: readonly Source[] = [
     terms: 'NTRS: public, government use permitted',
   },
   {
+    // Título corrigido em 15/11: o DOI/PMC apontam para Patel et al. 2020 (PMID 33298950), não para um artigo
+    // sobre exercício. Por isso a S21 não é mais citada nas afirmações de exercício (S13) nem de osso/músculo (S19).
     id: 'S21',
-    provider: 'npj Microgravity (2020)',
-    title: 'The role of exercise countermeasures on the International Space Station',
+    provider: 'npj Microgravity (Patel et al., 2020)',
+    title: 'Red risks for a journey to the red planet: The highest priority human health risks for a mission to Mars',
     urls: ['https://pmc.ncbi.nlm.nih.gov/articles/PMC7645687/', 'https://doi.org/10.1038/s41526-020-00124-6'],
     accessed: '2026-11-15',
-    use: 'Research context for exercise monitoring and countermeasures',
+    use: 'Background on the highest-priority human health risks for a Mars mission',
     terms: 'Open access · cited, not reproduced',
   },
   // ── NASA Spaceflight Standard Measures (SSM), L7 / Orbit §5C. Pesquisa do time em 15/11/2026; os ids do
@@ -275,7 +277,7 @@ export const SOURCES: readonly Source[] = [
   {
     id: 'S28',
     provider: 'NASA NTRS (Williams, 2017)',
-    title: 'BHP Laboratory Standard Measures',
+    title: 'Behavioral Health and Performance Laboratory Standard Measures (BHP-SM)',
     urls: ['https://ntrs.nasa.gov/citations/20170005421'],
     accessed: '2026-11-15',
     use: 'Caveat: research measures for longitudinal analysis; they do not define health or readiness',

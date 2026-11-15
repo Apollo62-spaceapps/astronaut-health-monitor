@@ -100,7 +100,7 @@ export function toEnglish(text: string): string {
 
 /** Palavras comuns do inglês que nunca são "corrigidas" (senão "does" viraria "dose"). */
 const COMMON = new Set(
-  'what does have this that with from your about today would could should there their when where which will been were they them then than much many more some very just also into over after before done make need help want know feel tell show give take right said says like good well only even back here same each both such most other these those while still need keep work works mean means time last next week days ever never always does doing doesn even than less once whom whose why how able away cant dont wont isnt arent wasnt didnt'.split(
+  'what does have this that with from your about today would could should there their when where which will been were they them then than much many more some very just also into over after before done make need help want know feel tell show give take right said says like good well only even back here same each both such most other these those while still need keep work works mean means time last next week days ever never always does doing doesn even than less once whom whose why how able away cant dont wont isnt arent wasnt didnt hard trouble breathe breathing'.split(
     ' ',
   ),
 )

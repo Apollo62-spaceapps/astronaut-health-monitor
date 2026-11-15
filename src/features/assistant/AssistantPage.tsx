@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { Cpu, Lock, ShieldCheck, WifiOff } from 'lucide-react'
 import { ASSISTANT_NAME, ASSISTANT_TAGLINE } from '@/ai/identity'
-import { canUseOnboardModel, onboardEngine } from '@/ai/engine'
-import { ONBOARD_MODELS } from '@/ai/onboard'
+import { canUseOnboardModel, currentOnboardModelId, onboardEngine } from '@/ai/engine'
+import { ONBOARD_MODEL_ID, ONBOARD_MODELS } from '@/ai/onboard'
 import { RISK_TEXT } from '@/ai/reply'
 import { KNOWLEDGE } from '@/ai/knowledge'
 import { Button } from '@/components/ui/button'
@@ -109,10 +109,12 @@ function EnginePanel() {
   const setAiMode = useAppStore((s) => s.setAiMode)
   const [progress, setProgress] = useState<{ p: number; text: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
-  // L8: três modelos com ID conferido na biblioteca; o recomendado escreve melhor que o de 1B e cabe em ~1,9 GB.
-  const [modelId, setModelId] = useState<string>(ONBOARD_MODELS[1].id)
+  // L8: três modelos com ID conferido na biblioteca. O padrão é o Llama 3.2 1B, o que o ensaio deixa em cache
+  // (P-03; sem rede, outro modelo falharia no pitch). Se um motor já foi carregado, a tela mostra esse.
+  const [modelId, setModelId] = useState<string>(() => currentOnboardModelId() ?? ONBOARD_MODEL_ID)
   const available = canUseOnboardModel()
-  const model = ONBOARD_MODELS.find((m) => m.id === modelId) ?? ONBOARD_MODELS[0]
+  const loadedId = aiMode === 'onboard-model' ? (currentOnboardModelId() ?? modelId) : modelId
+  const model = ONBOARD_MODELS.find((m) => m.id === loadedId) ?? ONBOARD_MODELS[0]
 
   const load = async () => {
     setError(null)
@@ -136,7 +138,7 @@ function EnginePanel() {
       <p className="text-muted">
         {aiMode === 'onboard-model'
           ? `Onboard model (${model.label}) rewrites only the wording of each answer, grounded on the same facts and NASA passages. Facts, actions and escalation stay rule-based.`
-          : `Protocol mode: every answer is built from the rules and a local library of ${KNOWLEDGE.length} NASA-sourced passages. Works offline, no download.`}
+          : `Protocol mode: every answer is built from the rules and a local library of ${KNOWLEDGE.length} passages, cited when they come from a source. Works offline, no download.`}
       </p>
       {progress && (
         <div className="space-y-1">

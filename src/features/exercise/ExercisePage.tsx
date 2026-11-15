@@ -34,7 +34,7 @@ export function ExercisePage() {
     <Card><CardHeader><CardTitle className="flex items-center gap-2"><Dumbbell aria-hidden className="size-5" />Today’s activity</CardTitle></CardHeader><CardContent className="space-y-4">
       <p className="flex items-baseline gap-2"><span className="num text-4xl">{completed}</span><span className="text-muted">minutes logged</span><ProvenanceBadge provenance={{ kind: 'simulated', note: 'Self-reported demo data.' }} /></p>
       <div aria-label={`Daily progress ${progress}%`} className="h-2 overflow-hidden rounded-sm bg-surface-2"><div className="h-full bg-link" style={{ width: `${progress}%` }} /></div>
-      <p className="text-sm text-muted">NASA reports about 2 hours of exercise per day on the ISS, on average. Reference only; not an individual target. <SourceRef ids={['S13','S21']} /></p>
+      <p className="text-sm text-muted">NASA reports about 2 hours of exercise per day on the ISS, on average. Reference only; not an individual target. <SourceRef ids={['S13']} /></p>
       {!shelterActive && todaySessions.length > 0 && <form className="flex flex-wrap items-end gap-3" onSubmit={(e) => { e.preventDefault(); const v = Number(new FormData(e.currentTarget).get('minutes')); if (Number.isFinite(v) && v >= 0 && v <= 240) saveMinutes(v) }}><div className="space-y-1"><Label htmlFor="exercise-minutes">Total minutes today</Label><Input id="exercise-minutes" name="minutes" type="number" min="0" max="240" defaultValue={completed || ''} className="w-32 font-mono" /></div><Button type="submit" variant="outline"><Check aria-hidden />Save check-in</Button></form>}
       <p className="text-xs text-muted">Self-report, not a clinical assessment. Consult your flight surgeon.</p>
     </CardContent></Card>
