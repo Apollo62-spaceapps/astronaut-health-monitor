@@ -47,7 +47,7 @@ const CORE: Passage[] = [
     id: 'bone-muscle',
     title: 'Bone and muscle in microgravity',
     text: 'NASA reports bone and muscle loss in microgravity. Exercise is the countermeasure the crew uses every day to limit it.',
-    sourceIds: ['S19', 'S21'],
+    sourceIds: ['S19'],
     keywords: [
       'bone',
       'bones',
