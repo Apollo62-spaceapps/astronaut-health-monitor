@@ -97,7 +97,7 @@ export function VitalChart({
         domain={xDomain ?? ['dataMin', 'dataMax']}
         allowDataOverflow
         ticks={xDomain ? [xDomain[0], Math.round((xDomain[0] + xDomain[1]) / 2), xDomain[1]] : undefined}
-        tickFormatter={(d: number) => `D${Math.round(d)}`}
+        tickFormatter={(d: number) => `Day ${Math.round(d)}`}
         stroke="var(--color-muted)"
         tickLine={false}
         fontSize={11}
@@ -122,7 +122,7 @@ export function VitalChart({
           fontFamily: 'var(--font-sans)',
           fontVariantNumeric: 'tabular-nums',
         }}
-        labelFormatter={(d) => `Mission day ${Math.round(Number(d))}`}
+        labelFormatter={(d) => `Day ${Math.round(Number(d))}`}
         formatter={(v, name) => [
           `${formatVitalValue(kind, Number(v))} ${unit}`,
           name === 'avg' ? '7-day average' : 'Reading',

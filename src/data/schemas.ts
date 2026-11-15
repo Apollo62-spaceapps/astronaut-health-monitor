@@ -39,6 +39,7 @@ export const vitalsFileSchema = z.object({
 export const wellbeingSchema = z.array(
   z.object({
     date: z.string(),
+    environment: missionMode.optional(),
     mood: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
     sleepHours: z.number().min(0).max(24),
     note: z.string().optional(),

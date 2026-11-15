@@ -20,6 +20,7 @@ import { useAppStore } from '@/state/store'
 import { accessLevel, visibleAuditEntries } from '@/domain/rules/privacy'
 import type { WellbeingEntry } from '@/domain/types'
 import { formatUtc } from '@/lib/format'
+import { ENVIRONMENTS } from '@/domain/config/environments'
 
 const checkInSchema = z.object({ mood: z.number().int().min(1).max(5), sleepHours: z.number().min(0).max(24) })
 const MOOD_LABELS = ['Very low', 'Low', 'Neutral', 'Good', 'Very good']
@@ -28,6 +29,7 @@ const daysBack = (iso: string, amount: number) =>
 
 export function WellbeingPage() {
   const role = useAppStore((s) => s.role)
+  const environment = useAppStore((s) => s.environment)
   const wellbeing = useAppStore((s) => s.wellbeing)
   const consent = useAppStore((s) => s.consent)
   const breakGlass = useAppStore((s) => s.breakGlass)
@@ -52,14 +54,16 @@ export function WellbeingPage() {
   // Log de auditoria por perfil (matriz §6.7): CMO vê só os próprios acessos.
   const auditEntries = visibleAuditEntries(auditLog, privacy).slice().reverse()
   const today = simNowIso.slice(0, 10)
+  const environmentEntries = wellbeing.filter((item) => (item.environment ?? 'EARTH') === environment)
+  const todayEntry = environmentEntries.find((item) => item.date === today)
   const chartData = useMemo(
     () =>
       Array.from({ length: 14 }, (_, i) => {
         const date = daysBack(simNowIso, 13 - i)
-        const entry = wellbeing.find((item) => item.date === date)
+        const entry = environmentEntries.find((item) => item.date === date)
         return { date: formatUtc(`${date}T00:00:00Z`).split(' 20')[0], mood: entry?.mood ?? null, sleep: entry?.sleepHours ?? null }
       }),
-    [simNowIso, wellbeing],
+    [simNowIso, environmentEntries],
   )
   const chartEntries = chartData.filter((entry) => entry.mood !== null || entry.sleep !== null)
   const notification = auditLog.findLast((entry) => entry.action === 'BREAK_GLASS_VIEW' && entry.actor === 'CMO')
@@ -73,10 +77,11 @@ export function WellbeingPage() {
     }
     const entry: WellbeingEntry = {
       date: today,
+      environment,
       mood: parsed.data.mood as WellbeingEntry['mood'],
       sleepHours: parsed.data.sleepHours,
     }
-    loadScenario({ wellbeing: [...wellbeing.filter((item) => item.date !== today), entry] })
+    loadScenario({ wellbeing: [...wellbeing.filter((item) => item.date !== today || (item.environment ?? 'EARTH') !== environment), entry] })
     setError('')
   }
 
@@ -97,7 +102,7 @@ export function WellbeingPage() {
       <header>
         <p className="text-xs font-semibold uppercase tracking-wider text-muted">Wellbeing · private</p>
         <h1 className="mt-2 text-3xl">{role === 'ASTRONAUT' ? 'Daily check-in' : 'Crew wellbeing'}</h1>
-        <p className="mt-2 text-muted">Self-report, not a clinical assessment.</p>
+        <p className="mt-2 text-muted">{ENVIRONMENTS[environment].label} · Self-report, not a clinical assessment.</p>
         {/* PRIV-05: contexto da privacidade, com fonte (S02, S04). */}
         <button
           type="button"
@@ -185,14 +190,14 @@ export function WellbeingPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    Today&apos;s check-in
+                    Today&apos;s check-in {todayEntry && <span className="text-sm font-normal text-muted">· saved</span>}
                     <ProvenanceBadge
                       provenance={{ kind: 'simulated', note: 'Self-reported check-in in this demo scenario.' }}
                     />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={saveCheckIn} className="space-y-5">
+                  <form onSubmit={saveCheckIn} className="space-y-4">
                     <fieldset>
                       <legend className="mb-2 text-sm font-medium">How would you describe your mood?</legend>
                       <div className="grid grid-cols-5 gap-2">
@@ -233,7 +238,7 @@ export function WellbeingPage() {
                       </p>
                     )}
                     <Button type="submit" variant="secondary">
-                      Save check-in
+                      {todayEntry ? 'Update check-in' : 'Save check-in'}
                     </Button>
                   </form>
                 </CardContent>

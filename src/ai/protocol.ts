@@ -28,9 +28,9 @@ function vitalsSentence(ctx: AssistantContext): string {
 
 /** Sugestões de perguntas para a tela (chips), conforme o cenário. */
 export function suggestions(ctx: AssistantContext): string[] {
-  const s = ['How am I doing today?', 'What should I do now?', 'How long until the ground replies?']
+  const s = ['Summarize today’s readings', 'Explain my status labels', 'How do I log a measurement?']
   if (ctx.activeEvent) s.unshift('What do I do about the solar event?')
-  s.push('Remind me of my measurements')
+  s.push('How is my exercise tracking going?')
   return s
 }
 
@@ -47,9 +47,26 @@ export function protocolReply(ctx: AssistantContext, userText: string): string {
       GENERIC_CHECK,
     ].join(' ')
   }
+  if (/exercise|workout|training|minutes|streak/.test(t)) {
+    return 'Exercise entries are self-reported. The Exercise screen summarizes logged minutes and recent consistency; its ISS reference is context, not an individual target. The monitor does not prescribe or change a training plan.'
+  }
+  if (/status|normal|attention|urgent|restricted|adapting/.test(t)) {
+    return 'Normal means the reading is within its configured comparison range. Attention means a rule detected a deviation; Urgent means an urgent rule is active. Restricted marks private or unavailable information, and Adapting marks a recent environment-change window. Thresholds are illustrative; consult your flight surgeon.'
+  }
+  if (/sleep|mood|wellbeing|well-being|check.?in/.test(t)) {
+    return 'The Wellbeing check-in records your self-reported mood and sleep for the selected environment. Entries are private and are not a clinical assessment. You can review the recent trend on the Wellbeing screen.'
+  }
+  if (/source|article|reference|nasa/.test(t)) {
+    return 'Open Data & Sources to review the references behind this prototype. The Exercise screen links to NASA material about ISS exercise; these references provide context and do not validate individual targets.'
+  }
+  if (/radiation|dose/.test(t)) {
+    return ctx.activeEvent
+      ? 'The demo event is replayed from NASA DONKI. The Radiation screen shows its source and the scenario shelter procedure. This is not a live space-weather alert; follow the displayed procedure and consult your flight surgeon.'
+      : 'The Radiation screen shows the scenario’s career-dose estimate and source notes. Some values are simulated, and a rate without a source is not added.'
+  }
   if (/ground|reply|delay|earth|houston|surgeon|how long/.test(t)) return etaSentence(ctx)
   if (/measure|remind|routine|check-in|checkin/.test(t)) {
-    return 'Open the Routine screen to see what is due today, then use “Log measurement” to record it.'
+    return 'Use Log measurement on the Overview when it is available, or open Vitals to review recorded readings. Check-in values are self-reported and labeled by environment.'
   }
   if (/do now|what should|help|what do i do/.test(t)) {
     return anyOff

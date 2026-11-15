@@ -58,6 +58,8 @@ export interface Baseline {
 
 export interface WellbeingEntry {
   date: string
+  /** Ambiente em que o autorrelato foi registrado; registros antigos sem campo são Earth. */
+  environment?: MissionMode
   /** Autorrelato simples, NÃO é instrumento validado. */
   mood: 1 | 2 | 3 | 4 | 5
   sleepHours: number

@@ -23,7 +23,8 @@ export function SourcesPage() {
   useEffect(() => {
     if (selected) document.getElementById(`source-${selected}`)?.scrollIntoView?.({ block: 'center' })
   }, [selected])
-  const last = SOURCES[SOURCES.length - 1]!.id
+  const orderedSources = [...SOURCES].sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)))
+  const last = orderedSources.at(-1)!.id
 
   return (
     <div className="space-y-6">
@@ -66,7 +67,7 @@ export function SourcesPage() {
                 </tr>
               </thead>
               <tbody>
-                {SOURCES.map((source) => (
+                {orderedSources.map((source) => (
                   <tr
                     key={source.id}
                     id={`source-${source.id}`}

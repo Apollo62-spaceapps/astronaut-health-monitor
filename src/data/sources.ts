@@ -142,6 +142,15 @@ export const SOURCES: readonly Source[] = [
     terms: 'NASA public document · cited, not reproduced',
   },
   {
+    id: 'S21',
+    provider: 'npj Microgravity (Smith et al., 2020)',
+    title: 'The role of exercise countermeasures on the International Space Station',
+    urls: ['https://pmc.ncbi.nlm.nih.gov/articles/PMC7645687/', 'https://doi.org/10.1038/s41526-020-00124-6'],
+    accessed: '2026-11-15',
+    use: 'Research context for monitoring exercise countermeasure participation in the Exercise screen',
+    terms: 'Open access · cited, not reproduced',
+  },
+  {
     id: 'S14',
     provider: 'NOAA SWPC',
     title: 'GOES Proton Flux; NOAA Space Weather Scales',
