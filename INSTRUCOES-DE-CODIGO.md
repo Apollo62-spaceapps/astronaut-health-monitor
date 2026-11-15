@@ -93,7 +93,7 @@ A estrutura completa está na SPEC §5.3. O resumo:
 
 - **Tipos:** os mesmos da SPEC §5.4 e §6.6, sem renomear. Se precisar de campo novo, combine primeiro.
 - **Status:** `AlertLevel` = `normal | attention | urgent`. O mapa do corpo usa `ZoneStatus` = `AlertLevel | adapting | restricted`. A zona mostra o **pior** status dos indicadores dela (R-BODY-01).
-- **Ambientes, estilo "modo noturno"** (SPEC §17, `config/environments.ts`). Um botão na TopBar muda o sistema inteiro. `MissionMode` = `EARTH | ISS | LUNAR | SPACECRAFT`.
+- **Botão de modo de ambiente** (SPEC §17, `config/environments.ts`). Ao clicar, a plataforma inteira troca de modo, como um botão de tema troca a aparência de um site. **Não é um tema escuro**: o visual escuro do design system não muda. `MissionMode` = `EARTH | ISS | LUNAR | SPACECRAFT`.
 
   | Ambiente | Gravidade | Atraso de ida | Dose/dia | Exercício |
   |---|---|---|---|---|
@@ -104,7 +104,7 @@ A estrutura completa está na SPEC §5.3. O resumo:
 
   - O ETA de resposta do solo é **2 × o atraso de ida**.
   - **As regras recebem o ambiente como entrada.** As telas leem o resultado e não decidem nada.
-  - O `data-environment` no `<html>` muda só a cor de destaque. Os status mantêm verde, âmbar e vermelho, com ícone e texto.
+  - O `data-environment` no `<html>` muda só a cor da faixa da missão (banner). Os status mantêm verde, âmbar e vermelho, com ícone e texto.
   - Um número sem fonte para o ambiente não aparece.
 - **Radiação:**
   - dose diária = taxa do ambiente (só a Spacecraft tem fonte: 1,8 mSv [S08, S09]);

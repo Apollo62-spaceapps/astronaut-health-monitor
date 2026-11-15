@@ -52,7 +52,7 @@ A SPEC foi convertida de `SPEC-frontend.docx` (v0.2 de 14/11/2026). Este arquivo
 
   O sistema continua funcionando longe da Terra e escalona para o CMO ou para o solo, respeitando quem pode ver cada dado.
 - **Diferenciais para o pitch (SPEC §6.1.1, §6.5, §6.7, §17):**
-  0. **Um sistema, quatro ambientes.** Um seletor estilo "modo noturno" (**Earth · Space Station · Moon · Spacecraft**) muda o sistema inteiro: tema, atraso de comunicação, escalonamento, gravidade, taxa de dose e equipamentos de exercício. Isso responde ao pedido do briefing de adaptar a vários ambientes [S01]. Veja a §5.1.
+  0. **Um sistema, quatro ambientes.** Um **botão de modo de ambiente** (**Earth · Space Station · Moon · Spacecraft**): ao clicar, a plataforma inteira troca de modo, como um botão de tema troca um site (não é um tema escuro). Muda: a cor da faixa da missão, o atraso de comunicação, o escalonamento, a gravidade, a taxa de dose, os equipamentos de exercício e a rotina. Isso responde ao pedido do briefing de adaptar a vários ambientes [S01]. Veja a §5.1.
   1. **O atraso de comunicação faz parte da interface.** Trocar de ISS para Marte muda o escalonamento ao vivo ("Ground reply in ~40 min — safe actions now"). É o "diferencial em 10 segundos" da demo.
   2. **Privacidade médica real.** A cabeça fica cinza com cadeado para o CMO, e existe break-glass com motivo e auditoria.
   3. **Evento solar real da NASA (DONKI)** reproduzido no cenário, gerando o fluxo de abrigo baseado na Orion.
@@ -185,9 +185,9 @@ scripts/
   - evento real `2024-05-11T02:10:00-SEP-001` (GOES-P SEISS >100 MeV) [S07], com o rótulo "Real event observed near Earth (NASA DONKI), replayed in this scenario."
   - não inventar tendências fisiológicas como fato: as séries são ruído em torno do baseline mais um desvio roteirizado (P-07).
 
-### 5.1 Modos de ambiente (estilo "modo noturno") — adendo à SPEC (§17 do `docs/SPEC-frontend.md`)
+### 5.1 Botão de modo de ambiente — adendo à SPEC (§17 do `docs/SPEC-frontend.md`)
 
-O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
+É um **botão de modo de ambiente** na barra superior: ao clicar, a plataforma inteira troca de modo, do mesmo jeito que um botão de tema troca a aparência de um site. **Não é um tema escuro.** O visual escuro já é o padrão do design system e não muda.
 
 **Como funciona por dentro:**
 - `store.environment` guarda o ambiente atual.
@@ -232,7 +232,7 @@ O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
 ## 6. Roteiro da demo (SPEC §10)
 
 1. **Overview** (Astronauta, **Spacecraft**, dia 120): o mapa do corpo aparece com as zonas coloridas. Clicar no coração e mostrar o card (função, desvio contra o baseline, hazard, fonte), a dose de carreira e os selos REAL/SIMULATED.
-   - **Momento "modo noturno":** apertar Earth → Space Station → Moon → Spacecraft. O tema, o atraso, o escalonamento, a taxa de dose, o exercício e a rotina mudam na frente dos jurados.
+   - **Troca de modo ao vivo:** clicar Earth → Space Station → Moon → Spacecraft no botão de modo de ambiente. O tema, o atraso, o escalonamento, a taxa de dose, o exercício e a rotina mudam na frente dos jurados.
    - **Rotina:** um lembrete vence ("Time to measure your resting heart rate"). Clicar em **Log measurement**, registrar, e o mapa do corpo e o gráfico se atualizam.
 2. **Replay event:** o evento DONKI real gera o alerta urgent e o fluxo de abrigo da Orion, e o exercício passa para postponed.
 3. **Assistente** (WebLLM), com o selo do modo de IA.
@@ -246,7 +246,7 @@ O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
 - **Kanban:** https://github.com/orgs/Apollo62-spaceapps/projects/3. As tasks são do Kayque, do Lucas e do Felipe.
 - **Kayque (K4yquee), tasks K\*:**
   - base, tokens do design system, AppShell e TopBar com a faixa da missão;
-  - seletor de ambiente (K12);
+  - botão de modo de ambiente (K5);
   - contrato (tipos, store, configs), fixtures, DONKI e catálogo de fontes;
   - comunicação e fila;
   - assistente;

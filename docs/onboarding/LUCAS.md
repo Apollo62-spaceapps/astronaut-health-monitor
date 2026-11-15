@@ -27,11 +27,13 @@ npm run dev
 
 | # | Task | Depende de | Prazo |
 |---|---|---|---|
-| [#52](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/52) | **L1** · Regras de vitais, mapa do corpo e privacidade (R-VIT-01/02, R-BODY-01, R-PRIV-01) + testes | K2 (contrato) | dom 01h |
-| [#53](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/53) | **L2** · Regras de radiação, exercício e escalonamento + `engine.ts` (R-RAD-01..03, R-EX-01/02, R-ESC-01) + testes | K2 | dom 01h |
-| [#54](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/54) | **L3** · Overview: mapa do corpo clicável e card da zona | K4 (componentes), L1 | dom 01h |
-| [#55](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/55) | **L4** · Vitals: cards e gráficos (Recharts) com baseline pré-voo e em voo | K3 (fixtures), K4, L1 | dom manhã |
-| [#57](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/57) | **L6** (extra) · Animação, Advance day, fase "Adapting", zona Legs | L3, L4, F4 | só depois do P0 |
+| [#52](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/52) | **L1** · Escrever as regras de sinais vitais, mapa do corpo e privacidade (R-VIT-01/02, R-BODY-01, R-PRIV-01), com testes | K2 (contrato) | dom 01h |
+| [#53](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/53) | **L2** · Escrever as regras de radiação, exercício e escalonamento + `engine.ts` (R-RAD-01..03, R-EX-01/02, R-ESC-01), com testes | K2 | dom 01h |
+| [#54](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/54) | **L3** · Criar o mapa do corpo clicável com o card de cada zona | K4 (componentes), L1 | dom 01h |
+| [#55](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/55) | **L4** · Criar os cards e os gráficos dos sinais vitais (Recharts, baseline pré-voo e em voo) | K3 (dados), K4, L1 | dom manhã |
+| [#57](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/57) | **L5** (extra) · Animação, avançar o dia, estado "Adapting" e zona das pernas | L3, L4, F3 | só depois do P0 |
+
+O número da task é a ordem: faça L1 → L2 → L3 → L4, e a L5 só se sobrar tempo.
 
 **Enquanto K2 não entra** (deve sair até ~21h30): comece L1 e L2 usando os tipos da SPEC §5.4 e do adendo §17. Os nomes vão ser os mesmos.
 
