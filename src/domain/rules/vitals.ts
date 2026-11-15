@@ -143,6 +143,25 @@ export function evaluateVitals(
   return kinds.map((k) => evaluateVital(k, inflight, preflight, nowIso)).filter((e) => e !== null)
 }
 
+/**
+ * Tendência (CORE-02), só aritmética: média dos últimos `days` dias até `nowIso` vs média dos `days` dias anteriores, em %.
+ * null = faltam leituras em uma das janelas. Não é limiar nem critério clínico.
+ */
+export function trendPct(kind: VitalKind, inflight: readonly VitalReading[], nowIso: string, days = 7): number | null {
+  const now = Date.parse(nowIso)
+  const inRange = (from: number, to: number) =>
+    readingsOf(kind, inflight)
+      .filter((r) => {
+        const t = Date.parse(r.takenAt)
+        return t > from && t <= to
+      })
+      .map((r) => r.value)
+  const recent = mean(inRange(now - days * DAY_MS, now))
+  const before = mean(inRange(now - 2 * days * DAY_MS, now - days * DAY_MS))
+  if (!Number.isFinite(recent) || !Number.isFinite(before) || before === 0) return null
+  return ((recent - before) / before) * 100
+}
+
 /** Desvio formatado para a UI: "+18%" / "-4%" (1 casa só abaixo de 10%). */
 export function formatDeviation(devPct: number): string {
   const abs = Math.abs(devPct)

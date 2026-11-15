@@ -4,6 +4,7 @@ import {
   deviationPct,
   evaluateVital,
   formatDeviation,
+  trendPct,
   vitalAlert,
   vitalLevel,
   VITAL_SAFE_ACTIONS,
@@ -147,5 +148,16 @@ describe('cenário da demo (dia 120)', () => {
     expect(ev.latest.value).toBe(84)
     expect(ev.baseline.preflightMean).toBeCloseTo(71.2, 1)
     expect(formatDeviation(ev.deviationPct)).toBe('+18%')
+  })
+})
+
+describe('tendência (CORE-02)', () => {
+  const r = (v: number, d: string) => reading('heartRate', v, `2026-11-${d}T07:00:00Z`)
+  it('média dos últimos 7 dias vs 7 anteriores', () => {
+    const inflight = [r(70, '01'), r(70, '05'), r(77, '10'), r(77, '13')]
+    expect(trendPct('heartRate', inflight, '2026-11-14T00:00:00Z')).toBeCloseTo(10)
+  })
+  it('sem leituras numa das janelas → null', () => {
+    expect(trendPct('heartRate', [r(70, '13')], '2026-11-14T00:00:00Z')).toBeNull()
   })
 })
