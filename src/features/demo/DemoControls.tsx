@@ -17,7 +17,7 @@ export function DemoControls() {
   const setTimeAcceleration = useAppStore((s) => s.setTimeAcceleration)
 
   return (
-    <div className="fixed right-4 bottom-14 z-40 flex flex-col items-end gap-2">
+    <div className="fixed right-4 bottom-14 z-40 flex flex-col items-end gap-2 max-md:right-3 max-md:bottom-[calc(4.25rem+env(safe-area-inset-bottom))]">
       {open && (
         <section
           id="demo-controls-panel"

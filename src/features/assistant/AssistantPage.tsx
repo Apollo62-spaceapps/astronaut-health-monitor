@@ -220,7 +220,8 @@ export function AssistantPage() {
         </ul>
       </header>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      {/* grid-cols-[minmax(0,1fr)]: sem isso, a coluna implícita cresce até a largura das sugestões e vaza no celular. */}
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <section aria-label="Conversation" className="flex min-h-[32rem] flex-col rounded-lg bg-surface p-4">
           <OrbitConversation inputId="orbit-page-input" />
         </section>
