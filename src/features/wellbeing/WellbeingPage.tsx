@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { z } from 'zod'
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { History, Info, LockKeyhole, ShieldAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -19,6 +19,7 @@ import { ProvenanceBadge } from '@/components/ProvenanceBadge'
 import { useAppStore } from '@/state/store'
 import { accessLevel, visibleAuditEntries } from '@/domain/rules/privacy'
 import type { WellbeingEntry } from '@/domain/types'
+import { formatUtc } from '@/lib/format'
 
 const checkInSchema = z.object({ mood: z.number().int().min(1).max(5), sleepHours: z.number().min(0).max(24) })
 const MOOD_LABELS = ['Very low', 'Low', 'Neutral', 'Good', 'Very good']
@@ -56,7 +57,7 @@ export function WellbeingPage() {
       Array.from({ length: 14 }, (_, i) => {
         const date = daysBack(simNowIso, 13 - i)
         const entry = wellbeing.find((item) => item.date === date)
-        return { date: date.slice(5), mood: entry?.mood ?? null, sleep: entry?.sleepHours ?? null }
+        return { date: formatUtc(`${date}T00:00:00Z`).split(' 20')[0], mood: entry?.mood ?? null, sleep: entry?.sleepHours ?? null }
       }),
     [simNowIso, wellbeing],
   )
@@ -92,10 +93,10 @@ export function WellbeingPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
+    <div className="space-y-6">
       <header>
         <p className="text-xs font-semibold uppercase tracking-wider text-muted">Wellbeing · private</p>
-        <h1 className="mt-2 text-3xl">Daily check-in</h1>
+        <h1 className="mt-2 text-3xl">{role === 'ASTRONAUT' ? 'Daily check-in' : 'Crew wellbeing'}</h1>
         <p className="mt-2 text-muted">Self-report, not a clinical assessment.</p>
         {/* PRIV-05: contexto da privacidade, com fonte (S02, S04). */}
         <button
@@ -179,11 +180,16 @@ export function WellbeingPage() {
         </Card>
       ) : (
         <>
-          <div className="grid grid-cols-[minmax(320px,0.8fr)_1.2fr] gap-6">
+          <div className="grid items-start gap-6 lg:grid-cols-[minmax(360px,0.9fr)_1.1fr]">
             {role === 'ASTRONAUT' && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Today's check-in · SIMULATED</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    Today&apos;s check-in
+                    <ProvenanceBadge
+                      provenance={{ kind: 'simulated', note: 'Self-reported check-in in this demo scenario.' }}
+                    />
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={saveCheckIn} className="space-y-5">
@@ -193,7 +199,7 @@ export function WellbeingPage() {
                         {MOOD_LABELS.map((label, index) => (
                           <label
                             key={label}
-                            className="flex cursor-pointer flex-col items-center gap-1 rounded-md border border-border p-2 text-center text-xs has-[:checked]:border-link has-[:checked]:bg-surface-2"
+                            className="flex cursor-pointer flex-col items-center gap-1 rounded-md border border-border px-1 py-2 text-center text-xs whitespace-nowrap has-[:checked]:border-link has-[:checked]:bg-surface-2"
                           >
                             <input
                               type="radio"
@@ -220,9 +226,6 @@ export function WellbeingPage() {
                         onChange={(e) => setSleepHours(e.target.value)}
                         className="font-mono"
                       />
-                      <ProvenanceBadge
-                        provenance={{ kind: 'simulated', note: 'Self-reported check-in in this demo scenario.' }}
-                      />
                     </div>
                     {error && (
                       <p role="alert" className="text-sm text-muted">
@@ -238,53 +241,84 @@ export function WellbeingPage() {
             )}
             <Card className={role !== 'ASTRONAUT' ? 'col-span-2' : ''}>
               <CardHeader>
-                <CardTitle>Last 14 days</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  Last 14 days
+                  <ProvenanceBadge provenance={{ kind: 'simulated', note: 'Self-reported mood and sleep.' }} />
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="mb-3 flex gap-2">
-                  <ProvenanceBadge provenance={{ kind: 'simulated', note: 'Self-reported mood and sleep.' }} />
-                  <span className="text-xs text-muted">Mood · 1–5</span>
-                  <span className="text-xs text-muted">Sleep · hours</span>
-                </div>
+                {/* Legenda: cada eixo tem a cor da sua série (humor à esquerda, sono à direita). */}
+                <ul aria-label="Chart legend" className="mb-3 flex flex-wrap gap-4 text-sm">
+                  <li className="flex items-center gap-2">
+                    <span aria-hidden className="inline-block h-0.5 w-5 bg-link" />
+                    Mood (1–5, left axis)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span aria-hidden className="inline-block h-3 w-1.5 bg-muted/60" />
+                    Sleep (hours, right axis)
+                  </li>
+                </ul>
                 <div
                   className="h-72"
                   role="img"
                   aria-label="Chart of self-reported mood and sleep over the last 14 days"
                 >
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={chartData} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-                      <CartesianGrid stroke="#34383d" vertical={false} />
-                      <XAxis dataKey="date" stroke="#a9afb5" tick={{ fontSize: 11 }} />
-                      <YAxis yAxisId="mood" domain={[1, 5]} stroke="#6fa8ff" tick={{ fontSize: 11 }} />
+                    <ComposedChart data={chartData} margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
+                      <CartesianGrid stroke="var(--color-border)" vertical={false} />
+                      <XAxis
+                        dataKey="date"
+                        stroke="var(--color-muted)"
+                        tick={{ fontSize: 12, fontFamily: 'var(--font-mono)' }}
+                        interval={1}
+                      />
+                      <YAxis
+                        yAxisId="mood"
+                        domain={[1, 5]}
+                        ticks={[1, 2, 3, 4, 5]}
+                        allowDecimals={false}
+                        width={28}
+                        stroke="var(--color-link)"
+                        tick={{ fontSize: 12, fontFamily: 'var(--font-mono)' }}
+                      />
                       <YAxis
                         yAxisId="sleep"
                         orientation="right"
                         domain={[0, 12]}
-                        stroke="#a9afb5"
-                        tick={{ fontSize: 11 }}
+                        ticks={[0, 3, 6, 9, 12]}
+                        width={32}
+                        stroke="var(--color-muted)"
+                        tick={{ fontSize: 12, fontFamily: 'var(--font-mono)' }}
                       />
-                      <Tooltip contentStyle={{ background: '#181a1b', borderColor: '#34383d' }} />
-                      <Area
-                        yAxisId="mood"
-                        type="monotone"
-                        dataKey="mood"
-                        name="Mood"
-                        stroke="#6fa8ff"
-                        fill="#6fa8ff"
-                        fillOpacity={0.12}
-                        connectNulls={false}
+                      <Tooltip
+                        contentStyle={{
+                          background: 'var(--color-surface)',
+                          borderColor: 'var(--color-border)',
+                          fontFamily: 'var(--font-mono)',
+                        }}
                       />
-                      <Area
+                      <Bar
                         yAxisId="sleep"
-                        type="monotone"
                         dataKey="sleep"
                         name="Sleep (hours)"
-                        stroke="#a9afb5"
-                        fill="#a9afb5"
-                        fillOpacity={0.08}
-                        connectNulls={false}
+                        barSize={6}
+                        fill="var(--color-muted)"
+                        fillOpacity={0.55}
+                        isAnimationActive={false}
                       />
-                    </AreaChart>
+                      {/* Humor é ordinal (1–5): degraus com pontos, sem curva que passa do valor real. */}
+                      <Line
+                        yAxisId="mood"
+                        type="stepAfter"
+                        dataKey="mood"
+                        name="Mood (1–5)"
+                        stroke="var(--color-link)"
+                        strokeWidth={2}
+                        dot={{ r: 3, fill: 'var(--color-link)' }}
+                        connectNulls={false}
+                        isAnimationActive={false}
+                      />
+                    </ComposedChart>
                   </ResponsiveContainer>
                 </div>
                 {chartEntries.length === 0 && (
@@ -328,9 +362,9 @@ export function WellbeingPage() {
               {auditEntries.map((entry) => (
                 <li
                   key={`${entry.at}-${entry.action}-${entry.actor}`}
-                  className="grid grid-cols-[170px_150px_1fr] gap-3 py-2"
+                  className="grid grid-cols-[210px_140px_1fr] gap-3 py-2"
                 >
-                  <span className="num text-muted">{entry.at.slice(0, 16).replace('T', ' ')} UTC</span>
+                  <span className="num text-muted">{formatUtc(entry.at)}</span>
                   <span>
                     {entry.actor === 'FLIGHT_SURGEON' ? 'Flight surgeon' : entry.actor === 'CMO' ? 'CMO' : 'Astronaut'}
                   </span>

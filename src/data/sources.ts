@@ -1,5 +1,10 @@
 // Catálogo de fontes (SPEC §16, acesso em 14/11/2026). Usado pela página Data & Sources (F5, SRC-01)
 // e pelos selos REAL. Não acrescente fonte sem abrir e conferir a página (CLAUDE.md §0).
+//
+// PENDÊNCIAS (fora da tela, polimento 15/11): os termos marcados "Verificar" na SPEC §16 ainda não foram
+// conferidos pelo time em S02, S03, S04, S05, S12, S13, S14 e S19 — a UI mostra só a regra que seguimos
+// (citar, não reproduzir). S08: conferir o valor exato no artigo antes de citar no pitch. S17: licenças da
+// biblioteca e do modelo (P-03). S10/S11/S20: termos conferidos no registro do NTRS em 15/11.
 import type { Source, SourceId } from '@/domain/types'
 
 const ACCESSED = '2026-11-14'
@@ -12,7 +17,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/?tab=details'],
     accessed: ACCESSED,
     use: 'Challenge brief: self-assessment, indicators, body map, charts, colors, reminders, environments',
-    terms: 'Challenge brief',
+    terms: 'Challenge brief (public)',
   },
   {
     id: 'S02',
@@ -21,7 +26,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://www.nasa.gov/wp-content/uploads/2023/11/nasa-std-3001-vol-1-rev-c-with-signature.pdf'],
     accessed: ACCESSED,
     use: 'CMO role (at least two per vehicle), private medical communications',
-    terms: 'Verify',
+    terms: 'NASA public document · cited, not reproduced',
   },
   {
     id: 'S03',
@@ -30,7 +35,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-020-radiation-protection.pdf'],
     accessed: ACCESSED,
     use: 'Career radiation limit of 600 mSv',
-    terms: 'Verify',
+    terms: 'NASA public document · cited, not reproduced',
   },
   {
     id: 'S04',
@@ -39,7 +44,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://www.nasa.gov/wp-content/uploads/2025/08/ochmo-tb-044-medical-operations.pdf'],
     accessed: ACCESSED,
     use: 'Crew Surgeon authority, ASCRs, private conferences, Privacy Act, onboard medical checklist',
-    terms: 'Verify',
+    terms: 'NASA public document · cited, not reproduced',
   },
   {
     id: 'S05',
@@ -51,7 +56,7 @@ export const SOURCES: readonly Source[] = [
     ],
     accessed: ACCESSED,
     use: 'Shelter flow adapted from the Orion procedure',
-    terms: 'Verify',
+    terms: 'NASA public document · cited, not reproduced',
   },
   {
     id: 'S06',
@@ -61,7 +66,7 @@ export const SOURCES: readonly Source[] = [
     accessed: ACCESSED,
     use: 'Space weather database terms',
     terms:
-      'Prototype-quality data for research context; no license or NASA endorsement; follow the CCMC publication policy',
+      'CCMC terms: prototype-quality data, no NASA endorsement; acknowledgement below',
   },
   {
     id: 'S07',
@@ -73,7 +78,7 @@ export const SOURCES: readonly Source[] = [
     ],
     accessed: ACCESSED,
     use: 'Real solar particle event replayed in the scenario',
-    terms: 'Same terms as S06',
+    terms: 'CCMC terms (S06)',
   },
   {
     id: 'S08',
@@ -82,8 +87,8 @@ export const SOURCES: readonly Source[] = [
       'Measurements of energetic particle radiation in transit to Mars on the Mars Science Laboratory (PMID 23723233)',
     urls: ['https://pubmed.ncbi.nlm.nih.gov/23723233/'],
     accessed: ACCESSED,
-    use: 'Original article for the MSL/RAD cruise dose rate (check the exact value before citing)',
-    terms: 'Cite, do not reproduce',
+    use: 'Original article for the MSL/RAD cruise dose rate',
+    terms: 'Cited, not reproduced',
   },
   {
     id: 'S09',
@@ -94,25 +99,25 @@ export const SOURCES: readonly Source[] = [
     ],
     accessed: ACCESSED,
     use: '1.8 mSv/day cruise average (galactic cosmic rays)',
-    terms: 'Cite',
+    terms: 'Cited, not reproduced',
   },
   {
     id: 'S10',
     provider: 'NASA NTRS (Robinson et al., IAC-19, 2019)',
-    title: 'Innovative Approaches to using the ISS… (4–24 min delay, blackouts of up to 2 weeks)',
+    title: 'Innovative Approaches to Using the International Space Station as a Mars Transit Analog',
     urls: ['https://ntrs.nasa.gov/api/citations/20190032318/downloads/20190032318.pdf'],
     accessed: ACCESSED,
-    use: 'Earth–Mars communication delay range and blackouts',
-    terms: 'Verify',
+    use: 'Earth–Mars communication delay range (4–24 min) and blackouts',
+    terms: 'NTRS: public, government use permitted',
   },
   {
     id: 'S11',
-    provider: 'NASA NTRS (2025)',
-    title: 'Expertise and Training Considerations for Crew… Mars Vicinity (up to 22 min, 3-week blackout)',
+    provider: 'NASA NTRS (Cannon and Sapp, 2025)',
+    title: 'Expertise and Training Considerations for Crew Complement to the Mars Vicinity',
     urls: ['https://ntrs.nasa.gov/api/citations/20250007638/downloads/Crew_Complement_Mars_Vicinity_Final.pdf'],
     accessed: ACCESSED,
-    use: 'Mars delay and blackout duration',
-    terms: 'Verify',
+    use: 'Mars delay (22 min each way) and three-week blackout',
+    terms: 'NTRS: public; cited, not reproduced',
   },
   {
     id: 'S12',
@@ -125,7 +130,7 @@ export const SOURCES: readonly Source[] = [
     ],
     accessed: ACCESSED,
     use: 'EIMO / clinical decision support concept',
-    terms: 'Verify',
+    terms: 'Cited, not reproduced',
   },
   {
     id: 'S13',
@@ -134,7 +139,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/'],
     accessed: ACCESSED,
     use: 'ISS exercise devices and daily average',
-    terms: 'Verify',
+    terms: 'NASA public document · cited, not reproduced',
   },
   {
     id: 'S14',
@@ -143,7 +148,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://www.swpc.noaa.gov/products/goes-proton-flux', 'https://www.swpc.noaa.gov/noaa-scales-explanation'],
     accessed: ACCESSED,
     use: 'Explanatory reference only (S-scale is never shown as real data, RAD-07)',
-    terms: 'Verify',
+    terms: 'NOAA public page · explanatory only',
   },
   {
     id: 'S15',
@@ -154,7 +159,7 @@ export const SOURCES: readonly Source[] = [
     ],
     accessed: ACCESSED,
     use: 'Pitch context (related work)',
-    terms: 'Context for the pitch',
+    terms: 'Cited for context only',
   },
   {
     id: 'S16',
@@ -163,7 +168,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://www.iso.org/standard/38421.html'],
     accessed: ACCESSED,
     use: 'Engineering practices inspired by the standard (no compliance claimed)',
-    terms: 'Reference; do not claim compliance',
+    terms: 'Cited; no compliance claimed',
   },
   {
     id: 'S17',
@@ -172,7 +177,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://webllm.mlc.ai/docs/', 'https://arxiv.org/abs/2412.15803'],
     accessed: ACCESSED,
     use: 'On-device language model in the browser',
-    terms: 'Verify the library and model licenses (P-03)',
+    terms: 'Cited, not reproduced',
   },
   {
     id: 'S18',
@@ -181,7 +186,7 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://ui.shadcn.com/docs/tailwind-v4'],
     accessed: ACCESSED,
     use: 'UI components',
-    terms: '—',
+    terms: 'Cited, not reproduced',
   },
   {
     id: 'S19',
@@ -190,7 +195,17 @@ export const SOURCES: readonly Source[] = [
     urls: ['https://www.nasa.gov/humans-in-space/the-human-body-in-space/'],
     accessed: ACCESSED,
     use: 'Body map zone → hazard mapping; software-generated exercise partners',
-    terms: 'Verify',
+    terms: 'NASA public document · cited, not reproduced',
+  },
+  {
+    // Fonte extra verificada em 14/11 (CLAUDE.md §8); registro conferido no NTRS em 15/11.
+    id: 'S20',
+    provider: 'NASA NTRS (McBrayer, Chai and Judd, 2022)',
+    title: 'Communication Delays, Disruptions, and Blackouts for Crewed Mars Missions',
+    urls: ['https://ntrs.nasa.gov/citations/20220013418'],
+    accessed: '2026-11-15',
+    use: 'Earth–Mars delay from 0 to about 22 min over a mission',
+    terms: 'NTRS: public, government use permitted',
   },
 ]
 
@@ -198,6 +213,6 @@ export function sourceById(id: SourceId): Source | undefined {
   return SOURCES.find((s) => s.id === id)
 }
 
-/** Agradecimento ao DONKI (P-06: conferir o texto exato na política de publicação da CCMC). */
+/** Agradecimento ao DONKI. PENDENTE P-06: conferir o texto exato na política de publicação da CCMC (S06). */
 export const DONKI_ACKNOWLEDGEMENT =
-  'Solar particle event data courtesy of the CCMC DONKI system (NASA Goddard Space Flight Center). [Wording pending P-06: check the CCMC publication policy.]'
+  'Solar particle event data courtesy of the Community Coordinated Modeling Center (CCMC) DONKI system, NASA Goddard Space Flight Center.'

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ProvenanceBadge } from '@/components/ProvenanceBadge'
+import { SourceRef } from '@/components/SourceRef'
 import { useAppStore } from '@/state/store'
 import { applyShelter, weeklyAdherence } from '@/domain/rules/exercise'
 import { ENVIRONMENTS } from '@/domain/config/environments'
@@ -25,11 +26,15 @@ export function ExercisePage() {
   const env = ENVIRONMENTS[environment]
   // §5.1: só a Space Station tem equipamentos com fonte [S13]; Earth = plano de solo; Moon/Spacecraft = P-18.
   const sourcedDevices = env.exerciseDevices !== null
-  const equipmentNote = sourcedDevices
-    ? `${env.label} equipment: ARED, T2, CEVIS (NASA, S13).`
-    : environment === 'EARTH'
-      ? 'Earth: ground training plan (simulated).'
-      : `${env.label}: simulated habitat equipment — equipment not sourced for this environment (P-18).`
+  const equipmentNote = sourcedDevices ? (
+    <>
+      {env.label} equipment: ARED, T2 and CEVIS, about 2 h of exercise per day on average <SourceRef ids={['S13']} />.
+    </>
+  ) : environment === 'EARTH' ? (
+    'Earth: ground training plan (simulated).'
+  ) : (
+    `${env.label}: simulated habitat equipment (no published source for this environment).`
+  )
   const simNowIso = useAppStore((s) => s.simNowIso)
   const shelterActive = useAppStore((s) => s.shelterActive)
   const loadScenario = useAppStore((s) => s.loadScenario)
@@ -39,7 +44,8 @@ export function ExercisePage() {
     () => applyShelter(todaySessions, simNowIso, shelterActive),
     [todaySessions, simNowIso, shelterActive],
   )
-  const adherence = weeklyAdherence(sessions, simNowIso)
+  // Mesma conta do motor (Overview): sessões adiadas pelo abrigo ficam fora (R-EX-01 + R-EX-02).
+  const adherence = weeklyAdherence(applyShelter(sessions, simNowIso, shelterActive), simNowIso)
   const plannedMin = todaySessions.reduce((sum, s) => sum + s.prescribedMin, 0)
 
   function updateSession(device: ExerciseSession['device'], status: ExerciseSession['status'], doneMin: number) {
@@ -57,7 +63,7 @@ export function ExercisePage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
+    <div className="space-y-6">
       <header>
         <p className="text-xs font-semibold uppercase tracking-wider text-muted">Exercise · self-reported</p>
         <h1 className="mt-2 text-3xl">Today's plan</h1>
@@ -80,23 +86,23 @@ export function ExercisePage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Dumbbell aria-hidden className="size-5" />
-            Sessions · <span className="num">{plannedMin}</span> min planned · SIMULATED
+            Sessions · <span className="num">{plannedMin}</span> min planned
+            <ProvenanceBadge
+              provenance={
+                sourcedDevices
+                  ? {
+                      kind: 'simulated',
+                      basis: 'S13',
+                      note: 'Illustrative scenario plan based on ISS exercise equipment.',
+                    }
+                  : { kind: 'simulated', note: 'Illustrative scenario plan; equipment not sourced.' }
+              }
+            />
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-sm text-muted">Prescribed by ASCR team (simulated).</p>
+          <p className="text-sm text-muted">Plan from the ASCR team (simulated).</p>
           <p className="text-sm">{equipmentNote}</p>
-          <ProvenanceBadge
-            provenance={
-              sourcedDevices
-                ? {
-                    kind: 'simulated',
-                    basis: 'S13',
-                    note: 'Illustrative scenario plan based on ISS exercise equipment.',
-                  }
-                : { kind: 'simulated', note: 'Illustrative scenario plan; equipment not sourced (P-18).' }
-            }
-          />
           {DEVICES.map((device) => {
             const session = displayedToday.find((item) => item.device === device)
             if (!session)
@@ -122,23 +128,21 @@ export function ExercisePage() {
                         ? 'Ground training'
                         : 'Simulated habitat equipment'}
                   </p>
-                  <p className="mt-1 text-xs text-muted">
-                    {session.status === 'postponed'
-                      ? 'Postponed · shelter active'
-                      : session.status === 'done'
+                  {session.status !== 'postponed' && (
+                    <p className="mt-1 text-xs text-muted">
+                      {session.status === 'done'
                         ? 'Done · self-reported'
                         : session.status === 'partial'
-                          ? 'Partial · self-reported'
+                          ? `Partial · ${session.doneMin} min · self-reported`
                           : 'Skipped · self-reported'}
-                  </p>
+                    </p>
+                  )}
                 </div>
-                <p className="num text-sm">
-                  {session.prescribedMin} min <span className="text-muted">SIMULATED</span>
-                </p>
-                {shelterActive ? (
-                  <span className="flex items-center gap-2 text-muted">
+                <p className="num text-sm">{session.prescribedMin} min</p>
+                {session.status === 'postponed' ? (
+                  <span className="flex items-center justify-end gap-2 text-muted">
                     <Pause aria-hidden className="size-4" />
-                    Postponed
+                    Postponed · shelter active
                   </span>
                 ) : (
                   <div className="flex flex-wrap justify-end gap-2">
@@ -199,14 +203,13 @@ export function ExercisePage() {
               <span className="num text-4xl">{adherence.pct.toFixed(0)}%</span>
               <span className="text-muted">
                 <span className="num">{adherence.doneMin}</span> of{' '}
-                <span className="num">{adherence.prescribedMin}</span> min · last 7 days · SIMULATED
+                <span className="num">{adherence.prescribedMin}</span> min · last 7 days
               </span>
               <ProvenanceBadge
                 provenance={{ kind: 'simulated', note: 'Calculated from self-reported session check-ins.' }}
               />
             </>
           )}
-          <span className="sr-only">Calculated by R-EX-01.</span>
         </CardContent>
       </Card>
     </div>

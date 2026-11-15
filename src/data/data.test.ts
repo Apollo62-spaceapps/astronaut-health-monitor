@@ -60,13 +60,17 @@ describe('cenário da demo (K3)', () => {
 })
 
 describe('catálogo de fontes (SRC-01)', () => {
-  it('tem S01…S19, sem repetição, todas com URL, uso e termos', () => {
-    expect(SOURCES.map((x) => x.id)).toEqual(Array.from({ length: 19 }, (_, i) => `S${String(i + 1).padStart(2, '0')}`))
+  it('tem S01…S20, sem repetição, todas com URL, uso e termos', () => {
+    expect(SOURCES.map((x) => x.id)).toEqual(Array.from({ length: 20 }, (_, i) => `S${String(i + 1).padStart(2, '0')}`))
     for (const src of SOURCES) {
       expect(src.urls.length).toBeGreaterThan(0)
       expect(src.urls.every((u) => u.startsWith('https://'))).toBe(true)
       expect(src.use.length).toBeGreaterThan(0)
       expect(src.terms.length).toBeGreaterThan(0)
     }
+  })
+
+  it('termos visíveis não têm nota interna (Verify, check, P-xx)', () => {
+    for (const src of SOURCES) expect(src.terms).not.toMatch(/verify|check|P-\d|pending/i)
   })
 })
