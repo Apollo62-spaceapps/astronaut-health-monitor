@@ -46,6 +46,13 @@ export const MIN_ADAPTED_READINGS = 3
 export const TREND_MIN_DAYS = 3
 export const TREND_LOOKBACK_DAYS = 14
 
+/**
+ * R-PROJ-01: projeção linear dos vitais (mínimos quadrados sobre um valor por dia). PENDENTE P-01 — ilustrativo.
+ * lookbackDays: dias olhados; minPoints: dias com leitura exigidos; horizonDays: só avisa se a linha seguinte
+ * (Attention ou Urgent) for cruzada dentro deste prazo; minR2: qualidade mínima do ajuste (ruído não dispara).
+ */
+export const PROJECTION = { lookbackDays: 7, minPoints: 5, horizonDays: 7, minR2: 0.5 } as const
+
 // ───────── Crew Risk Outlook (L7, Orbit §5A, R-RISK-01) ─────────
 
 /** Limiares dos "drivers" do risk outlook. PENDENTE P-01 — valores ilustrativos, sem fonte clínica. */

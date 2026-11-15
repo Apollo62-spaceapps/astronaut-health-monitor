@@ -443,6 +443,15 @@ const MORE_NASA: Passage[] = [
 /** Como este protótipo funciona (sem fonte externa: descreve o próprio app). */
 const APP: Passage[] = [
   {
+    // R-PROJ-01 / R-PROJ-02: o que o app "prevê" e o que não prevê.
+    id: 'app-projection',
+    kind: 'app',
+    title: 'Early warning: projections from your own readings',
+    text: 'The rule engine draws a straight line through your last 7 days of each vital and warns early when, at that pace, it would cross the next illustrative line (Attention or Urgent) within 7 days. The warning is always Attention, never Urgent, and it is a projection from your own readings, not a medical assessment. On the Spacecraft it also projects the career dose with the sourced cruise rate. I tell you as soon as a warning appears; the rules decide it, not me.',
+    sourceIds: [],
+    keywords: ['predict', 'prediction', 'forecast', 'projection', 'project', 'future', 'early', 'warning', 'ahead', 'will', 'going', 'heading', 'next days', 'anticipate'],
+  },
+  {
     id: 'app-environments',
     kind: 'app',
     title: 'Four environments, one system',
