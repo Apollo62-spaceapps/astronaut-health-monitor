@@ -107,7 +107,7 @@ export function CommsPage() {
           </div>
         )}
         <div className="mt-5 flex flex-wrap items-center gap-4">
-          {/* Secundário: o primário vermelho da tela é o "Log measurement" da faixa (ROUT-03, DESIGN-SYSTEM §3). */}
+          {/* Secundário: o primário vermelho da tela é o "Log measurement" da faixa (ROUT-03, DESIGN-SYSTEM §4). */}
           <Button variant="secondary" onClick={sendSummary}>
             <Send aria-hidden />
             Send summary to ground

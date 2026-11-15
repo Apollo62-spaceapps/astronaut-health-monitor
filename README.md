@@ -13,7 +13,7 @@ The astronaut self-assesses through a **core of vital signs compared with their 
 | Feature | What it shows |
 |---|---|
 | **Body Status Map** | A clickable silhouette. Each zone (head, heart, torso, skin, plus a radiation overlay) shows the worst status of its indicators. The zone card shows the value vs. the personal baseline, the related NASA hazard and the source. |
-| **Vitals** | Heart rate, blood pressure, glucose and temperature, each with its % deviation from the pre-flight and in-flight baselines, its trend and a provenance badge. |
+| **Vitals** | Heart rate, blood pressure, glucose and temperature, each with its % deviation from the pre-flight baseline (drawn as one range on the chart), the in-flight average, its trend and a provenance badge. |
 | **Radiation** | Career dose vs. the 600 mSv limit. A **real solar particle event from NASA DONKI** (May 11, 2024) is replayed in the scenario and triggers a shelter flow adapted from NASA's Orion procedure. |
 | **Wellbeing (restricted)** | Daily mood and sleep self-report, private by default. The CMO sees it only with the astronaut's consent, or through an audited **break-glass** emergency access. |
 | **Exercise** | Adherence to the prescribed ARED / T2 / CEVIS plan. |

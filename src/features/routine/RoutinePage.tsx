@@ -50,7 +50,7 @@ export function RoutinePage() {
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">
             Mission day · {simNowIso.slice(0, 10)} · SIMULATED
           </p>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Mission routine</h1>
+          <h1 className="mt-2 text-3xl font-semibold">Mission routine</h1>
           <p className="mt-2 text-muted">Today's scheduled activities for {ENVIRONMENTS[environment].label}.</p>
         </div>
         <div className="flex items-center gap-2 rounded-md border border-border bg-surface p-2">

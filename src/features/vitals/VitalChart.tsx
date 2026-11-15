@@ -1,11 +1,31 @@
-// Gráfico de um vital (CORE-05) com Recharts: série temporal (até ~120 dias) + linha do baseline pré-voo
-// e linha do baseline em voo, com traços diferentes. Sem faixas coloridas até P-01 ser decidido.
-import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import type { Baseline, VitalKind, VitalReading } from '@/domain/types'
+// Gráfico de um vital (CORE-05, DESIGN-SYSTEM v2 §Gráficos): UMA referência (faixa cinza = baseline pré-voo
+// ± limiar de atenção, ilustrativo até P-01), média móvel de 7 dias e o valor de hoje destacado com a cor do status.
+// Sem pontos diários (ficam no tooltip), sem legenda (rótulo direto), sem anotações que não afetam esta métrica.
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ReferenceArea,
+  ReferenceDot,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
+import type { AlertLevel, Baseline, VitalKind, VitalReading } from '@/domain/types'
+import { VITAL_DEVIATION_PCT } from '@/domain/config/thresholds'
 import { VITAL_LABEL, VITAL_UNIT, formatVitalValue } from '@/lib/format'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 const HEIGHT = 200
+const AVG_WINDOW_DAYS = 7
+
+const STATUS_COLOR: Record<AlertLevel, string> = {
+  normal: 'var(--color-normal)',
+  attention: 'var(--color-attention)',
+  urgent: 'var(--color-urgent)',
+}
 
 export interface ChartPoint {
   day: number
@@ -27,84 +47,144 @@ export function chartPoints(
     .map((r) => ({ day: Math.round(((Date.parse(r.takenAt) - start) / DAY_MS) * 10) / 10, value: r.value }))
 }
 
+/** Média móvel: para cada ponto, a média das leituras dos últimos `AVG_WINDOW_DAYS` dias. */
+export function movingAverage(points: ChartPoint[]): (ChartPoint & { avg: number })[] {
+  return points.map((p) => {
+    const win = points.filter((q) => q.day > p.day - AVG_WINDOW_DAYS && q.day <= p.day)
+    return { ...p, avg: win.reduce((a, q) => a + q.value, 0) / win.length }
+  })
+}
+
 export function VitalChart({
   kind,
   points,
   baseline,
+  status,
   xDomain,
 }: {
   kind: VitalKind
   points: ChartPoint[]
   baseline: Baseline
+  /** Nível do valor de hoje (vem do motor de regras); colore só o ponto de hoje. */
+  status: AlertLevel
   /** [primeiro, último] dia de missão do eixo X; o último é o dia de hoje (BODY-08). */
   xDomain?: [number, number]
 }) {
   const unit = VITAL_UNIT[kind]
-  const values = [...points.map((p) => p.value), baseline.preflightMean, baseline.inflightMean]
-  const pad = (Math.max(...values) - Math.min(...values)) * 0.15 || 1
+  const data = movingAverage(points)
+  const today = points.at(-1)
+  // Faixa = baseline pré-voo ± limiar de atenção (PENDENTE P-01 — valores ilustrativos).
+  const pct = VITAL_DEVIATION_PCT[kind].attention / 100
+  const bandLow = baseline.preflightMean * (1 - pct)
+  const bandHigh = baseline.preflightMean * (1 + pct)
+  const values = [...data.map((p) => p.avg), today?.value ?? baseline.preflightMean, bandLow, bandHigh]
+  const pad = (Math.max(...values) - Math.min(...values)) * 0.12 || 1
   const domain: [number, number] = [Math.floor(Math.min(...values) - pad), Math.ceil(Math.max(...values) + pad)]
+  const mid = Math.round((domain[0] + domain[1]) / 2)
 
   const chart = (width?: number) => (
     <LineChart
-      data={points}
+      data={data}
       width={width}
       height={HEIGHT}
-      margin={{ top: 8, right: 16, bottom: 4, left: 0 }}
+      margin={{ top: 12, right: 104, bottom: 4, left: 0 }}
       accessibilityLayer
     >
-      <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
+      <CartesianGrid stroke="var(--color-border)" vertical={false} />
       <XAxis
         dataKey="day"
         type="number"
         domain={xDomain ?? ['dataMin', 'dataMax']}
         allowDataOverflow
+        ticks={xDomain ? [xDomain[0], Math.round((xDomain[0] + xDomain[1]) / 2), xDomain[1]] : undefined}
         tickFormatter={(d: number) => `D${Math.round(d)}`}
         stroke="var(--color-muted)"
-        fontSize={12}
+        tickLine={false}
+        fontSize={11}
         fontFamily="var(--font-mono)"
       />
-      <YAxis domain={domain} width={44} stroke="var(--color-muted)" fontSize={12} fontFamily="var(--font-mono)" />
+      <YAxis
+        domain={domain}
+        ticks={[domain[0], mid, domain[1]]}
+        width={40}
+        stroke="var(--color-muted)"
+        axisLine={false}
+        tickLine={false}
+        fontSize={11}
+        fontFamily="var(--font-mono)"
+      />
       <Tooltip
         contentStyle={{
-          background: 'var(--color-surface)',
-          border: '1px solid rgba(255,255,255,0.15)',
-          fontFamily: 'var(--font-mono)',
+          background: 'var(--color-surface-2)',
+          border: 'none',
+          borderRadius: 10,
+          // Texto em Plex Sans; números com algarismos tabulares (DESIGN-SYSTEM v2 §2: mono só em números).
+          fontFamily: 'var(--font-sans)',
+          fontVariantNumeric: 'tabular-nums',
         }}
         labelFormatter={(d) => `Mission day ${Math.round(Number(d))}`}
-        formatter={(v) => [`${formatVitalValue(kind, Number(v))} ${unit}`, VITAL_LABEL[kind]]}
+        formatter={(v, name) => [
+          `${formatVitalValue(kind, Number(v))} ${unit}`,
+          name === 'avg' ? '7-day average' : 'Reading',
+        ]}
       />
-      <ReferenceLine
-        y={baseline.preflightMean}
-        stroke="var(--color-muted)"
-        strokeDasharray="8 4"
-        label={{ value: 'Pre-flight baseline', position: 'insideTopLeft', fill: 'var(--color-muted)', fontSize: 11 }}
+      <ReferenceArea
+        y1={bandLow}
+        y2={bandHigh}
+        fill="var(--color-foreground)"
+        fillOpacity={0.07}
+        stroke="none"
+        ifOverflow="extendDomain"
+        label={{ value: 'Your normal range', position: 'insideBottomLeft', fill: 'var(--color-muted)', fontSize: 11 }}
       />
-      <ReferenceLine
-        y={baseline.inflightMean}
-        stroke="var(--color-link)"
-        strokeDasharray="2 3"
-        label={{
-          value: `In-flight baseline (${baseline.windowDays} d)`,
-          position: 'insideBottomLeft',
-          fill: 'var(--color-link)',
-          fontSize: 11,
-        }}
-      />
+      {/* Bordas da faixa: o preenchimento tem 1,22:1 com o fundo; as bordas em muted, 7,7:1 (WCAG 1.4.11). */}
+      {[bandLow, bandHigh].map((y) => (
+        <ReferenceLine
+          key={y}
+          y={y}
+          stroke="var(--color-muted)"
+          strokeWidth={1}
+          strokeDasharray="2 3"
+          ifOverflow="extendDomain"
+        />
+      ))}
       <Line
         type="monotone"
-        dataKey="value"
-        name={VITAL_LABEL[kind]}
+        dataKey="avg"
         stroke="#ffffff"
-        strokeWidth={1.5}
+        strokeWidth={1.75}
         dot={false}
+        activeDot={{ r: 3 }}
         isAnimationActive={false}
       />
+      <Line dataKey="value" stroke="none" dot={false} activeDot={false} isAnimationActive={false} legendType="none" />
+      {today && (
+        <ReferenceDot
+          x={today.day}
+          y={today.value}
+          r={5}
+          fill={STATUS_COLOR[status]}
+          stroke="var(--color-surface)"
+          strokeWidth={2}
+          ifOverflow="visible"
+          label={{
+            value: `${formatVitalValue(kind, today.value)} today`,
+            position: 'right',
+            fill: 'var(--color-foreground)',
+            fontSize: 12,
+            fontFamily: 'var(--font-mono)',
+          }}
+        />
+      )}
     </LineChart>
   )
 
   // ResponsiveContainer precisa de ResizeObserver (ausente em jsdom nos testes).
   return (
-    <figure aria-label={`${VITAL_LABEL[kind]} over time, with pre-flight and in-flight baselines`} className="w-full">
+    <figure
+      aria-label={`${VITAL_LABEL[kind]}: 7-day average over time against your normal range, today's value highlighted`}
+      className="w-full"
+    >
       {typeof ResizeObserver === 'undefined' ? (
         chart(560)
       ) : (
@@ -112,6 +192,10 @@ export function VitalChart({
           {chart()}
         </ResponsiveContainer>
       )}
+      <figcaption className="mt-1 text-[11px] text-muted">
+        Line: {AVG_WINDOW_DAYS}-day average · Range: pre-flight baseline ±{VITAL_DEVIATION_PCT[kind].attention}%
+        (illustrative)
+      </figcaption>
     </figure>
   )
 }

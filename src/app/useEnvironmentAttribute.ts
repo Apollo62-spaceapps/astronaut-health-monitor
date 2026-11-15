@@ -4,7 +4,7 @@ import { useAppStore } from '@/state/store'
 
 /**
  * Aplica o modo de ambiente no <html data-environment="…">.
- * Isso troca só a cor da faixa da missão (DESIGN-SYSTEM §5). O visual escuro não muda.
+ * Isso troca só a cor da faixa da missão (DESIGN-SYSTEM §7). O visual escuro não muda.
  */
 export function useEnvironmentAttribute() {
   const environment = useAppStore((s) => s.environment)

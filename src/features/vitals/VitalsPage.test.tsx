@@ -40,11 +40,13 @@ describe('Vitais (L4 #55)', () => {
     expect(screen.getAllByText('Illustrative thresholds').length).toBeGreaterThan(0)
   })
 
-  it('um gráfico por indicador, com as duas linhas de baseline (CORE-05)', () => {
+  it('um gráfico por indicador, com a faixa do baseline pré-voo e o valor de hoje (CORE-05 v2)', () => {
     page()
     expect(screen.getAllByRole('figure')).toHaveLength(5)
-    expect(document.body.textContent).toContain('Pre-flight baseline')
-    expect(document.body.textContent).toContain('In-flight baseline (14 d)')
+    expect(document.body.textContent).toContain('Your normal range')
+    expect(document.body.textContent).toContain('84 today')
+    // A média em voo continua visível, como texto no card (não como segunda linha no gráfico).
+    expect(document.body.textContent).toContain('In-flight 74 bpm')
   })
 
   it('uma medição nova muda o card na hora (regra recalcula)', () => {

@@ -130,7 +130,7 @@ export interface MissionProfile {
   /** null = "simulated habitat equipment" (P-18). */
   exerciseDevices: ExerciseDevice[] | null
   emphasizedHazards: Hazard[]
-  /** Valor de data-environment no <html>; muda só a cor da faixa da missão (DESIGN-SYSTEM §5). */
+  /** Valor de data-environment no <html>; muda só a cor da faixa da missão (DESIGN-SYSTEM §7). */
   themeToken: 'earth' | 'station' | 'moon' | 'spacecraft'
   /** Ícone (lucide-react) do botão de modo. */
   icon: 'Globe' | 'Satellite' | 'Moon' | 'Rocket'

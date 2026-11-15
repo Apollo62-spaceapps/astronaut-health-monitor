@@ -425,7 +425,7 @@ export function BodyMap({
       </svg>
       <div className="flex w-full max-w-[760px] items-center justify-between gap-3 text-xs text-muted">
         <span>Illustrative rhythm, not a live reading · torso breathes slowly · icon, text and hatch always present</span>
-        <span className="num shrink-0 rounded bg-muted/20 px-2 py-0.5 font-semibold tracking-wider">SIMULATED</span>
+        <span className="shrink-0 text-[11px] font-medium uppercase tracking-wider">SIMULATED</span>
       </div>
     </>
   )

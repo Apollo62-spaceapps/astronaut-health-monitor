@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // K8 #50 — varredura da demo: renderiza TODAS as abas em todos os perfis e ambientes e confere
-// as regras inegociáveis que dá para checar automaticamente (CLAUDE.md §0, DESIGN-SYSTEM §6).
+// as regras inegociáveis que dá para checar automaticamente (CLAUDE.md §0, DESIGN-SYSTEM §9).
 // Se este teste falhar, a tela que quebrou aparece no nome do caso: "<aba> · <perfil> · <ambiente>".
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
@@ -49,7 +49,7 @@ describe('varredura da demo (K8)', () => {
           const match = text.replace(DISCLAIMER, '').match(FORBIDDEN_UI)
           expect(match?.[0], `palavra proibida na UI: "${match?.[0]}"`).toBeUndefined()
 
-          // DESIGN-SYSTEM §3/§6: no máximo uma ação primária vermelha por tela.
+          // DESIGN-SYSTEM §4/§9: no máximo uma ação primária vermelha por tela.
           const primaries = container.querySelectorAll('[data-slot="button"][data-variant="default"]')
           const labels = [...primaries].map((b) => b.textContent?.trim())
           expect(primaries.length, `botões primários: ${labels.join(' | ')}`).toBeLessThanOrEqual(1)

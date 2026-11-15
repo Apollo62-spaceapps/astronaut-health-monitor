@@ -21,7 +21,7 @@ npm run preview     # abre em http://localhost:4173
 
 1. Com o `npm run preview` aberto, **desligue o Wi-Fi**.
 2. Recarregue a página (F5).
-3. Confira se a app abre com as fontes certas (Inter e números em mono).
+3. Confira se a app abre com as fontes certas (IBM Plex Sans no texto e IBM Plex Mono nos números).
 4. Aba **Assistant** → **Onboard model**. O modelo deve abrir do cache, sem baixar de novo.
 5. Se não abrir, a tela mostra "protocol mode is active" e nada mais muda: é o fallback. Para a demo, use `http://localhost:4173/?ai=protocol`.
 

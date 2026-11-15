@@ -4,11 +4,11 @@ import { cn } from '@/lib/utils'
 import type { ZoneStatus } from '@/domain/types'
 
 export const STATUS_META: Record<ZoneStatus, { label: string; glyph: string; className: string }> = {
-  normal: { label: 'Normal', glyph: '✓', className: 'text-normal border-normal/50' },
-  attention: { label: 'Attention', glyph: '▲', className: 'text-attention border-attention/50' },
-  urgent: { label: 'Urgent', glyph: '●', className: 'text-urgent border-urgent/60 hatch' },
-  restricted: { label: 'Restricted', glyph: '◼', className: 'text-muted border-muted/50' },
-  adapting: { label: 'Adapting', glyph: '↻', className: 'text-muted border-muted/50' },
+  normal: { label: 'Normal', glyph: '✓', className: 'text-normal' },
+  attention: { label: 'Attention', glyph: '▲', className: 'text-attention' },
+  urgent: { label: 'Urgent', glyph: '●', className: 'text-urgent hatch rounded-sm px-1' },
+  restricted: { label: 'Restricted', glyph: '◼', className: 'text-muted' },
+  adapting: { label: 'Adapting', glyph: '↻', className: 'text-muted' },
 }
 
 interface StatusBadgeProps {
@@ -23,15 +23,11 @@ export function StatusBadge({ status, detail, className }: StatusBadgeProps) {
   return (
     <span
       data-status={status}
-      className={cn(
-        'inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-sm font-semibold',
-        meta.className,
-        className,
-      )}
+      className={cn('inline-flex items-center gap-1.5 text-sm font-medium', meta.className, className)}
     >
       <span aria-hidden>{meta.glyph}</span>
       <span>{meta.label}</span>
-      {detail && <span className="num font-normal">· {detail}</span>}
+      {detail && <span className="num font-normal text-muted">· {detail}</span>}
     </span>
   )
 }
