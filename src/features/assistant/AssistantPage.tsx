@@ -6,7 +6,8 @@ import { useAppStore } from '@/state/store'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
-import { buildAssistantContext } from '@/ai/contextTemp'
+import { buildAssistantContext } from '@/domain/rules/engine'
+import { useEngineInput } from '@/state/useEngine'
 import { canUseOnboardModel, engineFor, replyWithFallback } from '@/ai/engine'
 import { AI_LABEL } from '@/ai/prompts'
 import { suggestions } from '@/ai/protocol'
@@ -14,18 +15,11 @@ import { suggestions } from '@/ai/protocol'
 export function AssistantPage() {
   const aiMode = useAppStore((s) => s.aiMode)
   const setAiMode = useAppStore((s) => s.setAiMode)
-  const environment = useAppStore((s) => s.environment)
-  const alerts = useAppStore((s) => s.alerts)
-  const vitals = useAppStore((s) => s.vitals)
-  const preflight = useAppStore((s) => s.preflight)
-  const eventReplayed = useAppStore((s) => s.eventReplayed)
-  const spaceWeatherEvent = useAppStore((s) => s.spaceWeatherEvent)
   const simNowIso = useAppStore((s) => s.simNowIso)
 
-  const ctx = useMemo(
-    () => buildAssistantContext({ environment, alerts, vitals, preflight, eventReplayed, spaceWeatherEvent }),
-    [environment, alerts, vitals, preflight, eventReplayed, spaceWeatherEvent],
-  )
+  // Contexto montado pelo motor de regras, com a privacidade do perfil (AI-07, ENV-05, §6.7).
+  const engineInput = useEngineInput()
+  const ctx = useMemo(() => buildAssistantContext(engineInput), [engineInput])
 
   const [history, setHistory] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
