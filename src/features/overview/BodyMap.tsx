@@ -6,13 +6,34 @@
 // Figura: astronauta (capacete, ombreiras, braços com luvas, placa do peito, cinto, joelheiras e botas), sem brilho
 // (DESIGN-SYSTEM v2 §1/§8). Tamanhos: viewBox de 660 de largura num mapa de ~560–620 px na tela, então
 // 18 unidades ≈ 15 px reais (mínimo de 12 px renderizados). A legenda de status fica em HTML, abaixo do SVG.
-import type { KeyboardEvent, ReactNode } from 'react'
+import { useSyncExternalStore, type KeyboardEvent, type ReactNode } from 'react'
 import { HeartPulse, Lock } from 'lucide-react'
 import type { BodyZoneId, ZoneStatus } from '@/domain/types'
 import { STATUS_META } from '@/components/StatusBadge'
 import { ProvenanceBadge } from '@/components/ProvenanceBadge'
 
 export type MapTarget = BodyZoneId | 'radiation'
+
+/**
+ * Celular (< 640 px, o breakpoint `sm` do Tailwind): o SVG recorta as margens dos rótulos para a figura ocupar
+ * a largura toda, e os rótulos viram uma lista de botões em HTML logo abaixo (legíveis e com alvo de toque ≥ 44 px).
+ * Sem matchMedia (jsdom, testes), fica o layout de desktop.
+ */
+const COMPACT_QUERY = '(max-width: 639.98px)'
+const compactMql = () =>
+  typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia(COMPACT_QUERY) : null
+function subscribeCompact(cb: () => void) {
+  const m = compactMql()
+  if (!m) return () => {}
+  m.addEventListener?.('change', cb)
+  return () => m.removeEventListener?.('change', cb)
+}
+const useCompact = () =>
+  useSyncExternalStore(
+    subscribeCompact,
+    () => compactMql()?.matches ?? false,
+    () => false,
+  )
 
 const COLOR: Record<ZoneStatus, string> = {
   normal: 'var(--color-normal)',
@@ -86,6 +107,44 @@ function Zone({
     >
       {children}
     </g>
+  )
+}
+
+/** Rótulos do mapa no celular: botões em grade (cor + ícone + texto), com o mesmo aria-label e aria-pressed das zonas. */
+function ZoneList({
+  items,
+  aria,
+  selected,
+  onSelect,
+}: {
+  items: { id: MapTarget; status: ZoneStatus | null; text: string; sub?: string }[]
+  aria: (id: MapTarget) => string
+  selected: MapTarget | null
+  onSelect: (t: MapTarget) => void
+}) {
+  return (
+    <ul aria-label="Body zones" className="grid w-full grid-cols-2 gap-2">
+      {items.map((it) => (
+        <li key={it.id} className={it.id === 'radiation' ? 'col-span-2' : undefined}>
+          <button
+            type="button"
+            aria-pressed={selected === it.id}
+            aria-label={aria(it.id)}
+            onClick={() => onSelect(it.id)}
+            className={`flex min-h-11 w-full flex-col items-start justify-center rounded-md border px-3 py-1.5 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 ${
+              selected === it.id ? 'border-current bg-surface-2' : 'border-border bg-surface-2'
+            }`}
+            style={{ color: it.status ? COLOR[it.status] : NO_DATA }}
+          >
+            <span className="text-sm leading-snug font-semibold">
+              {(it.status || it.id !== 'radiation') && <span aria-hidden>{glyph(it.status)} </span>}
+              {it.text}
+            </span>
+            {it.sub && <span className="font-mono text-xs text-muted">{it.sub}</span>}
+          </button>
+        </li>
+      ))}
+    </ul>
   )
 }
 
@@ -199,6 +258,9 @@ export function BodyMap({
   const statuses: ZoneStatus[] = ['attention', 'urgent', 'restricted', 'adapting']
   const skinDash = status.skin === 'normal' ? undefined : '10 5'
   const radUrgent = radiation.status === 'urgent'
+  const compact = useCompact()
+  /** No celular, rótulos e linhas-guia saem do SVG (vão para a lista abaixo). */
+  const labelled = !compact
 
   /**
    * Um membro: o lado esquerdo e o mesmo desenho espelhado. Cada peça leva o preenchimento do status
@@ -258,7 +320,12 @@ export function BodyMap({
 
   return (
     <>
-      <svg viewBox="0 0 660 610" className="h-auto w-full max-w-[620px]" role="group" aria-label="Body status map">
+      <svg
+        viewBox={compact ? '134 12 392 592' : '0 0 660 610'}
+        className="h-auto w-full max-w-[620px]"
+        role="group"
+        aria-label="Body status map"
+      >
         {/* BODY-05: Urgent pulsa a 1,25 Hz (abaixo do limite de 3/s da WCAG 2.3.1); Attention estático.
             Batimento em dois tempos (~0,8 Hz) e respiração da placa do peito são ilustrativos.
             Nada se mexe com prefers-reduced-motion. */}
@@ -316,11 +383,15 @@ export function BodyMap({
             className={shapeClass(selected === 'radiation')}
           />
           <ellipse cx={CX} cy="296" rx="190" ry="278" fill="none" stroke="transparent" strokeWidth="14" />
-          <Leader x1={12} y1={584} x2={232} y2={548} />
-          <text x={8} y={604} className="fill-current text-[18px] font-semibold" aria-hidden>
-            {radiation.status ? `${glyph(radiation.status)} ` : ''}
-            {radiation.label}
-          </text>
+          {labelled && (
+            <>
+              <Leader x1={12} y1={584} x2={232} y2={548} />
+              <text x={8} y={604} className="fill-current text-[18px] font-semibold" aria-hidden>
+                {radiation.status ? `${glyph(radiation.status)} ` : ''}
+                {radiation.label}
+              </text>
+            </>
+          )}
         </Zone>
 
         {/* Anel do pescoço (decorativo) */}
@@ -361,16 +432,24 @@ export function BodyMap({
             className={shapeClass(selected === 'skin')}
           />
           <path d={BUCKLE} fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" aria-hidden />
-          <Leader x1={LEFT_TEXT + 6} y1={299} x2={CX - 66} y2={299} />
-          <Label x={LEFT_TEXT} y={305} anchor="end" status={status.skin} text={labels.skin} sub={sub.skin} />
+          {labelled && (
+            <>
+              <Leader x1={LEFT_TEXT + 6} y1={299} x2={CX - 66} y2={299} />
+              <Label x={LEFT_TEXT} y={305} anchor="end" status={status.skin} text={labels.skin} sub={sub.skin} />
+            </>
+          )}
         </Zone>
 
         {/* Legs (P1): coxas, joelheiras, canelas e botas */}
         {showLegs ? (
           <Zone {...z('legs')}>
             {limb(LEG_PARTS, LEG_STRIPES, status.legs, selected === 'legs')}
-            <Leader x1={CX + 58} y1={470} x2={RIGHT_TEXT - 6} y2={470} />
-            <Label x={RIGHT_TEXT} y={476} status={status.legs} text={labels.legs} sub={sub.legs} />
+            {labelled && (
+              <>
+                <Leader x1={CX + 58} y1={470} x2={RIGHT_TEXT - 6} y2={470} />
+                <Label x={RIGHT_TEXT} y={476} status={status.legs} text={labels.legs} sub={sub.legs} />
+              </>
+            )}
           </Zone>
         ) : (
           <g aria-hidden style={{ color: NO_DATA }}>
@@ -389,15 +468,23 @@ export function BodyMap({
             strokeLinejoin="round"
             className={`torso-breathe ${shapeClass(selected === 'torso')}`}
           />
-          <Leader x1={LEFT_TEXT + 6} y1={232} x2={CX - 58} y2={232} />
-          <Label x={LEFT_TEXT} y={238} anchor="end" status={status.torso} text={labels.torso} sub={sub.torso} />
+          {labelled && (
+            <>
+              <Leader x1={LEFT_TEXT + 6} y1={232} x2={CX - 58} y2={232} />
+              <Label x={LEFT_TEXT} y={238} anchor="end" status={status.torso} text={labels.torso} sub={sub.torso} />
+            </>
+          )}
         </Zone>
 
         {/* Arms: ombreiras, braços, antebraços e luvas (musculoesquelético, mesmo indicador de Legs) */}
         <Zone {...z('arms')}>
           {limb(ARM_PARTS, ARM_STRIPES, status.arms, selected === 'arms', THUMB)}
-          <Leader x1={LEFT_TEXT + 6} y1={162} x2={CX - 130} y2={162} />
-          <Label x={LEFT_TEXT} y={168} anchor="end" status={status.arms} text={labels.arms} sub={sub.arms} />
+          {labelled && (
+            <>
+              <Leader x1={LEFT_TEXT + 6} y1={162} x2={CX - 130} y2={162} />
+              <Label x={LEFT_TEXT} y={168} anchor="end" status={status.arms} text={labels.arms} sub={sub.arms} />
+            </>
+          )}
         </Zone>
 
         {/* Heart (sobre a placa do peito): ícone bate em dois tempos, anel de pulso se expande */}
@@ -436,8 +523,14 @@ export function BodyMap({
           <g className="heart-beat" aria-hidden>
             <HeartPulse x={HX - 14} y={HY - 14} width={28} height={28} strokeWidth={2.2} />
           </g>
-          <Leader x1={HX + 34} y1={HY} x2={RIGHT_TEXT - 6} y2={HY} />
-          <Label x={RIGHT_TEXT} y={HY + 6} status={status.heart} text={labels.heart} sub={sub.heart} />
+          {/* Área de toque invisível (≥ 44 px no celular), sem mudar o desenho. */}
+          <circle cx={HX} cy={HY} r="34" fill="transparent" aria-hidden />
+          {labelled && (
+            <>
+              <Leader x1={HX + 34} y1={HY} x2={RIGHT_TEXT - 6} y2={HY} />
+              <Label x={RIGHT_TEXT} y={HY + 6} status={status.heart} text={labels.heart} sub={sub.heart} />
+            </>
+          )}
         </Zone>
 
         {/* Head: capacete com visor (restrito para o CMO: cinza + cadeado, BODY-06) */}
@@ -489,10 +582,32 @@ export function BodyMap({
             />
           ))}
           {status.head === 'restricted' && <Lock x={CX - 12} y={60} width={24} height={24} aria-hidden />}
-          <Leader x1={CX + 62} y1={72} x2={RIGHT_TEXT - 6} y2={72} />
-          <Label x={RIGHT_TEXT} y={78} status={status.head} text={labels.head} sub={sub.head} />
+          {labelled && (
+            <>
+              <Leader x1={CX + 62} y1={72} x2={RIGHT_TEXT - 6} y2={72} />
+              <Label x={RIGHT_TEXT} y={78} status={status.head} text={labels.head} sub={sub.head} />
+            </>
+          )}
         </Zone>
       </svg>
+
+      {compact && (
+        <ZoneList
+          items={[
+            ...(['head', 'heart', 'arms', 'torso', 'skin', ...(showLegs ? (['legs'] as const) : [])] as const).map(
+              (id) => ({ id, status: status[id], text: `${labels[id]} · ${statusText(status[id])}`, sub: sub[id] }),
+            ),
+            { id: 'radiation' as const, status: radiation.status, text: radiation.label },
+          ]}
+          aria={(id) =>
+            id === 'radiation'
+              ? ['Radiation (whole body)', statusText(radiation.status), detail.radiation].filter(Boolean).join(' — ')
+              : [labels[id], statusText(status[id]), detail[id]].filter(Boolean).join(' — ')
+          }
+          selected={selected}
+          onSelect={onSelect}
+        />
+      )}
 
       {/* Legenda de status (HTML para ficar legível): ícone + texto, nunca só cor */}
       <ul aria-label="Status key" className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm font-semibold">

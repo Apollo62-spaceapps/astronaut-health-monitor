@@ -69,14 +69,15 @@ export function EnvironmentModeButton() {
               onClick={() => select(mode)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                'inline-flex h-8 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded px-3 text-sm transition-colors select-none',
+                'inline-flex h-9 min-w-10 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded px-3 text-sm transition-colors select-none lg:h-8',
                 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white',
                 // Ativo: branco com texto preto, sem hover. Inativo: texto sempre branco; hover só clareia o fundo.
                 checked ? 'bg-white font-semibold text-black' : 'text-white hover:bg-white/15',
               )}
             >
               <Icon aria-hidden className="size-4 shrink-0" />
-              <span className="max-lg:sr-only">{env.label}</span>
+              {/* Telas estreitas: só o modo ativo mostra o nome (os outros ficam com ícone + aria-label). */}
+              <span className={checked ? undefined : 'max-lg:sr-only'}>{env.label}</span>
             </button>
           )
         })}

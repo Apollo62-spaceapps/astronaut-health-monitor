@@ -1,5 +1,6 @@
 // Baseline (L7 §5B): exame pré-voo, referência por ambiente (Reference explorer) e drift (R-TREND-01).
 // Referência pessoal — não é julgamento de saúde. O nível de cada indicador continua sendo da R-VIT-02.
+import type { ReactNode } from 'react'
 import { Sparkles } from 'lucide-react'
 import { REFERENCE_DISCLAIMER } from '@/ai/identity'
 import { ENVIRONMENTS } from '@/domain/config/environments'
@@ -23,6 +24,26 @@ import { useOrbitContext } from '@/features/assistant/useOrbitContext'
 const ORIGIN: Record<ReferenceOrigin, string> = { 'pre-flight': 'pre-flight', adapting: 'adapting', adapted: 'adapted' }
 const SIM = { kind: 'simulated' as const, note: 'Pre-flight exam (fictional)' }
 
+// Celular (< md): as tabelas viram linhas empilhadas (um bloco por linha, rótulo visível em cada célula), sem
+// rolagem lateral. Os papéis ARIA explícitos mantêm a semântica de tabela quando o CSS troca o display.
+// No md+ as classes max-md:* não valem e a tabela fica igual à de desktop.
+const T = {
+  table: 'w-full text-left text-sm max-md:block',
+  thead: 'max-md:sr-only',
+  tbody: 'max-md:block',
+  row: 'border-b border-border/60 last:border-0 max-md:grid max-md:gap-x-4 max-md:gap-y-2 max-md:py-3',
+  cell: 'p-2 max-md:p-0',
+}
+
+/** Rótulo da coluna, só no celular (no desktop o cabeçalho da tabela já diz). */
+function CellLabel({ children }: { children: ReactNode }) {
+  return (
+    <span aria-hidden className="mb-0.5 block text-xs tracking-wider text-muted uppercase md:hidden">
+      {children}
+    </span>
+  )
+}
+
 export function ReferencePage() {
   const ctx = useOrbitContext()
   const ask = useOrbitStore((s) => s.ask)
@@ -43,7 +64,7 @@ export function ReferencePage() {
         </p>
       </header>
 
-      <section aria-labelledby="preflight-title" className="space-y-4 rounded-lg bg-surface p-5">
+      <section aria-labelledby="preflight-title" className="space-y-4 rounded-lg bg-surface p-4 md:p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 id="preflight-title" className="text-xl">
             Pre-flight baseline
@@ -51,43 +72,64 @@ export function ReferencePage() {
           <Button
             variant="outline"
             size="sm"
+            className="max-md:h-10"
             onClick={() => askOrbit('Where did my reference come from?', 'reference')}
           >
             <Sparkles aria-hidden /> Ask Orbit
           </Button>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs tracking-wider text-muted uppercase">
-                <th className="p-2">Indicator</th>
-                <th className="p-2">Reference</th>
-                <th className="p-2">Readings</th>
-                <th className="p-2">Spread (SD)</th>
-                <th className="p-2">Dates</th>
-                <th className="p-2">Data</th>
+          <table role="table" className={T.table}>
+            <thead role="rowgroup" className={T.thead}>
+              <tr role="row" className="border-b border-border text-xs tracking-wider text-muted uppercase">
+                <th role="columnheader" className="p-2">
+                  Indicator
+                </th>
+                <th role="columnheader" className="p-2">
+                  Reference
+                </th>
+                <th role="columnheader" className="p-2">
+                  Readings
+                </th>
+                <th role="columnheader" className="p-2">
+                  Spread (SD)
+                </th>
+                <th role="columnheader" className="p-2">
+                  Dates
+                </th>
+                <th role="columnheader" className="p-2">
+                  Data
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup" className={T.tbody}>
               {VITAL_KINDS.map((k) => {
                 const q = ctx.quality[k]
                 if (!q) return null
                 return (
-                  <tr key={k} className="border-b border-border/60 last:border-0">
-                    <td className="p-2">{VITAL_LABEL[k]}</td>
-                    <td className="p-2">
+                  <tr key={k} role="row" className={cn(T.row, 'max-md:grid-cols-3')}>
+                    <td role="cell" className={cn(T.cell, 'max-md:col-span-3 max-md:font-semibold')}>
+                      {VITAL_LABEL[k]}
+                    </td>
+                    <td role="cell" className={T.cell}>
+                      <CellLabel>Reference</CellLabel>
                       <span className="num font-semibold">{formatVitalValue(k, q.mean)}</span>{' '}
                       <span className="num text-xs text-muted">{VITAL_UNIT[k]}</span>
                     </td>
-                    <td className="num p-2">
+                    <td role="cell" className={cn('num', T.cell)}>
+                      <CellLabel>Readings</CellLabel>
                       {q.n}
                       {q.lowConfidence && <span className="ml-2 text-xs text-muted">Low-confidence baseline</span>}
                     </td>
-                    <td className="num p-2">± {q.sd.toFixed(k === 'bodyTemp' ? 2 : 1)}</td>
-                    <td className="num p-2 text-muted">
+                    <td role="cell" className={cn('num', T.cell)}>
+                      <CellLabel>Spread (SD)</CellLabel>± {q.sd.toFixed(k === 'bodyTemp' ? 2 : 1)}
+                    </td>
+                    <td role="cell" className={cn('num text-muted', T.cell, 'max-md:col-span-2')}>
+                      <CellLabel>Dates</CellLabel>
                       {q.fromIso.slice(0, 10)} → {q.toIso.slice(0, 10)}
                     </td>
-                    <td className="p-2">
+                    <td role="cell" className={T.cell}>
+                      <CellLabel>Data</CellLabel>
                       <ProvenanceBadge provenance={SIM} />
                     </td>
                   </tr>
@@ -116,7 +158,7 @@ export function ReferencePage() {
         </div>
       </section>
 
-      <section aria-labelledby="explorer-title" className="space-y-3 rounded-lg bg-surface p-5">
+      <section aria-labelledby="explorer-title" className="space-y-3 rounded-lg bg-surface p-4 md:p-5">
         <h2 id="explorer-title" className="text-xl">
           Reference explorer
         </h2>
@@ -124,13 +166,16 @@ export function ReferencePage() {
           Current reference and where it comes from, by environment. {NO_SOURCED_SHIFT}
         </p>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs tracking-wider text-muted uppercase">
-                <th className="p-2">Indicator</th>
+          <table role="table" className={T.table}>
+            <thead role="rowgroup" className={T.thead}>
+              <tr role="row" className="border-b border-border text-xs tracking-wider text-muted uppercase">
+                <th role="columnheader" className="p-2">
+                  Indicator
+                </th>
                 {MISSION_MODES.map((m) => (
                   <th
                     key={m}
+                    role="columnheader"
                     className={cn('p-2', m === ctx.environment && 'bg-surface-2 text-foreground')}
                     aria-current={m === ctx.environment ? 'true' : undefined}
                   >
@@ -140,18 +185,34 @@ export function ReferencePage() {
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup" className={T.tbody}>
               {VITAL_KINDS.map((k) => {
                 const ref = ctx.references[k]
                 const ev = ctx.vitals.find((v) => v.kind === k)
                 if (!ref) return null
                 return (
-                  <tr key={k} className="border-b border-border/60 align-top last:border-0">
-                    <td className="p-2">{VITAL_LABEL[k]}</td>
+                  <tr key={k} role="row" className={cn(T.row, 'align-top max-md:gap-y-1.5')}>
+                    {/* Celular: indicador primeiro, depois o ambiente atual (destacado), depois os outros. */}
+                    <td role="cell" className={cn(T.cell, 'max-md:order-first max-md:font-semibold')}>
+                      {VITAL_LABEL[k]}
+                    </td>
                     {MISSION_MODES.map((m) => {
                       const now = m === ctx.environment
                       return (
-                        <td key={m} className={cn('p-2', now && 'bg-surface-2')}>
+                        <td
+                          key={m}
+                          role="cell"
+                          className={cn(
+                            T.cell,
+                            now
+                              ? 'bg-surface-2 max-md:-order-1 max-md:rounded-md max-md:p-3'
+                              : 'max-md:flex max-md:flex-wrap max-md:items-baseline max-md:gap-x-2 max-md:px-3',
+                          )}
+                        >
+                          <CellLabel>
+                            {ENVIRONMENTS[m].label}
+                            {now && ' · now'}
+                          </CellLabel>
                           {now ? (
                             <div className="space-y-0.5">
                               <p>
@@ -194,12 +255,17 @@ export function ReferencePage() {
         )}
       </section>
 
-      <section aria-labelledby="drift-title" className="space-y-3 rounded-lg bg-surface p-5">
+      <section aria-labelledby="drift-title" className="space-y-3 rounded-lg bg-surface p-4 md:p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 id="drift-title" className="text-xl">
             Drift from your reference
           </h2>
-          <Button variant="outline" size="sm" onClick={() => askOrbit('Am I drifting from my baseline?', 'drift')}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="max-md:h-10"
+            onClick={() => askOrbit('Am I drifting from my baseline?', 'drift')}
+          >
             <Sparkles aria-hidden /> Ask Orbit
           </Button>
         </div>
@@ -225,7 +291,7 @@ export function ReferencePage() {
         </p>
       </section>
 
-      <section aria-labelledby="ssm-title" className="space-y-3 rounded-lg bg-surface p-5">
+      <section aria-labelledby="ssm-title" className="space-y-3 rounded-lg bg-surface p-4 md:p-5">
         <h2 id="ssm-title" className="text-xl">
           NASA Standard Measures · example schedule
         </h2>
@@ -233,22 +299,41 @@ export function ReferencePage() {
           {SSM_SCHEDULE_NOTE} <SourceRef ids={['S23', 'S24']} className="text-xs" />
         </p>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs tracking-wider text-muted uppercase">
-                <th className="p-2">Domain</th>
-                <th className="p-2">Pre-flight</th>
-                <th className="p-2">In flight</th>
-                <th className="p-2">Post-flight</th>
+          <table role="table" className={T.table}>
+            <thead role="rowgroup" className={T.thead}>
+              <tr role="row" className="border-b border-border text-xs tracking-wider text-muted uppercase">
+                <th role="columnheader" className="p-2">
+                  Domain
+                </th>
+                <th role="columnheader" className="p-2">
+                  Pre-flight
+                </th>
+                <th role="columnheader" className="p-2">
+                  In flight
+                </th>
+                <th role="columnheader" className="p-2">
+                  Post-flight
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup" className={T.tbody}>
               {SSM_SCHEDULE.map((r) => (
-                <tr key={r.domain} className="border-b border-border/60 last:border-0">
-                  <td className="p-2">{r.domain}</td>
-                  <td className="num p-2 text-muted">{r.preflight}</td>
-                  <td className="num p-2 text-muted">{r.inflight}</td>
-                  <td className="num p-2 text-muted">{r.postflight}</td>
+                <tr key={r.domain} role="row" className={cn(T.row, 'max-md:grid-cols-3')}>
+                  <td role="cell" className={cn(T.cell, 'max-md:col-span-3 max-md:font-semibold')}>
+                    {r.domain}
+                  </td>
+                  <td role="cell" className={cn('num text-muted', T.cell)}>
+                    <CellLabel>Pre-flight</CellLabel>
+                    {r.preflight}
+                  </td>
+                  <td role="cell" className={cn('num text-muted', T.cell)}>
+                    <CellLabel>In flight</CellLabel>
+                    {r.inflight}
+                  </td>
+                  <td role="cell" className={cn('num text-muted', T.cell)}>
+                    <CellLabel>Post-flight</CellLabel>
+                    {r.postflight}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -41,15 +41,15 @@ export function MeasurementDialog({ item, open, onOpenChange, onSave, nowIso }: 
   }
 
   return <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent>
+    <DialogContent className="max-h-[85dvh] overflow-y-auto max-sm:p-4">
       <form onSubmit={submit}>
         <DialogHeader><DialogTitle>Log measurement</DialogTitle><DialogDescription>{item?.title ?? 'Record a mission measurement.'} · Illustrative thresholds</DialogDescription></DialogHeader>
         <div className="space-y-2 py-5"><Label htmlFor="measurement-value">{KIND_LABEL[kind]}</Label>
-          <Input id="measurement-value" type="number" step="any" value={value} onChange={(e) => setValue(e.target.value)} aria-invalid={!!error} autoFocus />
+          <Input id="measurement-value" type="number" step="any" value={value} onChange={(e) => setValue(e.target.value)} aria-invalid={!!error} className="max-sm:h-11" autoFocus />
           {error && <p role="alert" className="text-sm text-muted">{error}</p>}
           <p className="text-xs text-muted">Input plausibility check only; this is not a clinical threshold.</p>
         </div>
-        <DialogFooter><Button type="submit">Save measurement</Button></DialogFooter>
+        <DialogFooter><Button type="submit" className="max-sm:h-11 max-sm:w-full">Save measurement</Button></DialogFooter>
       </form>
     </DialogContent>
   </Dialog>

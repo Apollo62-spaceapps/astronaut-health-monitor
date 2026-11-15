@@ -170,7 +170,7 @@ export function ReplyCard({
     <article
       aria-label={`Orbit: ${prose[0]}`}
       data-intent={reply.intent}
-      className="w-full space-y-4 rounded-lg bg-surface-2 p-4"
+      className="w-full min-w-0 space-y-4 rounded-lg bg-surface-2 p-4 break-words max-md:p-3"
     >
       <div className="space-y-3 text-[16px] leading-relaxed" aria-busy={!done}>
         {visible.map((p, i) => (
@@ -217,6 +217,8 @@ export function ReplyCard({
                     size="sm"
                     variant={i === primaryIdx ? 'default' : 'outline'}
                     onClick={() => run(a)}
+                    // Celular: botões na largura toda, com 40 px, e o rótulo longo quebra em vez de vazar.
+                    className="max-md:h-auto max-md:min-h-10 max-md:w-full max-md:py-2 max-md:whitespace-normal"
                   >
                     <Icon aria-hidden />
                     {actionLabel(a, role, shelterActive)}
@@ -257,7 +259,7 @@ export function ReplyCard({
 
           {hasDetails && (
             <details className="rounded-md bg-surface px-3 py-2 text-sm">
-              <summary className="cursor-pointer text-xs font-semibold tracking-wider text-muted uppercase select-none">
+              <summary className="cursor-pointer text-xs font-semibold tracking-wider text-muted uppercase select-none max-md:py-2">
                 Data and details
               </summary>
               <div className="mt-2 space-y-3">
@@ -329,7 +331,7 @@ export function ReplyCard({
                   key={q}
                   type="button"
                   onClick={() => ask({ text: q })}
-                  className="cursor-pointer rounded-full border border-border px-3 py-1 text-sm hover:bg-surface"
+                  className="cursor-pointer rounded-full border border-border px-3 py-1 text-sm hover:bg-surface max-md:min-h-10 max-md:py-2 max-md:text-left"
                 >
                   {q}
                 </button>

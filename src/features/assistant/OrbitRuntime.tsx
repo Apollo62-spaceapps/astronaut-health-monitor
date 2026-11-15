@@ -130,9 +130,10 @@ function OrbitDrawerPanel() {
       aria-modal="false"
       aria-labelledby="orbit-drawer-title"
       data-orbit-drawer
-      className="fixed inset-y-0 right-0 z-50 flex w-full flex-col gap-3 border-l border-border bg-ground p-4 shadow-2xl lg:w-[420px]"
+      // Abaixo de 1024 px: folha de tela cheia (h-dvh acompanha a barra do navegador; respeita a safe-area).
+      className="fixed inset-y-0 right-0 z-50 flex w-full flex-col gap-3 border-l border-border bg-ground p-4 shadow-2xl max-lg:bottom-auto max-lg:h-dvh max-lg:pt-[max(1rem,env(safe-area-inset-top))] max-lg:pb-[max(1rem,env(safe-area-inset-bottom))] max-md:gap-2 max-md:px-3 lg:w-[420px]"
     >
-      <header className="flex items-start gap-3">
+      <header className="flex items-start gap-3 max-md:items-center">
         <OrbitMark size="md" decorative />
         <div className="min-w-0 flex-1">
           <h2 id="orbit-drawer-title" className="text-xl">
@@ -140,7 +141,7 @@ function OrbitDrawerPanel() {
           </h2>
           <p className="text-xs text-muted">{ASSISTANT_TAGLINE}</p>
         </div>
-        <Button variant="ghost" size="icon" aria-label="Close Orbit" onClick={closeDrawer}>
+        <Button variant="ghost" size="icon" aria-label="Close Orbit" onClick={closeDrawer} className="max-lg:size-11">
           <X aria-hidden />
         </Button>
       </header>

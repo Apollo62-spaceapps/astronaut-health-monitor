@@ -205,6 +205,10 @@ export function OverviewPage() {
   // se a faixa da missão já mostra o lembrete (com o primário), o "Log measurement" daqui fica secundário.
   const bannerHasPrimary = astronaut && !!pending && !shelterActive
   const logIsPrimary = astronaut && !shelterActive && !bannerHasPrimary
+  // Celular: ações em grade de 2 colunas; com número ímpar de botões, o primeiro (o primário) ocupa a linha toda.
+  const actionCount = (shelterAlertActive ? 1 : 0) + (astronaut ? 1 : 0) + 3
+  const firstSpan = actionCount % 2 === 1 ? 'max-sm:col-span-2' : ''
+  const mobileBtn = 'max-sm:h-11 max-sm:w-full max-sm:px-2 max-sm:whitespace-normal max-sm:leading-tight'
 
   const hr = vitalCardProps(out, 'heartRate')
   const sys = out.vitals.find((v) => v.kind === 'systolicBP')
@@ -231,7 +235,7 @@ export function OverviewPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-md:pb-16">
       <div className="grid gap-6 xl:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
         <section aria-labelledby="overview-title" className="flex flex-col gap-3">
           <DayLabel />
@@ -247,15 +251,15 @@ export function OverviewPage() {
               </>
             )}
           </h1>
-          <p className="text-lg">{headline(out, groundSec, environment === 'EARTH', astronaut)}</p>
+          <p className="text-lg max-sm:text-base">{headline(out, groundSec, environment === 'EARTH', astronaut)}</p>
           {!astronaut && (
             <p className="text-sm text-muted">
               Viewing as {ROLE_TEXT[role]}. Measurements are logged by the astronaut.
             </p>
           )}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
             {shelterAlertActive && (
-              <Button asChild>
+              <Button asChild className={`${mobileBtn} ${firstSpan}`}>
                 <a href="#/radiation" className="text-white no-underline hover:no-underline">
                   View shelter procedure
                 </a>
@@ -264,6 +268,7 @@ export function OverviewPage() {
             {astronaut && (
               <Button
                 variant={logIsPrimary ? 'default' : 'outline'}
+                className={`${mobileBtn} ${shelterAlertActive ? '' : firstSpan}`}
                 onClick={() => setLogOpen(true)}
                 disabled={!logItem}
               >
@@ -272,6 +277,7 @@ export function OverviewPage() {
             )}
             <Button
               variant="outline"
+              className={`${mobileBtn} ${shelterAlertActive || astronaut ? '' : firstSpan}`}
               onClick={() => {
                 setMood(String(checkIn?.mood ?? 3))
                 setSleepHours(checkIn ? String(checkIn.sleepHours) : '')
@@ -282,6 +288,7 @@ export function OverviewPage() {
             </Button>
             <Button
               variant="outline"
+              className={mobileBtn}
               onClick={() => advanceDay(1)}
               title="Demo control: moves the simulated mission clock forward one day (BODY-08)"
             >
@@ -291,10 +298,14 @@ export function OverviewPage() {
               </span>
             </Button>
             {/* L7b (pitch, passo 4): relatório completo para os flight surgeons, montado pelo Orbit. */}
-            <Button variant="outline" onClick={() => useOrbitStore.getState().setReportOpen(true)}>
+            <Button
+              variant="outline"
+              className={mobileBtn}
+              onClick={() => useOrbitStore.getState().setReportOpen(true)}
+            >
               <FileText aria-hidden /> Ground report
             </Button>
-            <IllustrativeThresholds />
+            <IllustrativeThresholds className="max-sm:col-span-2" />
           </div>
         </section>
 
@@ -313,9 +324,9 @@ export function OverviewPage() {
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <StatusBadge status={a.level} />
-                    <span className="font-semibold">{a.title}</span>
+                    <span className="min-w-0 font-semibold break-words">{a.title}</span>
                   </div>
-                  <p className="mt-1 text-muted">
+                  <p className="mt-1 break-words text-muted">
                     {a.escalateTo.length
                       ? `Escalation: ${a.escalateTo.map((r) => (r === 'FLIGHT_SURGEON' ? 'flight surgeon' : r)).join(', ')} · ${out.escalation.replyText}`
                       : 'No escalation.'}{' '}
@@ -323,12 +334,12 @@ export function OverviewPage() {
                       (v) =>
                         a.id.startsWith(`R-VIT-02:${v.kind}`) && shownLevel(v.kind, v.level, out.body) === 'adapting',
                     ) && <>Shown as Adapting on the body map during the adaptation window. </>}
-                    <span className="num text-xs">Rule {a.ruleId}</span>
+                    <span className="num text-xs whitespace-nowrap">Rule {a.ruleId}</span>
                   </p>
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="mt-1 -ml-2 h-7 text-link"
+                    className="mt-1 -ml-2 h-7 text-link max-lg:h-10"
                     onClick={() => askAboutAlert(a, out)}
                   >
                     <Sparkles aria-hidden /> Ask Orbit
@@ -342,7 +353,7 @@ export function OverviewPage() {
 
       <section
         aria-label="Body status map"
-        className="grid items-start gap-4 rounded-lg bg-surface p-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]"
+        className="grid items-start gap-4 rounded-lg bg-surface p-4 max-sm:p-3 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]"
       >
         <div className="flex flex-col items-center gap-2">
           <BodyMap
@@ -366,7 +377,7 @@ export function OverviewPage() {
           {/* Indicadores-chave logo abaixo do mapa: ocupa o espaço ao lado do card da zona (sem buraco). */}
           <section
             aria-label="Key indicators"
-            className="mt-2 grid w-full gap-3 sm:grid-cols-2 [&>section]:bg-surface-2"
+            className="mt-2 grid w-full grid-cols-2 gap-3 max-sm:gap-2 max-[379px]:grid-cols-1 [&>section]:bg-surface-2 max-sm:[&>section]:p-3"
           >
             {hr ? (
               <MetricCard label="Heart rate · rest" unit="bpm" {...hr} />
@@ -449,7 +460,7 @@ export function OverviewPage() {
         />
       )}
       <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}>
-        <DialogContent>
+        <DialogContent className="max-h-[85dvh] overflow-y-auto max-sm:p-4">
           <form onSubmit={saveCheckIn} className="space-y-3">
             <DialogHeader>
               <DialogTitle>Daily health check-in</DialogTitle>
@@ -461,14 +472,17 @@ export function OverviewPage() {
               <legend className="mb-2 text-sm">Mood (1–5)</legend>
               <div className="grid grid-cols-5 gap-2">
                 {[1, 2, 3, 4, 5].map((n) => (
-                  <label key={n} className="flex items-center justify-center gap-2 rounded-md bg-surface-2 p-2">
+                  <label
+                    key={n}
+                    className="flex items-center justify-center gap-2 rounded-md bg-surface-2 p-2 max-sm:min-h-11 max-sm:gap-1.5"
+                  >
                     <input type="radio" name="mood" checked={mood === String(n)} onChange={() => setMood(String(n))} />
                     {n}
                   </label>
                 ))}
               </div>
             </fieldset>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {(
                 [
                   ['sleepHours', 'Sleep last night (hours)', '0.5'],
@@ -484,6 +498,7 @@ export function OverviewPage() {
                   <Input
                     id={`daily-${key}`}
                     type="number"
+                    className="max-sm:h-11"
                     step={step}
                     required
                     min={key === 'sleepHours' ? 0 : undefined}
@@ -502,7 +517,9 @@ export function OverviewPage() {
               Input plausibility only · Illustrative thresholds · Consult your flight surgeon.
             </p>
             <DialogFooter>
-              <Button type="submit">Save daily check-in</Button>
+              <Button type="submit" className="max-sm:h-11 max-sm:w-full">
+                Save daily check-in
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>

@@ -48,8 +48,8 @@ export function PacketPreview() {
 
   return (
     <Dialog open={!!draft} onOpenChange={(open) => !open && setPacket(null)}>
-      <DialogContent className="sm:max-w-xl">
-        <DialogHeader>
+      <DialogContent className="max-sm:max-h-[calc(100dvh-2rem)] max-sm:overflow-y-auto max-sm:p-4 sm:max-w-xl">
+        <DialogHeader className="max-sm:px-6">
           <DialogTitle>{draft?.handoff ? 'Handoff to the flight surgeon' : 'Message for the CMO'}</DialogTitle>
           <DialogDescription>
             {PACKET_ORIGIN.replace(', confirmed by you', '')}. Nothing is sent until you confirm.
@@ -65,16 +65,20 @@ export function PacketPreview() {
             </p>
             <ul className="space-y-1 rounded-md bg-surface-2 p-3">
               {draft.lines.map((l) => (
-                <li key={l}>{l}</li>
+                <li key={l} className="break-words">
+                  {l}
+                </li>
               ))}
             </ul>
           </div>
         )}
         <DialogFooter>
-          <Button variant="outline" onClick={() => setPacket(null)}>
+          <Button variant="outline" onClick={() => setPacket(null)} className="max-sm:h-11">
             Cancel
           </Button>
-          <Button onClick={confirm}>{draft?.etaSec === 0 ? 'Send now' : 'Queue for CMO'}</Button>
+          <Button onClick={confirm} className="max-sm:h-11">
+            {draft?.etaSec === 0 ? 'Send now' : 'Queue for CMO'}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

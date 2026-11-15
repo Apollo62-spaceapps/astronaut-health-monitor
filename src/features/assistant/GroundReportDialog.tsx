@@ -82,32 +82,38 @@ export function GroundReportDialog() {
 
   return (
     <Dialog open={!!report} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-3xl">
-        <DialogHeader>
+      {/* Celular: o diálogo rola por dentro e nunca passa da tela. */}
+      <DialogContent className="max-sm:max-h-[calc(100dvh-2rem)] max-sm:overflow-y-auto max-sm:p-4 sm:max-w-3xl">
+        <DialogHeader className="max-sm:px-6">
           <DialogTitle>Ground report for the flight surgeons</DialogTitle>
           <DialogDescription>
             Drafted by Orbit from the rule engine. Plain text, {kb} kB — small enough for a low-bandwidth window.
             Nothing is sent until you confirm.
           </DialogDescription>
         </DialogHeader>
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={includeWellbeing} onChange={(e) => setIncludeWellbeing(e.target.checked)} />
+        <label className="flex items-center gap-2 text-sm max-sm:min-h-10">
+          <input
+            type="checkbox"
+            className="shrink-0 max-sm:size-5"
+            checked={includeWellbeing}
+            onChange={(e) => setIncludeWellbeing(e.target.checked)}
+          />
           Include my mood and sleep (private; flight surgeons can see them)
         </label>
         <pre
           aria-label="Report preview"
-          className="max-h-[50vh] overflow-auto rounded-md bg-surface-2 p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+          className="max-h-[50vh] overflow-auto max-sm:max-h-[40dvh] rounded-md bg-surface-2 p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap"
         >
           {report?.markdown}
         </pre>
         <DialogFooter className="flex-wrap gap-2">
-          <Button variant="outline" onClick={download}>
+          <Button variant="outline" onClick={download} className="max-sm:h-11">
             <Download aria-hidden /> Download .md
           </Button>
-          <Button variant="outline" onClick={print}>
+          <Button variant="outline" onClick={print} className="max-sm:h-11">
             <Printer aria-hidden /> Print or save as PDF
           </Button>
-          <Button onClick={queue}>
+          <Button onClick={queue} className="max-sm:h-11">
             <Send aria-hidden /> Queue for the ground
           </Button>
         </DialogFooter>

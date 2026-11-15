@@ -55,7 +55,7 @@ export function OrbitHost({ showLauncher }: { showLauncher: boolean }) {
           aria-keyshortcuts="A"
           title="Open Orbit (A)"
           onClick={openDrawer}
-          className="fixed right-36 bottom-14 z-40 bg-surface shadow-lg"
+          className="fixed right-36 bottom-14 z-40 bg-surface shadow-lg max-md:right-[7rem] max-md:bottom-[calc(4.25rem+env(safe-area-inset-bottom))]"
         >
           <OrbitMark size="sm" decorative />
           {ASSISTANT_NAME}

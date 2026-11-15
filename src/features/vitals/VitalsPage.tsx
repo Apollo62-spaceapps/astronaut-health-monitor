@@ -1,5 +1,6 @@
 // Vitais (L4 #55): um card + um gráfico por indicador — CORE-02, CORE-03, CORE-04, CORE-05, CORE-08, NFR-03.
 // Status, desvio e baselines vêm do motor de regras (useEngine); a tela não decide nada.
+import { useState, type ReactNode } from 'react'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, Info } from 'lucide-react'
 import type { VitalKind } from '@/domain/types'
 import { VITAL_KINDS } from '@/domain/types'
@@ -34,6 +35,35 @@ function Trend({ pct }: { pct: number | null }) {
   )
 }
 
+/**
+ * "Why this matters" (CORE-08). O tooltip do Radix só abre por hover/foco de teclado; no celular o toque
+ * não abre nada. Aqui o toque (clique) alterna o tooltip; hover e foco continuam como antes.
+ */
+function WhyThisMatters({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <Tooltip open={open} onOpenChange={setOpen}>
+      <TooltipTrigger
+        asChild
+        onClick={(e) => {
+          e.preventDefault() // impede o Radix de fechar no clique
+          setOpen((o) => !o)
+        }}
+      >
+        <button
+          type="button"
+          className="inline-flex items-center gap-1 self-start text-sm text-link max-md:-my-2 max-md:min-h-10"
+        >
+          <Info aria-hidden className="size-4" /> Why this matters
+        </button>
+      </TooltipTrigger>
+      <TooltipContent collisionPadding={16} className="max-w-xs max-md:max-w-[calc(100vw-2rem)] max-md:text-sm">
+        {children}
+      </TooltipContent>
+    </Tooltip>
+  )
+}
+
 export function VitalsPage() {
   const out = useEngine()
   const vitals = useAppStore((s) => s.vitals)
@@ -46,7 +76,9 @@ export function VitalsPage() {
         <div>
           <DayLabel />
           <h1 className="mt-1 text-3xl font-semibold">Vitals</h1>
-          <p className="mt-2 text-muted">Today&apos;s value against your own normal range, set from your pre-flight exam.</p>
+          <p className="mt-2 text-muted">
+            Today&apos;s value against your own normal range, set from your pre-flight exam.
+          </p>
         </div>
         <IllustrativeThresholds />
       </header>
@@ -56,7 +88,10 @@ export function VitalsPage() {
           const ev = out.vitals.find((v) => v.kind === kind)
           const why = whyItMatters(kind)
           return (
-            <li key={kind} className="grid gap-6 rounded-lg bg-surface p-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+            <li
+              key={kind}
+              className="grid gap-4 rounded-lg bg-surface p-4 md:gap-6 md:p-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"
+            >
               {ev ? (
                 <MetricCard
                   label={VITAL_LABEL[kind]}
@@ -81,23 +116,16 @@ export function VitalsPage() {
                     </span>
                   }
                 >
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button type="button" className="inline-flex items-center gap-1 self-start text-sm text-link">
-                        <Info aria-hidden className="size-4" /> Why this matters
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-xs">
-                      {why ? (
-                        <>
-                          {why.text} <SourceRef ids={why.sourceIds} className="[&_a]:text-current" />
-                        </>
-                      ) : (
-                        // P-13: glicemia sem hazard com fonte.
-                        <>Related hazard: under review. {CONSULT}</>
-                      )}
-                    </TooltipContent>
-                  </Tooltip>
+                  <WhyThisMatters>
+                    {why ? (
+                      <>
+                        {why.text} <SourceRef ids={why.sourceIds} className="[&_a]:text-current" />
+                      </>
+                    ) : (
+                      // P-13: glicemia sem hazard com fonte.
+                      <>Related hazard: under review. {CONSULT}</>
+                    )}
+                  </WhyThisMatters>
                 </MetricCard>
               ) : (
                 <MetricCard
@@ -114,7 +142,11 @@ export function VitalsPage() {
                   baseline={ev.baseline}
                   status={ev.level}
                   xDomain={[Math.max(0, missionDay - 120), missionDay]}
-                  points={chartPoints(vitals.filter((r) => r.kind === kind), MISSION_START_ISO, simNowIso)}
+                  points={chartPoints(
+                    vitals.filter((r) => r.kind === kind),
+                    MISSION_START_ISO,
+                    simNowIso,
+                  )}
                 />
               ) : (
                 <p className="self-center text-muted">No readings to chart.</p>

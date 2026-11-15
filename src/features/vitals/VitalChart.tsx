@@ -1,6 +1,7 @@
 // Gráfico de um vital (CORE-05, DESIGN-SYSTEM v2 §Gráficos): UMA referência (faixa cinza = baseline pré-voo
 // ± limiar de atenção, ilustrativo até P-01), média móvel de 7 dias e o valor de hoje destacado com a cor do status.
 // Sem pontos diários (ficam no tooltip), sem legenda (rótulo direto), sem anotações que não afetam esta métrica.
+import { useSyncExternalStore } from 'react'
 import {
   CartesianGrid,
   Line,
@@ -26,6 +27,19 @@ const STATUS_COLOR: Record<AlertLevel, string> = {
   attention: 'var(--color-attention)',
   urgent: 'var(--color-urgent)',
 }
+
+// Celular (< 768 px, o mesmo corte da barra de abas): o gráfico usa a largura toda e o rótulo de hoje vai
+// acima do ponto, em vez de reservar 104 px à direita. Sem matchMedia (jsdom nos testes) → layout de desktop.
+const NARROW_QUERY = '(max-width: 767.98px)'
+const hasMatchMedia = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+const subscribeNarrow = (onChange: () => void) => {
+  if (!hasMatchMedia()) return () => {}
+  const mq = window.matchMedia(NARROW_QUERY)
+  mq.addEventListener('change', onChange)
+  return () => mq.removeEventListener('change', onChange)
+}
+const isNarrow = () => hasMatchMedia() && window.matchMedia(NARROW_QUERY).matches
+export const useNarrowViewport = () => useSyncExternalStore(subscribeNarrow, isNarrow, () => false)
 
 export interface ChartPoint {
   day: number
@@ -70,6 +84,7 @@ export function VitalChart({
   /** [primeiro, último] dia de missão do eixo X; o último é o dia de hoje (BODY-08). */
   xDomain?: [number, number]
 }) {
+  const narrow = useNarrowViewport()
   const unit = VITAL_UNIT[kind]
   const data = movingAverage(points)
   const today = points.at(-1)
@@ -87,7 +102,7 @@ export function VitalChart({
       data={data}
       width={width}
       height={HEIGHT}
-      margin={{ top: 12, right: 104, bottom: 4, left: 0 }}
+      margin={narrow ? { top: 24, right: 26, bottom: 4, left: 0 } : { top: 12, right: 104, bottom: 4, left: 0 }}
       accessibilityLayer
     >
       <CartesianGrid stroke="var(--color-border)" vertical={false} />
@@ -173,6 +188,29 @@ export function VitalChart({
             fill: 'var(--color-foreground)',
             fontSize: 12,
             fontFamily: 'var(--font-mono)',
+            // Celular: acima do ponto, terminando nele (o ponto fica na borda direita do gráfico).
+            ...(narrow && {
+              content: ({ viewBox, value }) => {
+                if (!viewBox || !('width' in viewBox)) return null
+                const { x = 0, y = 0, width = 0 } = viewBox
+                return (
+                  <text
+                    x={x + width}
+                    y={y - 6}
+                    textAnchor="end"
+                    fill="var(--color-foreground)"
+                    fontSize={12}
+                    fontFamily="var(--font-mono)"
+                    // Halo da cor do card: o rótulo fica legível mesmo sobre a linha.
+                    stroke="var(--color-surface)"
+                    strokeWidth={4}
+                    paintOrder="stroke"
+                  >
+                    {value}
+                  </text>
+                )
+              },
+            }),
           }}
         />
       )}
@@ -192,7 +230,7 @@ export function VitalChart({
           {chart()}
         </ResponsiveContainer>
       )}
-      <figcaption className="mt-1 text-[11px] text-muted">
+      <figcaption className="mt-1 text-[11px] text-muted max-md:text-xs">
         Line: {AVG_WINDOW_DAYS}-day average · Range: pre-flight baseline ±{VITAL_DEVIATION_PCT[kind].attention}%
         (illustrative)
       </figcaption>

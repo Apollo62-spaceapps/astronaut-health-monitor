@@ -12,6 +12,7 @@ import { StatusBadge } from '@/components/StatusBadge'
 import { IllustrativeThresholds } from '@/components/IllustrativeThresholds'
 import { useAppStore } from '@/state/store'
 import { formatShortDuration, formatUtcTime } from '@/lib/format'
+import { cn } from '@/lib/utils'
 import { useOnline } from '@/lib/useOnline'
 import { OrbitConversation } from '@/features/assistant/OrbitConversation'
 import { OrbitMark } from '@/features/assistant/OrbitMark'
@@ -159,12 +160,12 @@ function EnginePanel() {
       <div className="flex flex-wrap gap-2">
         {aiMode === 'protocol' && available && !progress && (
           <>
-            <label className="flex items-center gap-2 text-xs text-muted">
+            <label className="flex items-center gap-2 text-xs text-muted max-md:w-full">
               <span className="sr-only">Onboard model</span>
               <select
                 value={modelId}
                 onChange={(e) => setModelId(e.target.value)}
-                className="rounded-md border border-border bg-surface-2 px-2 py-1 text-sm text-foreground"
+                className="rounded-md border border-border bg-surface-2 px-2 py-1 text-sm text-foreground max-md:h-10 max-md:w-full max-md:text-base"
               >
                 {ONBOARD_MODELS.map((m) => (
                   <option key={m.id} value={m.id}>
@@ -173,13 +174,13 @@ function EnginePanel() {
                 ))}
               </select>
             </label>
-            <Button size="sm" variant="outline" onClick={() => void load()}>
+            <Button size="sm" variant="outline" onClick={() => void load()} className="max-md:h-10">
               Load onboard model
             </Button>
           </>
         )}
         {(aiMode === 'onboard-model' || progress) && (
-          <Button size="sm" variant="outline" onClick={() => setAiMode('protocol')}>
+          <Button size="sm" variant="outline" onClick={() => setAiMode('protocol')} className="max-md:h-10">
             Use protocol mode instead
           </Button>
         )}
@@ -192,6 +193,7 @@ function EnginePanel() {
 export function AssistantPage() {
   const aiMode = useAppStore((s) => s.aiMode)
   const busy = useOrbitStore((s) => s.busy)
+  const hasMessages = useOrbitStore((s) => s.messages.length > 0)
   const online = useOnline()
   const ctx = useOrbitContext()
   return (
@@ -220,8 +222,17 @@ export function AssistantPage() {
         </ul>
       </header>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <section aria-label="Conversation" className="flex min-h-[32rem] flex-col rounded-lg bg-surface p-4">
+      {/* grid-cols-[minmax(0,1fr)]: sem isso, a coluna implícita cresce até a largura das sugestões e vaza no celular. */}
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        {/* Celular: sem conversa, a caixa tem a altura do conteúdo (sem vão vazio); com conversa, cabe na tela
+            (acima da barra inferior) e as mensagens rolam por dentro, com o campo sempre à vista. */}
+        <section
+          aria-label="Conversation"
+          className={cn(
+            'flex flex-col rounded-lg bg-surface p-4 max-md:p-3 md:min-h-[32rem]',
+            hasMessages && 'max-md:h-[calc(100dvh-10rem)] max-md:min-h-[24rem]',
+          )}
+        >
           <OrbitConversation inputId="orbit-page-input" />
         </section>
         <div className="flex flex-col gap-4">

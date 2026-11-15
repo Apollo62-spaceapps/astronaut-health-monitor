@@ -69,10 +69,11 @@ export function OrbitConversation({ compact = false, inputId }: { compact?: bool
           .map((m) => (
             <li key={m.id} className={cn('flex', m.role === 'user' ? 'justify-end' : 'items-start gap-2')}>
               {m.role === 'user' ? (
-                <p className="max-w-[80%] rounded-lg bg-surface-2 px-3 py-2">{m.text}</p>
+                <p className="max-w-[80%] rounded-lg bg-surface-2 px-3 py-2 break-words">{m.text}</p>
               ) : (
                 <>
-                  <OrbitMark size="sm" decorative className="mt-1" />
+                  {/* No celular, o avatar sai ao lado da resposta: o cartão ganha a largura toda. */}
+                  <OrbitMark size="sm" decorative className="mt-1 max-md:hidden" />
                   {m.reply && (
                     <ReplyCard
                       reply={m.reply}
@@ -97,14 +98,18 @@ export function OrbitConversation({ compact = false, inputId }: { compact?: bool
         )}
       </ol>
 
-      <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" aria-label="Suggested questions">
+      {/* Celular: chips com alvo de 40 px; sem conversa, quebram em linhas (cabem todas); depois, fileira rolável. */}
+      <div
+        className={cn('-mx-1 flex gap-2 overflow-x-auto px-1 pb-1', messages.length === 0 && 'max-md:flex-wrap')}
+        aria-label="Suggested questions"
+      >
         {chips.map((q) => (
           <button
             key={q}
             type="button"
             onClick={() => send(q)}
             disabled={busy}
-            className="shrink-0 cursor-pointer rounded-full border border-border px-3 py-1 text-sm whitespace-nowrap hover:bg-surface-2 disabled:opacity-50"
+            className="shrink-0 cursor-pointer rounded-full border border-border px-3 py-1 text-sm whitespace-nowrap hover:bg-surface-2 disabled:opacity-50 max-md:min-h-10 max-md:py-2"
           >
             {q}
           </button>
@@ -121,10 +126,10 @@ export function OrbitConversation({ compact = false, inputId }: { compact?: bool
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask Orbit…"
-          className="min-w-0 flex-1 rounded-md border border-border bg-surface-2 px-3 py-2"
+          className="min-w-0 flex-1 rounded-md border border-border bg-surface-2 px-3 py-2 text-base max-md:h-11"
           autoComplete="off"
         />
-        <Button type="submit" variant="secondary" disabled={busy || !input.trim()}>
+        <Button type="submit" variant="secondary" disabled={busy || !input.trim()} className="max-md:h-11 max-md:px-5">
           Send
         </Button>
       </form>

@@ -35,6 +35,9 @@ const PAGES: Record<TabId, ComponentType> = {
   sources: SourcesPage,
 }
 
+/** Nome curto na barra inferior do celular (cabe em ~68 px); o nome completo segue no title e no leitor de tela. */
+const SHORT_LABEL: Partial<Record<TabId, string>> = { outlook: 'Crew', sources: 'Sources' }
+
 /** Rodapé fixo obrigatório (NFR-08). Não remover. */
 export const DISCLAIMER = 'Decision-support prototype — not a medical device, not for diagnosis. Some data simulated.'
 
@@ -56,15 +59,22 @@ export function AppShell() {
     <div className="relative isolate flex min-h-screen flex-col bg-ground">
       <EnvironmentBackdrop />
       {/* Header (ground #000) — DESIGN-SYSTEM §4 */}
-      <header className="flex h-11 items-center justify-between gap-4 bg-ground px-6">
-        <span className="text-lg font-semibold tracking-wider">APOLLO 62</span>
+      <header className="flex h-11 items-center justify-between gap-3 bg-ground px-4 md:gap-4 md:px-6">
+        <span className="shrink-0 text-lg font-semibold tracking-wider whitespace-nowrap">APOLLO 62</span>
         <span className="flex min-w-0 items-center gap-4">
           {/* L7 §9.7: tudo roda local; o selo sustenta o "works without Earth" (ícone + texto). */}
           <span className="inline-flex shrink-0 items-center gap-1.5 text-xs text-muted" role="status">
             {online ? <ShieldCheck aria-hidden className="size-3.5" /> : <WifiOff aria-hidden className="size-3.5" />}
-            {online ? 'Online · works offline' : 'Offline · running locally'}
+            {online ? (
+              <>
+                <span className="max-sm:hidden">Online · works offline</span>
+                <span className="sm:hidden">Works offline</span>
+              </>
+            ) : (
+              'Offline · running locally'
+            )}
           </span>
-          <span className="truncate text-sm text-muted">Astronaut health monitor · prototype</span>
+          <span className="truncate text-sm text-muted max-md:hidden">Astronaut health monitor · prototype</span>
         </span>
       </header>
 
@@ -72,17 +82,23 @@ export function AppShell() {
       <MissionBanner envSlot={<EnvironmentModeButton />} />
 
       <div className="flex min-w-0 flex-1">
-        {/* ≤ 1100 px: a sidebar vira só ícones (o nome continua acessível e no title). */}
+        {/* ≥ 1101 px: sidebar com nome. 768–1100 px: só ícones (nome no title e para leitor de tela).
+            < 768 px (celular): vira barra inferior fixa, rolável, com ícone + nome curto (alvo de toque ≥ 48 px). */}
         <nav
           aria-label="Sections"
-          className="on-backdrop w-14 shrink-0 border-r border-border p-2 min-[1101px]:w-56 min-[1101px]:p-3"
+          className={cn(
+            'on-backdrop shrink-0',
+            'max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:border-t max-md:border-border max-md:bg-ground max-md:pb-[env(safe-area-inset-bottom)]',
+            'md:w-14 md:border-r md:border-border md:p-2 min-[1101px]:w-56 min-[1101px]:p-3',
+          )}
         >
-          <ul className="space-y-1">
+          <ul className="max-md:flex max-md:overflow-x-auto max-md:[scrollbar-width:none] md:space-y-1">
             {TABS.map(({ id, label, icon: Icon }) => (
-              <li key={id}>
+              <li key={id} className="max-md:flex-1">
                 <a
                   href={`#/${id}`}
                   title={label}
+                  aria-label={label}
                   onClick={(e) => {
                     e.preventDefault()
                     go(id)
@@ -90,10 +106,14 @@ export function AppShell() {
                   aria-current={tab === id ? 'page' : undefined}
                   className={cn(
                     'flex items-center justify-center gap-3 rounded-md px-2 py-2 text-foreground no-underline hover:bg-surface-2 hover:no-underline min-[1101px]:justify-start min-[1101px]:px-3',
-                    tab === id && 'bg-surface font-semibold',
+                    'max-md:h-14 max-md:min-w-[4.25rem] max-md:flex-col max-md:gap-1 max-md:rounded-none max-md:px-1 max-md:py-1.5',
+                    tab === id && 'bg-surface font-semibold max-md:shadow-[inset_0_2px_0_var(--color-foreground)]',
                   )}
                 >
-                  <Icon aria-hidden className="size-4 shrink-0" />
+                  <Icon aria-hidden className="size-5 shrink-0 md:size-4" />
+                  <span aria-hidden className="text-[11px] leading-none whitespace-nowrap md:hidden">
+                    {SHORT_LABEL[id] ?? label}
+                  </span>
                   <span className="sr-only min-[1101px]:not-sr-only">{label}</span>
                 </a>
               </li>
@@ -102,7 +122,7 @@ export function AppShell() {
         </nav>
 
         {/* on-backdrop: halo escuro no texto que fica direto sobre o fundo do ambiente (index.css). */}
-        <main className="on-backdrop min-w-0 flex-1 p-6">
+        <main className="on-backdrop min-w-0 flex-1 p-4 md:p-6">
           {/* Regra única de largura para todas as telas (polimento 15/11). */}
           <div className="mx-auto w-full max-w-[1280px]">
             <Suspense fallback={<p className="text-muted">Loading…</p>}>
@@ -112,7 +132,10 @@ export function AppShell() {
         </main>
       </div>
 
-      <footer className="border-t border-border bg-ground px-6 py-3 text-sm text-muted">{DISCLAIMER}</footer>
+      {/* No celular, o rodapé ganha espaço para não ficar atrás da barra inferior de navegação. */}
+      <footer className="border-t border-border bg-ground px-4 py-3 text-sm text-muted max-md:pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:px-6">
+        {DISCLAIMER}
+      </footer>
       <DemoControls />
       {/* Orbit (L7): gaveta global, atalho A, e os diálogos das ações propostas. */}
       <OrbitHost showLauncher={tab !== 'assistant'} />

@@ -36,7 +36,7 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
   const logItem = routine.find((item) => item.id === logItemId) ?? reminder ?? null
 
   return (
-    <div role="region" aria-label="Mission banner" className="bg-banner px-6 py-2 transition-colors">
+    <div role="region" aria-label="Mission banner" className="bg-banner px-4 py-2 transition-colors md:px-6">
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
         {envSlot}
 
@@ -57,7 +57,7 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
           </p>
         ) : (
           reminder && (
-            <div className="flex items-center gap-3 rounded-md bg-black/20 px-2 py-0.5" role="status">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-md bg-black/20 px-2 py-1" role="status">
               <Clock3 aria-hidden className="size-4" />
               <span className="text-sm">
                 Time to measure your{' '}

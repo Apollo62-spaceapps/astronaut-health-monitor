@@ -57,8 +57,9 @@ export function SourcesPage() {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead>
+            {/* Celular (< 768 px): cada linha vira um bloco empilhado, sem rolagem lateral; o cabeçalho fica só para leitor de tela. */}
+            <table className="w-full border-collapse text-left text-sm max-md:block">
+              <thead className="max-md:sr-only">
                 <tr className="border-b border-border text-xs uppercase tracking-wider text-muted">
                   <th className="p-3">ID · provider</th>
                   <th className="p-3">Title</th>
@@ -66,25 +67,28 @@ export function SourcesPage() {
                   <th className="p-3">Accessed · terms</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="max-md:block">
                 {SOURCES.map((source) => (
                   <tr
                     key={source.id}
                     id={`source-${source.id}`}
                     aria-current={selected === source.id ? 'true' : undefined}
                     className={cn(
-                      'scroll-mt-24 border-b border-border align-top last:border-0',
-                      selected === source.id && 'bg-link/10 outline-2 outline-link',
+                      'scroll-mt-24 border-b border-border align-top last:border-0 max-md:block max-md:space-y-3 max-md:py-4',
+                      selected === source.id && 'bg-link/10 outline-2 outline-link max-md:px-3',
                     )}
                   >
-                    <td className="p-3">
+                    <td className="p-3 max-md:block max-md:p-0">
                       <span className="num">{source.id}</span>
-                      <br />
+                      <br className="max-md:hidden" />
+                      <span aria-hidden className="text-muted md:hidden">
+                        {' · '}
+                      </span>
                       <span className="text-muted">{source.provider}</span>
                     </td>
-                    <td className="min-w-64 p-3">
+                    <td className="p-3 max-md:block max-md:p-0 md:min-w-64">
                       <p className="font-medium">{source.title}</p>
-                      <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                      <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 max-md:mt-1 max-md:gap-y-0">
                         {source.urls.map((url) => (
                           <li key={url}>
                             <a
@@ -92,7 +96,7 @@ export function SourcesPage() {
                               target="_blank"
                               rel="noreferrer"
                               title={url}
-                              className="inline-flex items-center gap-1 text-xs"
+                              className="inline-flex items-center gap-1 text-xs [overflow-wrap:anywhere] max-md:min-h-10 max-md:text-sm"
                             >
                               {linkHost(url)}
                               <ExternalLink aria-hidden className="size-3 shrink-0" />
@@ -101,10 +105,18 @@ export function SourcesPage() {
                         ))}
                       </ul>
                     </td>
-                    <td className="min-w-48 p-3 text-muted">{source.use}</td>
-                    <td className="min-w-40 p-3">
+                    <td className="p-3 text-muted max-md:block max-md:p-0 md:min-w-48">
+                      <span aria-hidden className="block text-xs font-semibold tracking-wider uppercase md:hidden">
+                        Use
+                      </span>
+                      {source.use}
+                    </td>
+                    <td className="p-3 max-md:block max-md:p-0 md:min-w-40">
+                      <span aria-hidden className="block text-xs font-semibold tracking-wider text-muted uppercase md:hidden">
+                        Accessed · terms
+                      </span>
                       <span className="num text-xs">{formatUtc(`${source.accessed}T12:00:00Z`).split(',')[0]}</span>
-                      <p className="mt-2 text-muted">{source.terms}</p>
+                      <p className="mt-2 text-muted max-md:mt-1">{source.terms}</p>
                     </td>
                   </tr>
                 ))}
