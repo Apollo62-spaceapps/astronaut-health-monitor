@@ -68,14 +68,14 @@ describe('um primário por tela com o abrigo ativo (DESIGN-SYSTEM §6)', () => {
 })
 
 describe('exercício durante o abrigo (R-EX-02)', () => {
-  it('sessão adiada nunca aparece também como "Done"', () => {
+  // A tela de exercício foi simplificada em 15/11 (76fdfb4): total de minutos do dia, semana e conquistas.
+  it('no abrigo, o exercício aparece adiado e não dá para registrar minutos', () => {
     useAppStore.getState().replaySolarEvent()
     const { container } = renderTab('exercise', 'ASTRONAUT', 'ISS')
-    const sessions = [...container.querySelectorAll('section')].filter((s) => s.textContent?.includes('Postponed'))
-    expect(sessions.length).toBe(3)
-    for (const s of sessions) expect(s.textContent).not.toContain('Done')
-    expect(container.textContent).toContain('Plan from the ASCR team (simulated).')
+    expect(container.textContent).toContain('Radiation shelter active · exercise is postponed in this scenario.')
+    expect(screen.queryByLabelText('Total minutes today')).toBeNull()
     expect(container.textContent).not.toContain('Prescribed by')
+    expect(container.textContent).toContain('does not prescribe or change your training')
   })
 })
 

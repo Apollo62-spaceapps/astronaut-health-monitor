@@ -74,13 +74,19 @@ describe('roteiro da demo (K8, SPEC §10)', () => {
     expect(primaryLabels(container).length, primaryLabels(container).join(' | ')).toBeLessThanOrEqual(1)
   })
 
-  it('exercício segue o ambiente: aparelhos com fonte só na Space Station (§5.1, P-18)', () => {
-    renderTab('exercise', 'ASTRONAUT', 'ISS')
-    expect(screen.getAllByText(/ARED/).length).toBeGreaterThan(0)
-    cleanup()
-    const { container } = renderTab('exercise', 'ASTRONAUT', 'LUNAR')
-    expect(container.textContent).toMatch(/simulated habitat equipment/i)
-    expect(container.textContent).not.toMatch(/Advanced Resistive Exercise Device/)
+  // Tela simplificada em 15/11 (76fdfb4): a média da ISS aparece só como referência, com fonte, e nenhum
+  // aparelho da ISS é atribuído a outro ambiente (§5.1, P-18).
+  it('exercício: a média da ISS é só referência com fonte; nenhum aparelho da ISS fora da Space Station', () => {
+    for (const env of ['ISS', 'LUNAR', 'SPACECRAFT', 'EARTH'] as const) {
+      const { container } = renderTab('exercise', 'ASTRONAUT', env)
+      expect(container.textContent, env).toMatch(
+        /about 2 hours of exercise per day on the ISS, on average. Reference only; not an individual target./,
+      )
+      expect(screen.getByRole('link', { name: 'Source S13' }), env).toBeTruthy()
+      if (env !== 'ISS')
+        expect(container.textContent, env).not.toMatch(/(^|[^A-Za-z0-9])(ARED|CEVIS|T2)([^A-Za-z0-9]|$)/)
+      cleanup()
+    }
   })
 
   it('passo 5: CMO vê o bem-estar bloqueado, faz break-glass e o acesso aparece na auditoria (PRIV-02/03/04)', () => {

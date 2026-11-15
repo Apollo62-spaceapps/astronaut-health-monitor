@@ -1,12 +1,16 @@
 // @vitest-environment jsdom
+// Faixa da missão (K4). Desde 15/11 (77133e7, 76fdfb4) ela tem só o seletor de ambiente e, quando há algo a
+// dizer, o lembrete de medida ou o aviso de abrigo. O tempo de resposta do solo aparece na Overview e no Orbit.
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { act, cleanup, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { MissionBanner, splitHms } from '@/app/MissionBanner'
 import { useAppStore } from '@/state/store'
+import { useOrbitStore } from '@/features/assistant/orbitStore'
 
 beforeEach(() => {
   useAppStore.getState().resetScenario()
   useAppStore.setState({ environment: 'SPACECRAFT', role: 'ASTRONAUT', aiMode: 'protocol' })
+  useOrbitStore.setState({ open: false, pending: null })
 })
 afterEach(cleanup)
 
@@ -15,33 +19,34 @@ describe('MissionBanner (K4)', () => {
     expect(splitHms(2400)).toEqual({ h: 0, m: 40, s: 0 })
   })
 
-  it('na Spacecraft mostra o tempo de resposta como texto estático (sem cronômetro parado)', () => {
+  it('sem cronômetro parado nem contagem na faixa', () => {
     render(<MissionBanner />)
-    const w = screen.getByLabelText('Ground reply window, Spacecraft')
-    expect(w.textContent).toContain('Ground reply ≈ 40 min (2 × 20 min delay)')
-    expect(w.textContent).not.toMatch(/HRS|MINS|SECS/)
     expect(screen.queryByRole('timer')).toBeNull()
+    expect(screen.getByRole('region', { name: 'Mission banner' }).textContent).not.toMatch(/HRS|MINS|SECS/)
   })
 
-  it('a contagem regressiva só aparece com um pacote enviado esperando resposta (ESC-04)', () => {
+  it('lembrete de medida (ROUT-03) com Log measurement e o atalho para o Orbit', () => {
+    useAppStore.getState().advanceDay(1) // dia novo: as medições voltam a vencer
     render(<MissionBanner />)
-    const p = useAppStore.getState().enqueuePacket('Daily summary')
-    act(() => useAppStore.getState().setPacketStatus(p.id, 'sent'))
-    expect(screen.getByRole('timer').textContent).toContain('40:00')
+    expect(screen.getByText(/Time to measure your/)).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Log measurement' })).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: 'Ask Orbit' }))
+    expect(useOrbitStore.getState()).toMatchObject({ open: true, pending: { intent: 'routine' } })
   })
 
   it('CMO e Flight Surgeon não recebem o lembrete de medir (é do astronauta)', () => {
-    useAppStore.getState().advanceDay(1) // dia novo: as medições voltam a vencer
+    useAppStore.getState().advanceDay(1)
     render(<MissionBanner />)
     expect(screen.getByRole('button', { name: 'Log measurement' })).toBeTruthy()
     act(() => useAppStore.getState().setRole('CMO'))
     expect(screen.queryByRole('button', { name: 'Log measurement' })).toBeNull()
   })
 
-  it('na Earth o flight surgeon está disponível na hora; mostra dia da missão e modo de IA', () => {
+  it('abrigo ativo: aviso Urgent no lugar do lembrete (RAD-05)', () => {
+    useAppStore.getState().advanceDay(1)
     render(<MissionBanner />)
-    act(() => useAppStore.getState().setEnvironment('EARTH'))
-    expect(screen.getByText('Flight surgeon available now')).toBeTruthy()
-    expect(screen.getByLabelText('AI mode').textContent).toBe('AI: protocol mode')
+    act(() => useAppStore.getState().replaySolarEvent())
+    expect(screen.getByText(/Urgent · Radiation shelter active — routine items postponed/)).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Log measurement' })).toBeNull()
   })
 })

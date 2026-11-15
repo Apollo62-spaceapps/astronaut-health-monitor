@@ -51,9 +51,13 @@ describe('store (K2)', () => {
     expect(useAppStore.getState().outbox).toEqual([])
   })
 
-  it('só preferências persistem (ambiente e perfil)', () => {
+  // Desde 15/11 (76fdfb4) o check-in diário de bem-estar também persiste; o resto do cenário recomeça igual.
+  it('só preferências e o check-in persistem (ambiente, perfil e bem-estar)', () => {
     useAppStore.getState().setEnvironment('LUNAR')
     const saved = JSON.parse(localStorage.getItem('apollo62:prefs') ?? '{}')
-    expect(saved.state).toEqual({ environment: 'LUNAR', role: 'ASTRONAUT' })
+    expect(Object.keys(saved.state).sort()).toEqual(['environment', 'role', 'wellbeing'])
+    expect(saved.state.environment).toBe('LUNAR')
+    expect(saved.state.vitals).toBeUndefined()
+    expect(saved.state.alerts).toBeUndefined()
   })
 })

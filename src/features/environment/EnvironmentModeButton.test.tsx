@@ -65,7 +65,8 @@ describe('Botão de modo de ambiente (K5, ENV-01..03)', () => {
     fireEvent.click(screen.getByRole('radio', { name: 'Earth' }))
     expect(useAppStore.getState().environment).toBe('EARTH')
     expect(document.documentElement.dataset.environment).toBe('earth')
-    expect(screen.getByText('Flight surgeon available now')).toBeTruthy()
+    // A faixa ficou só com o seletor (15/11); o tempo de resposta aparece no topo da Overview.
+    expect(screen.getByText(/The flight surgeon is available now./)).toBeTruthy()
 
     fireEvent.click(screen.getByRole('radio', { name: 'Space Station' }))
     expect(document.documentElement.dataset.environment).toBe('station')
