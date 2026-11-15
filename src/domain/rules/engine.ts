@@ -18,6 +18,7 @@ import { VITAL_KINDS } from '@/domain/types'
 import { evaluateVitals, vitalAlert, type VitalEvaluation, ALERT_LEVEL_ORDER } from '@/domain/rules/vitals'
 import { evaluateWellbeing, wellbeingAlert, type WellbeingEvaluation } from '@/domain/rules/wellbeing'
 import { careerDose, shelterAlert, type CareerDose } from '@/domain/rules/radiation'
+import { projectDose, projectVital, projectionAlert, type DoseProjection, type VitalProjection } from '@/domain/rules/projection'
 import { adherenceLevel, applyShelter, streakDays, weeklyAdherence, type Adherence } from '@/domain/rules/exercise'
 import { applyPhase } from '@/domain/rules/phase'
 import { BODY_ZONES } from '@/domain/config/bodyZones'
@@ -52,6 +53,10 @@ export interface EngineOutput {
   vitals: VitalEvaluation[]
   wellbeing: WellbeingEvaluation | null
   radiation: CareerDose
+  /** R-PROJ-01: vitais que, no ritmo atual, cruzam a próxima linha dentro do horizonte (aviso antecipado). */
+  projections: VitalProjection[]
+  /** R-PROJ-02: dose projetada com a taxa com fonte do ambiente; null onde a taxa não tem fonte. */
+  doseProjection: DoseProjection | null
   exercise: { sessions: ExerciseSession[]; adherence: Adherence; streakDays: number }
   indicatorLevels: IndicatorLevels
   /** Status de cada zona do mapa do corpo, já com a privacidade do perfil aplicada (R-BODY-01). */
@@ -92,9 +97,16 @@ export function runEngine(input: EngineInput): EngineOutput {
   const adherence = weeklyAdherence(sessions, now)
 
   const raw: Alert[] = []
+  // R-PROJ-01: aviso antecipado (sempre attention), ao lado do nível atual do indicador.
+  const projections: VitalProjection[] = []
   for (const ev of vitals) {
     const a = vitalAlert(ev, now)
     if (a) raw.push(a)
+    const p = projectVital(ev, input.vitals, now)
+    if (p) {
+      projections.push(p)
+      raw.push(projectionAlert(p, now))
+    }
   }
   if (wellbeing) {
     const a = wellbeingAlert(wellbeing, now)
@@ -135,6 +147,8 @@ export function runEngine(input: EngineInput): EngineOutput {
     vitals,
     wellbeing,
     radiation,
+    projections,
+    doseProjection: projectDose(radiation),
     exercise: { sessions, adherence, streakDays: streakDays(sessions, now) },
     indicatorLevels,
     body,

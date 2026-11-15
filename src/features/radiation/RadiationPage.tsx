@@ -9,6 +9,7 @@ import { DayLabel } from '@/components/DayLabel'
 import { useAppStore } from '@/state/store'
 import { ENVIRONMENTS } from '@/domain/config/environments'
 import { careerDose, SHELTER_LABEL, shelterAlert } from '@/domain/rules/radiation'
+import { projectDose } from '@/domain/rules/projection'
 import { formatMSv, formatUtc } from '@/lib/format'
 
 export function RadiationPage() {
@@ -26,6 +27,7 @@ export function RadiationPage() {
   const dose = careerDose(radiation, missionDay, environment)
   const alert = shelterAlert(event, shelterActive, simNowIso)
   const sourced = dose.totalMSv !== null && dose.pctOfLimit !== null && dose.missionMSv !== null
+  const projection = projectDose(dose)
 
   return (
     <div className="space-y-6">
@@ -141,6 +143,34 @@ export function RadiationPage() {
                       <span className="num">{dose.rateMSvPerDay}</span> mSv/day, MSL/RAD cruise average (galactic cosmic
                       rays)
                     </span>
+                    <ProvenanceBadge provenance={{ kind: 'simulated', basis: 'S09' }} />
+                    <SourceRef ids={['S08', 'S09']} />
+                  </dd>
+                </div>
+              )}
+              {/* R-PROJ-02: mesma taxa com fonte, estendida para frente. Só onde a taxa tem fonte (ENV-04). */}
+              {projection && (
+                <div className="contents">
+                  <dt className="text-muted">Projection</dt>
+                  <dd className="flex flex-wrap items-center gap-2">
+                    <span>
+                      At this rate: <span className="num">{projection.pctIn30Days.toFixed(0)}%</span> of the limit in{' '}
+                      <span className="num">30</span> days
+                      {projection.daysToAttention !== null && (
+                        <>
+                          {' '}
+                          · <span className="num">{projection.attentionPct}%</span> in ~
+                          <span className="num">{projection.daysToAttention}</span> days
+                        </>
+                      )}
+                      {projection.daysToLimit !== null && (
+                        <>
+                          {' '}
+                          · limit in ~<span className="num">{projection.daysToLimit}</span> days
+                        </>
+                      )}
+                    </span>
+                    <span className="text-muted">(cruise rate only; a solar event adds more)</span>
                     <ProvenanceBadge provenance={{ kind: 'simulated', basis: 'S09' }} />
                     <SourceRef ids={['S08', 'S09']} />
                   </dd>

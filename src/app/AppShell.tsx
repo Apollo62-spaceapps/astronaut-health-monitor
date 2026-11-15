@@ -89,7 +89,9 @@ export function AppShell() {
           className={cn(
             'on-backdrop shrink-0',
             'max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:border-t max-md:border-border max-md:bg-ground max-md:pb-[env(safe-area-inset-bottom)]',
-            'md:w-14 md:border-r md:border-border md:p-2 min-[1101px]:w-56 min-[1101px]:p-3',
+            // Dois breakpoints arbitrários (ordenados pelo valor): com md: + min-[1101px]: o md vencia e a sidebar
+            // larga ficava com 56 px no desktop.
+            'md:border-r md:border-border min-[768px]:w-14 min-[768px]:p-2 min-[1101px]:w-56 min-[1101px]:p-3',
           )}
         >
           <ul className="max-md:flex max-md:overflow-x-auto max-md:[scrollbar-width:none] md:space-y-1">
