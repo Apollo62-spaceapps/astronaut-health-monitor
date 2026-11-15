@@ -18,7 +18,9 @@ import { VITAL_KINDS } from '@/domain/types'
 import { evaluateVitals, vitalAlert, type VitalEvaluation, ALERT_LEVEL_ORDER } from '@/domain/rules/vitals'
 import { evaluateWellbeing, wellbeingAlert, type WellbeingEvaluation } from '@/domain/rules/wellbeing'
 import { careerDose, shelterAlert, type CareerDose } from '@/domain/rules/radiation'
-import { applyShelter, streakDays, weeklyAdherence, type Adherence } from '@/domain/rules/exercise'
+import { adherenceLevel, applyShelter, streakDays, weeklyAdherence, type Adherence } from '@/domain/rules/exercise'
+import { applyPhase } from '@/domain/rules/phase'
+import { BODY_ZONES } from '@/domain/config/bodyZones'
 import { escalate, type EscalationDecision } from '@/domain/rules/escalation'
 import { bodyStatus, type IndicatorLevels } from '@/domain/rules/body'
 import { canView, type PrivacyContext } from '@/domain/rules/privacy'
@@ -40,6 +42,8 @@ export interface EngineInput {
   shelterActive: boolean
   consent: { shareWellbeingAlertsWithCmo: boolean }
   breakGlass: { active: boolean }
+  /** Quando houve a última troca de campo gravitacional (R-PHASE-01, P1). null/ausente = nenhuma. */
+  gravityChangeIso?: string | null
 }
 
 export interface EngineOutput {
@@ -117,7 +121,11 @@ export function runEngine(input: EngineInput): EngineOutput {
     indicatorLevels.mood = wellbeing.mood
     indicatorLevels.sleep = wellbeing.sleep
   }
+  const legs = adherenceLevel(adherence.pct)
+  if (legs) indicatorLevels.exerciseAdherence = legs
   const body = bodyStatus(indicatorLevels, privacy)
+  // R-PHASE-01 (P1): "Adapting" só no lugar de attention, nas zonas ligadas à gravidade.
+  for (const zone of BODY_ZONES) body[zone.id] = applyPhase(body[zone.id], zone, input.gravityChangeIso, now)
 
   const visible = visibleAlerts(alerts, privacy)
   const worstLevel = visible.reduce<AlertLevel>((w, a) => (rank(a.level) > rank(w) ? a.level : w), 'normal')

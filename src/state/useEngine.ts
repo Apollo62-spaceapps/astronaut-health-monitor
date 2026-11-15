@@ -5,6 +5,7 @@ import { useEffect, useMemo } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { runEngine, type EngineInput, type EngineOutput } from '@/domain/rules/engine'
 import { useAppStore, type AppState } from '@/state/store'
+import { usePhaseStore } from '@/state/phase'
 
 const pickInput = (s: AppState): EngineInput => ({
   environment: s.environment,
@@ -25,7 +26,9 @@ const pickInput = (s: AppState): EngineInput => ({
 
 /** Entrada do motor lida do store. */
 export function useEngineInput(): EngineInput {
-  return useAppStore(useShallow(pickInput))
+  const base = useAppStore(useShallow(pickInput))
+  const gravityChangeIso = usePhaseStore((s) => s.gravityChangeIso)
+  return useMemo(() => ({ ...base, gravityChangeIso }), [base, gravityChangeIso])
 }
 
 /** Saída do motor de regras para as telas. */

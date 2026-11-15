@@ -50,6 +50,13 @@ function WhatToDo({ status }: { status: ZoneStatus | null }) {
         ))}
       </ul>
     )
+  if (status === 'adapting')
+    return (
+      <p>
+        Adapting after a change in gravity (up to 3 days on average for motion sickness [S04]). Keep your scheduled
+        measurements.
+      </p>
+    )
   if (status === 'restricted')
     return <p>Private medical data. Visible only with the astronaut's consent or through audited emergency access.</p>
   if (status === null) return <p>No data yet — log a measurement from the mission routine.</p>
@@ -212,12 +219,12 @@ export function ZoneCard({ target, out, mode }: { target: MapTarget; out: Engine
       <Section title="Why it matters">{content.whyItMatters ? content.whyItMatters.text : CONSULT}</Section>
       <Section title="What to do">
         <WhatToDo status={status} />
-        {status !== 'normal' && status !== null && !restricted && <p className="mt-1 text-muted">{CONSULT}</p>}
+        {(status === 'attention' || status === 'urgent') && <p className="mt-1 text-muted">{CONSULT}</p>}
       </Section>
       <Section title="Source">
         <Sources ids={content.whyItMatters?.sourceIds ?? zone.sourceIds} />
       </Section>
-      {!restricted && zone.indicators.some((i) => i !== 'exerciseAdherence') && <IllustrativeThresholds />}
+      {!restricted && <IllustrativeThresholds />}
     </article>
   )
 }

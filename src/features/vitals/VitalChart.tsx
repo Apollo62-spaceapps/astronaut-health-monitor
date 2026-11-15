@@ -27,7 +27,18 @@ export function chartPoints(
     .map((r) => ({ day: Math.round(((Date.parse(r.takenAt) - start) / DAY_MS) * 10) / 10, value: r.value }))
 }
 
-export function VitalChart({ kind, points, baseline }: { kind: VitalKind; points: ChartPoint[]; baseline: Baseline }) {
+export function VitalChart({
+  kind,
+  points,
+  baseline,
+  xDomain,
+}: {
+  kind: VitalKind
+  points: ChartPoint[]
+  baseline: Baseline
+  /** [primeiro, último] dia de missão do eixo X; o último é o dia de hoje (BODY-08). */
+  xDomain?: [number, number]
+}) {
   const unit = VITAL_UNIT[kind]
   const values = [...points.map((p) => p.value), baseline.preflightMean, baseline.inflightMean]
   const pad = (Math.max(...values) - Math.min(...values)) * 0.15 || 1
@@ -45,7 +56,8 @@ export function VitalChart({ kind, points, baseline }: { kind: VitalKind; points
       <XAxis
         dataKey="day"
         type="number"
-        domain={['dataMin', 'dataMax']}
+        domain={xDomain ?? ['dataMin', 'dataMax']}
+        allowDataOverflow
         tickFormatter={(d: number) => `D${Math.round(d)}`}
         stroke="var(--color-muted)"
         fontSize={12}

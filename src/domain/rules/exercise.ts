@@ -1,6 +1,7 @@
 // Regras de exercício (SPEC §7, §6.4): R-EX-01 (adesão semanal) e R-EX-02 (abrigo → postponed).
 // O sistema NÃO prescreve nem altera o plano (EX-05). Funções PURAS.
-import type { ExerciseSession } from '@/domain/types'
+import { EXERCISE_ADHERENCE_ATTENTION_BELOW_PCT } from '@/domain/config/thresholds'
+import type { AlertLevel, ExerciseSession } from '@/domain/types'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
@@ -35,6 +36,18 @@ export function weeklyAdherence(sessions: readonly ExerciseSession[], todayIso: 
     days,
     ruleId: 'R-EX-01',
   }
+}
+
+/**
+ * Nível da adesão para a zona Legs (L5, P1): abaixo do limiar ilustrativo → attention; nunca urgent.
+ * null = sem prescrição na janela. PENDENTE P-01.
+ */
+export function adherenceLevel(
+  pct: number | null,
+  attentionBelow: number = EXERCISE_ADHERENCE_ATTENTION_BELOW_PCT,
+): AlertLevel | null {
+  if (pct === null) return null
+  return pct < attentionBelow ? 'attention' : 'normal'
 }
 
 /** Sequência de dias seguidos (até hoje) com todas as sessões `done` (EX-04, P1). Dia sem sessão quebra. */

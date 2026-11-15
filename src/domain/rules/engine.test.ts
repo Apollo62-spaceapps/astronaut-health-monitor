@@ -94,3 +94,19 @@ describe('engine · privacidade do bem-estar', () => {
     })
   })
 })
+
+describe('engine · L5 (P1)', () => {
+  it('Legs recebe o nível da adesão (86% → normal)', () => {
+    expect(runEngine(input()).body.legs).toBe('normal')
+  })
+
+  it('logo depois de trocar de gravidade, Heart attention vira adapting; urgent não', () => {
+    const now = missionDayToIso(DEMO_MISSION_DAY)
+    expect(runEngine(input({ gravityChangeIso: now })).body.heart).toBe('adapting')
+    const urgentHr = [
+      ...scen.vitals,
+      { ...scen.vitals.at(-1)!, kind: 'heartRate' as const, value: 120, unit: 'bpm' as const, takenAt: now },
+    ]
+    expect(runEngine(input({ gravityChangeIso: now, vitals: urgentHr })).body.heart).toBe('urgent')
+  })
+})

@@ -130,6 +130,13 @@ export function BodyMap({
 
   return (
     <svg viewBox="-60 0 560 470" className="h-auto w-full max-w-[560px]" role="group" aria-label="Body status map">
+      {/* BODY-05: Urgent pulsa a 1,25 Hz (abaixo de ~1,5 Hz e do limite de 3/s da WCAG 2.3.1); Attention estático;
+          nada se mexe com prefers-reduced-motion. */}
+      <style>{`
+        @keyframes zone-pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.45 } }
+        .zone-pulse > :first-child { animation: zone-pulse 0.8s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) { .zone-pulse > :first-child { animation: none; } }
+      `}</style>
       <defs>
         {statuses.map((s) => (
           <pattern
@@ -219,7 +226,7 @@ export function BodyMap({
             strokeWidth="2.5"
             className={shapeClass(selected === 'legs')}
           />
-          <Label x={276} y={340} status={status.legs} text={labels.legs} />
+          <Label x={312} y={340} status={status.legs} text={labels.legs} />
         </Zone>
       ) : (
         <g aria-hidden style={{ color: NO_DATA }}>
