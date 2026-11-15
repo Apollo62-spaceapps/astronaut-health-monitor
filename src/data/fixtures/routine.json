@@ -1,0 +1,148 @@
+[
+  {
+    "id": "r-hr",
+    "title": "Measure resting heart rate",
+    "kind": "measure",
+    "vital": "heartRate",
+    "time": "07:30",
+    "environments": [
+      "EARTH",
+      "ISS",
+      "LUNAR",
+      "SPACECRAFT"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  },
+  {
+    "id": "r-bp",
+    "title": "Measure blood pressure",
+    "kind": "measure",
+    "vital": "systolicBP",
+    "time": "07:35",
+    "environments": [
+      "EARTH",
+      "ISS",
+      "LUNAR",
+      "SPACECRAFT"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  },
+  {
+    "id": "r-glu",
+    "title": "Measure blood glucose",
+    "kind": "measure",
+    "vital": "glucose",
+    "time": "07:40",
+    "environments": [
+      "EARTH",
+      "ISS",
+      "LUNAR",
+      "SPACECRAFT"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  },
+  {
+    "id": "r-temp",
+    "title": "Measure body temperature",
+    "kind": "measure",
+    "vital": "bodyTemp",
+    "time": "07:45",
+    "environments": [
+      "EARTH",
+      "ISS",
+      "LUNAR",
+      "SPACECRAFT"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  },
+  {
+    "id": "r-ex-iss",
+    "title": "Exercise session (ARED · T2 · CEVIS)",
+    "kind": "exercise",
+    "time": "10:00",
+    "environments": [
+      "ISS"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  },
+  {
+    "id": "r-ex-hab",
+    "title": "Exercise session (habitat equipment, simulated)",
+    "kind": "exercise",
+    "time": "10:00",
+    "environments": [
+      "LUNAR",
+      "SPACECRAFT"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  },
+  {
+    "id": "r-ex-earth",
+    "title": "Ground training session",
+    "kind": "exercise",
+    "time": "10:00",
+    "environments": [
+      "EARTH"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  },
+  {
+    "id": "r-maint",
+    "title": "Spacecraft maintenance (docked at the station)",
+    "kind": "maintenance",
+    "time": "14:00",
+    "environments": [
+      "ISS"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  },
+  {
+    "id": "r-wb",
+    "title": "Wellbeing check-in (private)",
+    "kind": "checkin",
+    "time": "21:00",
+    "environments": [
+      "EARTH",
+      "ISS",
+      "LUNAR",
+      "SPACECRAFT"
+    ],
+    "status": "due",
+    "provenance": {
+      "kind": "simulated",
+      "note": "Illustrative mission routine"
+    }
+  }
+]

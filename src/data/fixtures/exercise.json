@@ -1,0 +1,722 @@
+[
+  {
+    "date": "2026-10-16",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-16",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-16",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-17",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-17",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 24,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-17",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-18",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-18",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-18",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-19",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-19",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-19",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 21,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-20",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 27,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-20",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-20",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-21",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-21",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 24,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-21",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-22",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-22",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-22",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-23",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-23",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-23",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-24",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-24",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-24",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-25",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-25",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-25",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-26",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-26",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-26",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-27",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 27,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-27",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-27",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-28",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 27,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-28",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-28",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 21,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-29",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-29",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-29",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-30",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-30",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-30",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-31",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-31",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-10-31",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-01",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-01",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-01",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-02",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-02",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-02",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-03",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-03",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-03",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-04",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-04",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-04",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 21,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-05",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 27,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-05",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 24,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-05",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 21,
+    "status": "partial",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-06",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-06",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-06",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-07",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-07",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-07",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-08",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 0,
+    "status": "skipped",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-08",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 0,
+    "status": "skipped",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-08",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 0,
+    "status": "skipped",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-09",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-09",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-09",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-10",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-10",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-10",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-11",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-11",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-11",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-12",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-12",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-12",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-13",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-13",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-13",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-14",
+    "device": "ARED",
+    "prescribedMin": 45,
+    "doneMin": 45,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-14",
+    "device": "T2",
+    "prescribedMin": 40,
+    "doneMin": 40,
+    "status": "done",
+    "selfReported": true
+  },
+  {
+    "date": "2026-11-14",
+    "device": "CEVIS",
+    "prescribedMin": 35,
+    "doneMin": 35,
+    "status": "done",
+    "selfReported": true
+  }
+]
