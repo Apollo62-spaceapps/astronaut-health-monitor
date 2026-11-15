@@ -81,6 +81,7 @@ export interface AppState extends ScenarioData {
   setPacketStatus: (id: string, status: OutboundPacket['status']) => void
   setTimeAcceleration: (factor: number) => void
   advanceDay: (days?: number) => void
+  advanceDemoMinutes: (minutes: number) => void
   replaySolarEvent: () => void
   endShelter: () => void
   loadScenario: (data: Partial<ScenarioData>) => void
@@ -91,7 +92,11 @@ export interface AppState extends ScenarioData {
 const scenario = (): ScenarioData => demoScenario()
 
 const initialRuntime = () => ({
-  ...scenario(),
+  ...(() => {
+    const data = scenario()
+    const simNowIso = missionDayToIso(DEMO_MISSION_DAY)
+    return { ...data, routine: updateRoutineForClock(data.routine, simNowIso, false) }
+  })(),
   missionDay: DEMO_MISSION_DAY,
   simNowIso: missionDayToIso(DEMO_MISSION_DAY),
   timeAcceleration: 1,
@@ -167,11 +172,21 @@ export const useAppStore = create<AppState>()(
       advanceDay: (days = 1) =>
         set((s) => {
           const missionDay = s.missionDay + days
-          return { missionDay, simNowIso: missionDayToIso(missionDay) }
+          const simNowIso = missionDayToIso(missionDay)
+          return { missionDay, simNowIso, routine: updateRoutineForClock(s.routine, simNowIso, s.shelterActive) }
         }),
 
-      replaySolarEvent: () => set({ eventReplayed: true, shelterActive: true }),
-      endShelter: () => set({ shelterActive: false }),
+      advanceDemoMinutes: (minutes) =>
+        set((s) => {
+          const simNowIso = new Date(Date.parse(s.simNowIso) + Math.max(0, minutes) * 60_000).toISOString()
+          const dayChanged = simNowIso.slice(0, 10) !== s.simNowIso.slice(0, 10)
+          const routine = dayChanged ? s.routine.map((item) => ({ ...item, status: 'due' as const })) : s.routine
+          const missionDay = Math.floor((Date.parse(simNowIso) - Date.parse(MISSION_START_ISO)) / DAY_MS)
+          return { simNowIso, missionDay, routine: updateRoutineForClock(routine, simNowIso, s.shelterActive) }
+        }),
+
+      replaySolarEvent: () => set((s) => ({ eventReplayed: true, shelterActive: true, routine: s.routine.map((item) => item.status === 'done' ? item : { ...item, status: 'postponed' }) })),
+      endShelter: () => set((s) => ({ shelterActive: false, routine: updateRoutineForClock(s.routine.map((item) => item.status === 'postponed' ? { ...item, status: 'due' } : item), s.simNowIso, false) })),
 
       loadScenario: (data) => set(data),
       resetScenario: () => set(initialRuntime()),
@@ -186,3 +201,14 @@ export const useAppStore = create<AppState>()(
     },
   ),
 )
+
+function updateRoutineForClock(routine: RoutineItem[], nowIso: string, shelterActive: boolean): RoutineItem[] {
+  if (shelterActive) return routine.map((item) => item.status === 'done' ? item : { ...item, status: 'postponed' })
+  const now = new Date(nowIso)
+  const minutesNow = now.getUTCHours() * 60 + now.getUTCMinutes()
+  return routine.map((item) => {
+    if (item.status === 'done' || item.status === 'postponed') return item
+    const [hours, minutes] = item.time.split(':').map(Number)
+    return { ...item, status: minutesNow > hours * 60 + minutes ? 'overdue' : 'due' }
+  })
+}
