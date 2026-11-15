@@ -22,6 +22,8 @@ export function OrbitConversation({ compact = false, inputId }: { compact?: bool
   const chips = suggestions(ctx)
   const lastOrbit = [...messages].reverse().find((m) => m.role === 'orbit' && m.reply)
   const lastReplyId = lastOrbit?.id
+  // Só as respostas que chegam com a conversa aberta são escritas aos poucos; as antigas aparecem prontas.
+  const [mountedWith] = useState(messages.length)
 
   useEffect(() => {
     listRef.current?.lastElementChild?.scrollIntoView?.({ block: 'nearest' })
@@ -79,6 +81,7 @@ export function OrbitConversation({ compact = false, inputId }: { compact?: bool
                       // Na gaveta, nenhuma primária: a tela atrás já tem a sua (um primário por tela).
                       latest={!compact && m.id === lastReplyId}
                       at={m.at}
+                      stream={messages.indexOf(m) >= mountedWith}
                     />
                   )}
                   {m.triage && <TriageFlow messageId={m.id} state={m.triage} />}

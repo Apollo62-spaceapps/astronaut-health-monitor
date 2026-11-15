@@ -30,6 +30,8 @@ interface OrbitUiState {
   measure: VitalKind | null
   /** Prévia do pacote aberta; `report` = relato da triagem anexado. */
   packet: { report?: string } | null
+  /** Relatório completo para os flight surgeons (L7b, pitch passo 4). */
+  reportOpen: boolean
   openDrawer: () => void
   closeDrawer: () => void
   /** Pergunta ao Orbit (das telas, dos chips ou do campo). `openDrawer` abre a gaveta junto. */
@@ -40,6 +42,7 @@ interface OrbitUiState {
   takePending: () => OrbitQuestion | null
   setMeasure: (vital: VitalKind | null) => void
   setPacket: (packet: { report?: string } | null) => void
+  setReportOpen: (open: boolean) => void
   clear: () => void
 }
 
@@ -54,6 +57,7 @@ export const useOrbitStore = create<OrbitUiState>()((set, get) => ({
   pending: null,
   measure: null,
   packet: null,
+  reportOpen: false,
   openDrawer: () => set({ open: true, activated: true }),
   closeDrawer: () => set({ open: false }),
   ask: (q, opts) => set({ pending: q, activated: true, ...(opts?.openDrawer ? { open: true } : {}) }),
@@ -71,5 +75,6 @@ export const useOrbitStore = create<OrbitUiState>()((set, get) => ({
   },
   setMeasure: (measure) => set({ measure, activated: true }),
   setPacket: (packet) => set({ packet, activated: true }),
+  setReportOpen: (reportOpen) => set({ reportOpen, activated: true }),
   clear: () => set({ messages: [], pending: null }),
 }))

@@ -13,6 +13,7 @@ export const INTENTS = [
   'routine',
   'triage',
   'prepareReport',
+  'groundReport',
   'privacy',
   'riskOutlook',
   'reference',
@@ -53,6 +54,7 @@ export type ReplyAction =
   | { kind: 'openChecklist' }
   | { kind: 'goto'; tab: TabId; label: string }
   | { kind: 'startTriage' }
+  | { kind: 'openReport' }
 
 export interface StructuredReply {
   id: string
@@ -71,6 +73,14 @@ export interface StructuredReply {
   note?: string
   /** Relato da triagem, anexado ao pacote quando a pessoa usa Notify CMO. */
   report?: string
+  /** L7b — texto corrido com citações inline ([Sxx]); é o que a pessoa lê primeiro. */
+  prose?: string[]
+  /** Passos guiados em linguagem simples. */
+  steps?: { text: string; sourceIds?: SourceId[] }[]
+  /** Passagens da base local (Edge RAG) usadas na resposta. */
+  consulted?: { id: string; title: string; sourceIds: SourceId[] }[]
+  /** Próximas perguntas sugeridas. */
+  followUps?: string[]
   engine: 'protocol' | 'onboard-model'
 }
 
@@ -95,7 +105,9 @@ export const structuredReplySchema = z.object({
     }),
   ),
   actions: z.array(
-    z.object({ kind: z.enum(['remeasure', 'notifyCmo', 'openChecklist', 'goto', 'startTriage']) }).passthrough(),
+    z
+      .object({ kind: z.enum(['remeasure', 'notifyCmo', 'openChecklist', 'goto', 'startTriage', 'openReport']) })
+      .passthrough(),
   ),
   why: z.object({ text: z.string(), hazard: z.string().optional(), sourceIds: z.array(sourceId) }).optional(),
   escalate: z

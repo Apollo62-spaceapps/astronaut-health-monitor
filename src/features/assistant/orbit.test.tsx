@@ -7,7 +7,7 @@ import { useAppStore } from '@/state/store'
 import { OrbitMark } from '@/features/assistant/OrbitMark'
 import { ReplyCard } from '@/features/assistant/ReplyCard'
 import { useOrbitStore } from '@/features/assistant/orbitStore'
-import { buildReply } from '@/ai/reply'
+import { orbitProtocolAnswer } from '@/ai/engine'
 import { testContext } from '@/ai/orbitTestUtils'
 
 beforeEach(() => {
@@ -67,18 +67,25 @@ describe('OrbitMark', () => {
 
 describe('ReplyCard', () => {
   const ctx = testContext()
-  it('renderiza Data, Why it matters, Safe actions e Escalation, com uma só ação primária', () => {
-    const reply = buildReply('zoneExplain', ctx, { zone: 'heart' })
+  it('lê como texto corrido com fontes; passos, ações e "Data and details", com uma só ação primária', () => {
+    const reply = orbitProtocolAnswer(ctx, {
+      text: 'Why is my heart zone attention?',
+      intent: 'zoneExplain',
+      zone: 'heart',
+    })
     const { container } = render(
       <ReplyCard reply={reply} role="ASTRONAUT" shelterActive={false} latest at={ctx.simNowIso} />,
     )
-    for (const t of ['Data', 'Why it matters', 'Safe actions', 'Escalation']) expect(screen.getByText(t)).toBeTruthy()
+    expect(screen.getByText(/Heart shows Attention because your resting heart rate is 84 bpm/)).toBeTruthy()
+    for (const t of ['Step by step', 'Data and details', 'Notify the CMO']) expect(screen.getByText(t)).toBeTruthy()
+    expect(screen.getAllByRole('link', { name: 'Source S19' }).length).toBeGreaterThan(0)
+    expect(screen.getByText(/Consulted onboard/)).toBeTruthy()
     expect(container.querySelectorAll('[data-variant="default"]')).toHaveLength(1)
     expect(screen.getByText('Rule-based response · Protocol mode')).toBeTruthy()
     expect(screen.getAllByText('SIMULATED').length).toBeGreaterThan(0)
   })
   it('cartão antigo (não o mais recente) não tem primária', () => {
-    const reply = buildReply('whatNow', ctx)
+    const reply = orbitProtocolAnswer(ctx, { text: 'What should I do now?' })
     const { container } = render(
       <ReplyCard reply={reply} role="ASTRONAUT" shelterActive={false} latest={false} at={ctx.simNowIso} />,
     )
@@ -121,9 +128,10 @@ describe('gaveta global e página', () => {
     expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe('Orbit')
     fireEvent.change(screen.getByLabelText('Message Orbit'), { target: { value: 'Prepare a message for the CMO' } })
     fireEvent.click(screen.getByRole('button', { name: 'Send' }))
-    const card = await screen.findByRole('article', { name: /Here is a draft for the CMO/ })
+    const card = await screen.findByRole('article', { name: /I drafted a message for the CMO/ })
     expect(useAppStore.getState().outbox).toHaveLength(0)
-    fireEvent.click(within(card).getByRole('button', { name: /Notify CMO/ }))
+    // As ações aparecem quando o texto termina de ser escrito.
+    fireEvent.click(await within(card).findByRole('button', { name: /Notify CMO/ }))
     fireEvent.click(await screen.findByRole('button', { name: 'Queue for CMO' }))
     await waitFor(() => expect(useAppStore.getState().outbox).toHaveLength(1))
     expect(useAppStore.getState().outbox[0]!.summary).toMatch(/Drafted by Orbit, confirmed by you/)

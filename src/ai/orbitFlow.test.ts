@@ -118,7 +118,14 @@ describe('llm.ts — o modelo só reescreve o resumo', () => {
     )
     const viaProtocol = await orbitAnswer(ctx, q, 'protocol')
     expect(viaLlm.engine).toBe('onboard-model')
-    expect({ ...viaLlm, summary: '', engine: '' }).toEqual({ ...viaProtocol, summary: '', engine: '' })
+    // O modelo só troca o texto de abertura; fatos, ações, passos e escalonamento são os mesmos.
+    expect({ ...viaLlm, summary: '', prose: [], engine: '' }).toEqual({
+      ...viaProtocol,
+      summary: '',
+      prose: [],
+      engine: '',
+    })
+    expect(viaLlm.prose?.slice(1)).toEqual(viaProtocol.prose?.slice(1))
     expect(JSON.stringify(runEngine(input))).toBe(before)
   })
 })

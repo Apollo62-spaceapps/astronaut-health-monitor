@@ -6,7 +6,8 @@ import type { AiMode, AssistantContext, AssistantEngine, ChatMessage } from '@/d
 import { ProtocolEngine } from '@/ai/protocol'
 import { OnboardModelEngine } from '@/ai/onboard'
 import type { OrbitContext } from '@/ai/context'
-import { classify } from '@/ai/intent'
+import { classify, isFollowUp } from '@/ai/intent'
+import { followUpAnswer, narrate } from '@/ai/narrate'
 import { FORBIDDEN } from '@/ai/llm'
 import { rewriteSummary } from '@/ai/llm'
 import { buildReply } from '@/ai/reply'
@@ -64,13 +65,34 @@ export interface OrbitQuestion {
   intent?: Intent
   zone?: ZoneTarget
   crewId?: string
+  /** Resposta anterior do Orbit: "why?" / "tell me more" aprofundam o mesmo assunto. */
+  previous?: StructuredReply
 }
 
 /** Resposta determinística (protocolo). Mesma pergunta + mesmo contexto ⇒ mesma resposta. */
 export function orbitProtocolAnswer(ctx: OrbitContext, q: OrbitQuestion): StructuredReply {
+  // Seguimento ("why?", "tell me more"): aprofunda a resposta anterior com a base local, sem repetir as ações.
+  if (q.previous && !q.intent && isFollowUp(q.text)) {
+    const n = followUpAnswer(q.previous, ctx)
+    return {
+      id: `followUp:${q.previous.id}`,
+      intent: q.previous.intent,
+      summary: n.prose[0]!,
+      prose: n.prose,
+      consulted: n.consulted,
+      followUps: n.followUps,
+      facts: [],
+      actions: [],
+      engine: 'protocol',
+    }
+  }
   const c = classify(q.text)
   const intent = q.intent ?? c.intent
-  return buildReply(intent, ctx, { zone: q.zone ?? c.zone, crewId: q.crewId ?? c.crewId, text: q.text })
+  const opts = { zone: q.zone ?? c.zone, crewId: q.crewId ?? c.crewId, text: q.text }
+  const reply = buildReply(intent, ctx, opts)
+  // Voz (L7b): texto corrido com citações, passos guiados e o que foi consultado na base local.
+  const n = narrate(reply, ctx, opts)
+  return { ...reply, prose: n.prose, steps: n.steps, consulted: n.consulted, followUps: n.followUps }
 }
 
 /**

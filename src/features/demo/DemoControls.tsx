@@ -1,7 +1,7 @@
 // Demo controls (DEMO-01, DEMO-02): botão fixo "Demo" no canto inferior direito, em todas as telas,
 // visualmente separado do produto (borda tracejada, rótulo "Demo"). Tudo o que ele dispara leva "demo" na UI.
 import { useState } from 'react'
-import { FlaskConical, RotateCcw, Sparkles, Sun, Timer, X } from 'lucide-react'
+import { Activity, FlaskConical, RotateCcw, Sparkles, Sun, Timer, X } from 'lucide-react'
 import { useOrbitStore } from '@/features/assistant/orbitStore'
 import { useAppStore } from '@/state/store'
 import { Button } from '@/components/ui/button'
@@ -26,7 +26,9 @@ export function DemoControls() {
         >
           <div className="flex items-start justify-between gap-2">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Demo · not part of the product</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                Demo · not part of the product
+              </p>
               <h2 id="demo-controls-title" className="text-lg">
                 Demo controls
               </h2>
@@ -52,6 +54,31 @@ export function DemoControls() {
             </div>
           </div>
 
+          {/* L7b (pitch, passo 3): simula uma alteração nos indicadores para mostrar o autoatendimento guiado. */}
+          <div className="space-y-1">
+            <p className="text-sm font-semibold">Simulate a change</p>
+            <p className="text-xs text-muted">Adds a resting heart rate reading 30% above the pre-flight exam, now.</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const s = useAppStore.getState()
+                const pre = s.preflight.filter((r) => r.kind === 'heartRate')
+                const mean = pre.reduce((a, r) => a + r.value, 0) / Math.max(1, pre.length)
+                s.addReading({
+                  kind: 'heartRate',
+                  value: Math.round(mean * 1.3),
+                  unit: 'bpm',
+                  takenAt: s.simNowIso,
+                  provenance: { kind: 'simulated', note: 'Demo: simulated abnormal reading' },
+                })
+                setOpen(false)
+              }}
+            >
+              <Activity aria-hidden />
+              Simulate abnormal heart rate · demo
+            </Button>
+          </div>
 
           {/* L7 §9.6: roteiro do Orbit (§11) como atalho. Cada botão faz a pergunta e abre a gaveta. */}
           <div className="space-y-1">
@@ -59,11 +86,15 @@ export function DemoControls() {
             <div className="flex flex-wrap gap-2">
               {(
                 [
-                  { label: 'Heart zone', q: { text: 'Why is my heart zone attention?', intent: 'zoneExplain', zone: 'heart' } },
+                  {
+                    label: 'Heart zone',
+                    q: { text: 'Why is my heart zone attention?', intent: 'zoneExplain', zone: 'heart' },
+                  },
                   { label: 'Solar event', q: { text: 'What do I do about the solar event?', intent: 'solarEvent' } },
                   { label: 'I feel dizzy', q: { text: 'I feel dizzy' } },
                   { label: 'Crew outlook', q: { text: 'Who is at higher risk?', intent: 'riskOutlook' } },
                   { label: 'Drift', q: { text: 'Am I drifting from my baseline?', intent: 'drift' } },
+                  { label: 'Ground report', q: { text: 'Prepare the ground report', intent: 'groundReport' } },
                 ] as const
               ).map(({ label, q }) => (
                 <Button

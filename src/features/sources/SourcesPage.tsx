@@ -123,12 +123,17 @@ export function SourcesPage() {
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted">
           <p>
-            Orbit reads the data the rule engine already checked and explains it. Every answer is built from rules; the
-            optional onboard model only rewrites the wording, and never changes a status, an alert or the escalation.
-            Idea inspired by NASA research on Earth-independent medical operations <SourceRef ids={['S12']} />; related
-            context <SourceRef ids={['S15']} />. Not endorsed by or used by NASA.
+            Orbit has three layers, all onboard and offline. A deterministic rule engine decides every color, alert and
+            escalation. Orbit answers from a local library of short passages drawn from the NASA
+            sources below (a small retrieval index, “edge RAG”) and cites them in the text. An optional on-device model
+            only rewrites the wording and is checked against the same facts. The crew stays in the loop for every
+            action, and reports go to the flight surgeons for asynchronous review. Inspired by NASA research on
+            Earth-independent medical operations <SourceRef ids={['S12']} />; related context{' '}
+            <SourceRef ids={['S15']} />. Not endorsed by or used by NASA.
           </p>
-          <p>{SSM_CAVEAT} <SourceRef ids={['S28']} /></p>
+          <p>
+            {SSM_CAVEAT} <SourceRef ids={['S28']} />
+          </p>
         </CardContent>
       </Card>
 
@@ -138,8 +143,8 @@ export function SourcesPage() {
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted">
           <p>
-            Environment backgrounds: decorative only; no data. Drawn in-house on a 2D canvas, inspired by OriginKit visual
-            references. No OriginKit code or assets are used.
+            Environment backgrounds: decorative only; no data. Drawn in-house on a 2D canvas, inspired by OriginKit
+            visual references. No OriginKit code or assets are used.
           </p>
         </CardContent>
       </Card>

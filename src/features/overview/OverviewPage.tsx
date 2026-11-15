@@ -18,7 +18,14 @@ import { useEngine } from '@/state/useEngine'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { MetricCard } from '@/components/MetricCard'
 import { StatusBadge } from '@/components/StatusBadge'
 import { DayLabel } from '@/components/DayLabel'
@@ -29,7 +36,7 @@ import { BodyMap, type MapTarget } from '@/features/overview/BodyMap'
 import { ZoneCard } from '@/features/overview/ZoneCard'
 import { shownLevel, zoneOfVital } from '@/features/overview/phaseDisplay'
 import { useOrbitStore } from '@/features/assistant/orbitStore'
-import { Sparkles } from 'lucide-react'
+import { FileText, Sparkles } from 'lucide-react'
 import type { Alert } from '@/domain/types'
 import { VITAL_LABEL, formatDuration, formatMSv, formatVitalValue } from '@/lib/format'
 
@@ -47,9 +54,21 @@ const ENV_PLACE: Record<MissionMode, string> = {
 }
 
 const ROLE_TEXT: Record<string, string> = { CMO: 'CMO', FLIGHT_SURGEON: 'flight surgeon', ASTRONAUT: 'astronaut' }
-const dailyCheckInSchema = z.object({ mood: z.coerce.number().int().min(1).max(5), sleepHours: z.coerce.number().min(0).max(24), heartRate: z.coerce.number(), systolicBP: z.coerce.number(), diastolicBP: z.coerce.number(), glucose: z.coerce.number(), bodyTemp: z.coerce.number() }).superRefine((v, ctx) => {
-  for (const kind of ['heartRate','systolicBP','diastolicBP','glucose','bodyTemp'] as const) if (v[kind] < INPUT_PLAUSIBILITY[kind].min || v[kind] > INPUT_PLAUSIBILITY[kind].max) ctx.addIssue({ code: 'custom', message: `${kind}: enter a plausible value.`, path: [kind] })
-})
+const dailyCheckInSchema = z
+  .object({
+    mood: z.coerce.number().int().min(1).max(5),
+    sleepHours: z.coerce.number().min(0).max(24),
+    heartRate: z.coerce.number(),
+    systolicBP: z.coerce.number(),
+    diastolicBP: z.coerce.number(),
+    glucose: z.coerce.number(),
+    bodyTemp: z.coerce.number(),
+  })
+  .superRefine((v, ctx) => {
+    for (const kind of ['heartRate', 'systolicBP', 'diastolicBP', 'glucose', 'bodyTemp'] as const)
+      if (v[kind] < INPUT_PLAUSIBILITY[kind].min || v[kind] > INPUT_PLAUSIBILITY[kind].max)
+        ctx.addIssue({ code: 'custom', message: `${kind}: enter a plausible value.`, path: [kind] })
+  })
 
 /** Desvio em palavras para o aria-label (BODY-04): "resting heart rate +18% vs baseline". */
 const devText = (ev: VitalEvaluation) =>
@@ -138,18 +157,40 @@ export function OverviewPage() {
   const [checkInOpen, setCheckInOpen] = useState(false)
   const [mood, setMood] = useState('3')
   const [sleepHours, setSleepHours] = useState('')
-  const [measurementValues, setMeasurementValues] = useState<Record<string,string>>({ heartRate:'', systolicBP:'', diastolicBP:'', glucose:'', bodyTemp:'' })
+  const [measurementValues, setMeasurementValues] = useState<Record<string, string>>({
+    heartRate: '',
+    systolicBP: '',
+    diastolicBP: '',
+    glucose: '',
+    bodyTemp: '',
+  })
   const dateKey = simNowIso.slice(0, 10)
   const checkIn = wellbeing.find((x) => x.date === dateKey && (x.environment ?? 'EARTH') === environment)
   function saveCheckIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const result = dailyCheckInSchema.safeParse({ mood, sleepHours, ...measurementValues })
     if (!result.success) return
-    loadScenario({ wellbeing: [...wellbeing.filter((x) => x.date !== dateKey || (x.environment ?? 'EARTH') !== environment), { date: dateKey, environment, mood: result.data.mood as 1|2|3|4|5, sleepHours: result.data.sleepHours }] })
+    loadScenario({
+      wellbeing: [
+        ...wellbeing.filter((x) => x.date !== dateKey || (x.environment ?? 'EARTH') !== environment),
+        { date: dateKey, environment, mood: result.data.mood as 1 | 2 | 3 | 4 | 5, sleepHours: result.data.sleepHours },
+      ],
+    })
     const metrics = [
-      ['heartRate', result.data.heartRate, 'bpm'], ['systolicBP', result.data.systolicBP, 'mmHg'], ['diastolicBP', result.data.diastolicBP, 'mmHg'], ['glucose', result.data.glucose, 'mg/dL'], ['bodyTemp', result.data.bodyTemp, '°C'],
+      ['heartRate', result.data.heartRate, 'bpm'],
+      ['systolicBP', result.data.systolicBP, 'mmHg'],
+      ['diastolicBP', result.data.diastolicBP, 'mmHg'],
+      ['glucose', result.data.glucose, 'mg/dL'],
+      ['bodyTemp', result.data.bodyTemp, '°C'],
     ] as const
-    for (const [kind, value, unit] of metrics) addReading({ kind, value, unit, takenAt: simNowIso, provenance: { kind: 'simulated', note: 'Daily astronaut self-report' } })
+    for (const [kind, value, unit] of metrics)
+      addReading({
+        kind,
+        value,
+        unit,
+        takenAt: simNowIso,
+        provenance: { kind: 'simulated', note: 'Daily astronaut self-report' },
+      })
     setCheckInOpen(false)
   }
 
@@ -208,7 +249,9 @@ export function OverviewPage() {
           </h1>
           <p className="text-lg">{headline(out, groundSec, environment === 'EARTH', astronaut)}</p>
           {!astronaut && (
-            <p className="text-sm text-muted">Viewing as {ROLE_TEXT[role]}. Measurements are logged by the astronaut.</p>
+            <p className="text-sm text-muted">
+              Viewing as {ROLE_TEXT[role]}. Measurements are logged by the astronaut.
+            </p>
           )}
           <div className="flex flex-wrap items-center gap-3">
             {shelterAlertActive && (
@@ -219,18 +262,37 @@ export function OverviewPage() {
               </Button>
             )}
             {astronaut && (
-              <Button variant={logIsPrimary ? 'default' : 'outline'} onClick={() => setLogOpen(true)} disabled={!logItem}>
+              <Button
+                variant={logIsPrimary ? 'default' : 'outline'}
+                onClick={() => setLogOpen(true)}
+                disabled={!logItem}
+              >
                 Log measurement
               </Button>
             )}
-            <Button variant="outline" onClick={() => { setMood(String(checkIn?.mood ?? 3)); setSleepHours(checkIn ? String(checkIn.sleepHours) : ''); setCheckInOpen(true) }}>{checkIn ? 'Update daily check-in' : 'Daily health check-in'}</Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setMood(String(checkIn?.mood ?? 3))
+                setSleepHours(checkIn ? String(checkIn.sleepHours) : '')
+                setCheckInOpen(true)
+              }}
+            >
+              {checkIn ? 'Update daily check-in' : 'Daily health check-in'}
+            </Button>
             <Button
               variant="outline"
               onClick={() => advanceDay(1)}
               title="Demo control: moves the simulated mission clock forward one day (BODY-08)"
             >
               Advance day{' '}
-              <span className="ml-1 rounded border border-white/30 px-1 text-[11px] uppercase tracking-wider">Demo</span>
+              <span className="ml-1 rounded border border-white/30 px-1 text-[11px] uppercase tracking-wider">
+                Demo
+              </span>
+            </Button>
+            {/* L7b (pitch, passo 4): relatório completo para os flight surgeons, montado pelo Orbit. */}
+            <Button variant="outline" onClick={() => useOrbitStore.getState().setReportOpen(true)}>
+              <FileText aria-hidden /> Ground report
             </Button>
             <IllustrativeThresholds />
           </div>
@@ -258,11 +320,17 @@ export function OverviewPage() {
                       ? `Escalation: ${a.escalateTo.map((r) => (r === 'FLIGHT_SURGEON' ? 'flight surgeon' : r)).join(', ')} · ${out.escalation.replyText}`
                       : 'No escalation.'}{' '}
                     {out.vitals.some(
-                      (v) => a.id.startsWith(`R-VIT-02:${v.kind}`) && shownLevel(v.kind, v.level, out.body) === 'adapting',
+                      (v) =>
+                        a.id.startsWith(`R-VIT-02:${v.kind}`) && shownLevel(v.kind, v.level, out.body) === 'adapting',
                     ) && <>Shown as Adapting on the body map during the adaptation window. </>}
                     <span className="num text-xs">Rule {a.ruleId}</span>
                   </p>
-                  <Button variant="ghost" size="sm" className="mt-1 -ml-2 h-7 text-link" onClick={() => askAboutAlert(a, out)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="mt-1 -ml-2 h-7 text-link"
+                    onClick={() => askAboutAlert(a, out)}
+                  >
                     <Sparkles aria-hidden /> Ask Orbit
                   </Button>
                 </li>
@@ -300,68 +368,69 @@ export function OverviewPage() {
             aria-label="Key indicators"
             className="mt-2 grid w-full gap-3 sm:grid-cols-2 [&>section]:bg-surface-2"
           >
-        {hr ? (
-          <MetricCard label="Heart rate · rest" unit="bpm" {...hr} />
-        ) : (
-          <MetricCard label="Heart rate · rest" value="—" caption="No data" provenance={{ kind: 'simulated' }} />
-        )}
-        {sys && dia && bpShown && bpTop ? (
-          <MetricCard
-            label="Blood pressure"
-            value={`${formatVitalValue('systolicBP', sys.latest.value)}/${formatVitalValue('diastolicBP', dia.latest.value)}`}
-            unit="mmHg"
-            status={bpShown}
-            statusDetail={formatDeviation(bpTop.deviationPct)}
-            provenance={sys.latest.provenance}
-          />
-        ) : (
-          <MetricCard label="Blood pressure" value="—" caption="No data" provenance={{ kind: 'simulated' }} />
-        )}
-        {dose.pctOfLimit === null ? (
-          <MetricCard
-            label="Career dose"
-            value={`${formatMSv(dose.priorMSv)}`}
-            unit="mSv prior"
-            caption={
-              <>
-                {environment === 'EARTH' ? 'Not added on Earth' : `Not added ${ENV_PLACE[environment]} (rate not sourced)`}{' '}
-                · limit <span className="num">{dose.limitMSv}</span> mSv{' '}
-                <SourceRef ids={['S03']} />
-              </>
-            }
-            provenance={{ kind: 'simulated', note: 'Fictional prior career dose' }}
-          />
-        ) : (
-          <MetricCard
-            label="Career dose"
-            value={`${Math.round(dose.pctOfLimit)}%`}
-            caption={
-              <>
-                <span className="num">{formatMSv(dose.totalMSv!)}</span> of <span className="num">{dose.limitMSv}</span>{' '}
-                mSv <SourceRef ids={['S03']} />
-              </>
-            }
-            provenance={dose.provenance ?? { kind: 'simulated' }}
-          >
-            <div className="h-2 w-full overflow-hidden rounded-sm bg-surface-2" role="presentation">
-              <div
-                className="h-full rounded-sm bg-foreground"
-                style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }}
+            {hr ? (
+              <MetricCard label="Heart rate · rest" unit="bpm" {...hr} />
+            ) : (
+              <MetricCard label="Heart rate · rest" value="—" caption="No data" provenance={{ kind: 'simulated' }} />
+            )}
+            {sys && dia && bpShown && bpTop ? (
+              <MetricCard
+                label="Blood pressure"
+                value={`${formatVitalValue('systolicBP', sys.latest.value)}/${formatVitalValue('diastolicBP', dia.latest.value)}`}
+                unit="mmHg"
+                status={bpShown}
+                statusDetail={formatDeviation(bpTop.deviationPct)}
+                provenance={sys.latest.provenance}
               />
-            </div>
-          </MetricCard>
-        )}
-        <MetricCard
-          label="Exercise adherence"
-          value={adh.pct === null ? '—' : `${Math.round(adh.pct)}%`}
-          caption={
-            <>
-              <span className="num">{out.exercise.streakDays}</span>-day streak · last{' '}
-              <span className="num">{adh.days}</span> days
-            </>
-          }
-          provenance={{ kind: 'simulated', note: 'Self-reported sessions' }}
-        />
+            ) : (
+              <MetricCard label="Blood pressure" value="—" caption="No data" provenance={{ kind: 'simulated' }} />
+            )}
+            {dose.pctOfLimit === null ? (
+              <MetricCard
+                label="Career dose"
+                value={`${formatMSv(dose.priorMSv)}`}
+                unit="mSv prior"
+                caption={
+                  <>
+                    {environment === 'EARTH'
+                      ? 'Not added on Earth'
+                      : `Not added ${ENV_PLACE[environment]} (rate not sourced)`}{' '}
+                    · limit <span className="num">{dose.limitMSv}</span> mSv <SourceRef ids={['S03']} />
+                  </>
+                }
+                provenance={{ kind: 'simulated', note: 'Fictional prior career dose' }}
+              />
+            ) : (
+              <MetricCard
+                label="Career dose"
+                value={`${Math.round(dose.pctOfLimit)}%`}
+                caption={
+                  <>
+                    <span className="num">{formatMSv(dose.totalMSv!)}</span> of{' '}
+                    <span className="num">{dose.limitMSv}</span> mSv <SourceRef ids={['S03']} />
+                  </>
+                }
+                provenance={dose.provenance ?? { kind: 'simulated' }}
+              >
+                <div className="h-2 w-full overflow-hidden rounded-sm bg-surface-2" role="presentation">
+                  <div
+                    className="h-full rounded-sm bg-foreground"
+                    style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }}
+                  />
+                </div>
+              </MetricCard>
+            )}
+            <MetricCard
+              label="Exercise adherence"
+              value={adh.pct === null ? '—' : `${Math.round(adh.pct)}%`}
+              caption={
+                <>
+                  <span className="num">{out.exercise.streakDays}</span>-day streak · last{' '}
+                  <span className="num">{adh.days}</span> days
+                </>
+              }
+              provenance={{ kind: 'simulated', note: 'Self-reported sessions' }}
+            />
           </section>
         </div>
         <ZoneCard target={selected} out={out} mode={environment} adaptationActive={adaptationActive} />
@@ -379,7 +448,65 @@ export function OverviewPage() {
           }}
         />
       )}
-      <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}><DialogContent><form onSubmit={saveCheckIn} className="space-y-3"><DialogHeader><DialogTitle>Daily health check-in</DialogTitle><DialogDescription>{ENVIRONMENTS[environment].label} · self-report saved for this environment. Not a clinical assessment.</DialogDescription></DialogHeader><fieldset><legend className="mb-2 text-sm">Mood (1–5)</legend><div className="grid grid-cols-5 gap-2">{[1,2,3,4,5].map((n) => <label key={n} className="flex items-center justify-center gap-2 rounded-md bg-surface-2 p-2"><input type="radio" name="mood" checked={mood===String(n)} onChange={() => setMood(String(n))} />{n}</label>)}</div></fieldset><div className="grid grid-cols-2 gap-3">{([ ['sleepHours','Sleep last night (hours)','0.5'],['heartRate','Resting heart rate (bpm)','1'],['systolicBP','Systolic blood pressure (mmHg)','1'],['diastolicBP','Diastolic blood pressure (mmHg)','1'],['glucose','Blood glucose (mg/dL)','1'],['bodyTemp','Body temperature (°C)','0.1'] ] as const).map(([key,label,step]) => <div key={key} className="space-y-1"><Label htmlFor={`daily-${key}`}>{label}</Label><Input id={`daily-${key}`} type="number" step={step} required min={key==='sleepHours'?0:undefined} max={key==='sleepHours'?24:undefined} value={key==='sleepHours'?sleepHours:measurementValues[key] ?? ''} onChange={(e) => key==='sleepHours'?setSleepHours(e.target.value):setMeasurementValues((v)=>({...v,[key]:e.target.value}))} /></div>)}</div><p className="text-xs text-muted">Input plausibility only · Illustrative thresholds · Consult your flight surgeon.</p><DialogFooter><Button type="submit">Save daily check-in</Button></DialogFooter></form></DialogContent></Dialog>
+      <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}>
+        <DialogContent>
+          <form onSubmit={saveCheckIn} className="space-y-3">
+            <DialogHeader>
+              <DialogTitle>Daily health check-in</DialogTitle>
+              <DialogDescription>
+                {ENVIRONMENTS[environment].label} · self-report saved for this environment. Not a clinical assessment.
+              </DialogDescription>
+            </DialogHeader>
+            <fieldset>
+              <legend className="mb-2 text-sm">Mood (1–5)</legend>
+              <div className="grid grid-cols-5 gap-2">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <label key={n} className="flex items-center justify-center gap-2 rounded-md bg-surface-2 p-2">
+                    <input type="radio" name="mood" checked={mood === String(n)} onChange={() => setMood(String(n))} />
+                    {n}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <div className="grid grid-cols-2 gap-3">
+              {(
+                [
+                  ['sleepHours', 'Sleep last night (hours)', '0.5'],
+                  ['heartRate', 'Resting heart rate (bpm)', '1'],
+                  ['systolicBP', 'Systolic blood pressure (mmHg)', '1'],
+                  ['diastolicBP', 'Diastolic blood pressure (mmHg)', '1'],
+                  ['glucose', 'Blood glucose (mg/dL)', '1'],
+                  ['bodyTemp', 'Body temperature (°C)', '0.1'],
+                ] as const
+              ).map(([key, label, step]) => (
+                <div key={key} className="space-y-1">
+                  <Label htmlFor={`daily-${key}`}>{label}</Label>
+                  <Input
+                    id={`daily-${key}`}
+                    type="number"
+                    step={step}
+                    required
+                    min={key === 'sleepHours' ? 0 : undefined}
+                    max={key === 'sleepHours' ? 24 : undefined}
+                    value={key === 'sleepHours' ? sleepHours : (measurementValues[key] ?? '')}
+                    onChange={(e) =>
+                      key === 'sleepHours'
+                        ? setSleepHours(e.target.value)
+                        : setMeasurementValues((v) => ({ ...v, [key]: e.target.value }))
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-muted">
+              Input plausibility only · Illustrative thresholds · Consult your flight surgeon.
+            </p>
+            <DialogFooter>
+              <Button type="submit">Save daily check-in</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

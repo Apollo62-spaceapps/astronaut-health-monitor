@@ -2,6 +2,7 @@
 // Recebe os fatos já montados e devolve JSON {"summary": "…"}. Toda saída é validada: Zod, palavras proibidas,
 // ≤ 280 caracteres e todo número citado precisa existir no contexto. Falhou ⇒ fica o resumo determinístico,
 // sem erro na tela (só o selo do modo). O semáforo e os alertas não mudam em nenhum caso.
+import { passageById } from '@/ai/knowledge'
 import { llmOutputSchema, type StructuredReply } from '@/ai/schema'
 
 /** Palavras que nenhuma resposta pode ter (BODY-07). */
@@ -19,30 +20,37 @@ export const LLM_FORBIDDEN = new RegExp(
 )
 
 export const LLM_SYSTEM_PROMPT = [
-  'You rewrite one short summary for an onboard health copilot in a decision-support PROTOTYPE (not a medical device).',
-  'Use ONLY the facts given. Do not add numbers, causes, conditions, medication or doses.',
+  'You rewrite the opening of an answer from an onboard health copilot in a decision-support PROTOTYPE (not a medical device).',
+  'Use ONLY the facts and the NASA passages given (retrieved from the onboard library). Do not add numbers, causes, conditions, medication or doses.',
   'Never say anyone is fit, unfit, healthy, fine or safe. Never contradict or soften an alert.',
   'At most 2 short sentences, calm, plain English, second person, no emoji, no exclamation marks.',
   'Answer with JSON only: {"summary": "..."}',
 ].join(' ')
 
-/** Mensagens para o modelo: só fatos prontos. */
+/** Mensagens para o modelo (RAG): fatos prontos + passagens recuperadas da base local. */
 export function summaryMessages(reply: StructuredReply) {
+  const NL = '\n'
   const facts = reply.facts.map(
     (f) => `- ${f.label}: ${f.value}${f.unit ? ` ${f.unit}` : ''}${f.detail ? ` (${f.detail})` : ''}`,
   )
+  const passages = (reply.consulted ?? [])
+    .map((c) => passageById(c.id))
+    .filter((p) => !!p)
+    .map((p) => `- ${p!.title}: ${p!.text}`)
+  const opening = (reply.prose?.[0] ?? reply.summary).replace(/\s*\[S\d+(?:, S\d+)*\]/g, '')
   return [
     { role: 'system' as const, content: LLM_SYSTEM_PROMPT },
     {
       role: 'user' as const,
       content: [
-        `Deterministic summary: ${reply.summary}`,
-        facts.length ? `Facts:\n${facts.join('\n')}` : 'Facts: none',
+        `Draft opening: ${opening}`,
+        facts.length ? `Facts:${NL}${facts.join(NL)}` : 'Facts: none',
+        passages.length ? `NASA passages:${NL}${passages.join(NL)}` : '',
         reply.escalate ? `Escalation: ${reply.escalate.etaText}` : '',
-        'Rewrite the summary.',
+        'Rewrite the opening.',
       ]
         .filter(Boolean)
-        .join('\n'),
+        .join(NL),
     },
   ]
 }
@@ -53,6 +61,9 @@ const numbersIn = (s: string) => (s.match(/\d+(?:[.,]\d+)?/g) ?? []).map((n) => 
 export function allowedNumbers(reply: StructuredReply): Set<string> {
   const text = [
     reply.summary,
+    ...(reply.prose ?? []),
+    ...(reply.steps ?? []).map((x) => x.text),
+    ...(reply.consulted ?? []).map((c) => passageById(c.id)?.text ?? ''),
     ...reply.facts.flatMap((f) => [f.value, f.unit ?? '', f.detail ?? '']),
     reply.escalate?.etaText ?? '',
     ...(reply.lines ?? []).flatMap((l) => [l.label, l.detail ?? '']),
@@ -90,7 +101,13 @@ export async function rewriteSummary(reply: StructuredReply, generate: Generate)
   try {
     const raw = await generate(summaryMessages(reply))
     const check = validateSummary(raw, reply)
-    if (check.ok) return { ...reply, summary: check.summary, engine: 'onboard-model' }
+    if (check.ok)
+      return {
+        ...reply,
+        summary: check.summary,
+        prose: reply.prose?.length ? [check.summary, ...reply.prose.slice(1)] : [check.summary],
+        engine: 'onboard-model',
+      }
     if (import.meta.env.DEV) console.info(`[Orbit] LLM summary discarded: ${check.reason}`)
   } catch (e) {
     if (import.meta.env.DEV) console.info('[Orbit] LLM unavailable:', e)

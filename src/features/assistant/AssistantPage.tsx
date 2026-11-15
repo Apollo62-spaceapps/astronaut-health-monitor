@@ -6,6 +6,7 @@ import { ASSISTANT_NAME, ASSISTANT_TAGLINE } from '@/ai/identity'
 import { canUseOnboardModel, onboardEngine } from '@/ai/engine'
 import { ONBOARD_MODEL_ID } from '@/ai/onboard'
 import { RISK_TEXT } from '@/ai/reply'
+import { KNOWLEDGE } from '@/ai/knowledge'
 import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/StatusBadge'
 import { IllustrativeThresholds } from '@/components/IllustrativeThresholds'
@@ -132,7 +133,7 @@ function EnginePanel() {
       <p className="text-muted">
         {aiMode === 'onboard-model'
           ? `Onboard model (${ONBOARD_MODEL_ID}) rewrites only the wording of each summary. Facts, actions and escalation stay rule-based.`
-          : 'Protocol mode: every answer is built from the rules, works offline and needs no download.'}
+          : `Protocol mode: every answer is built from the rules and a local library of ${KNOWLEDGE.length} NASA-sourced passages. Works offline, no download.`}
       </p>
       {progress && (
         <div className="space-y-1">

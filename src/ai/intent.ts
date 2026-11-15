@@ -79,6 +79,19 @@ const KEYWORDS: Record<Exclude<Intent, 'general'>, string[]> = {
     'chest',
     'breath',
   ],
+  // Relatório completo para os flight surgeons (pitch, passo 4). "report" conta nos dois; "ground report" desempata.
+  groundReport: [
+    'ground report',
+    'full report',
+    'report',
+    'export',
+    'document',
+    'for the doctor',
+    'for my doctor',
+    'clinical summary',
+    'download',
+    'medical report',
+  ],
   prepareReport: [
     'message for the cmo',
     'prepare',
@@ -157,9 +170,21 @@ export function classify(text: string): Classified {
   // "why is my heart zone attention" → zoneExplain quando cita uma zona.
   if (zone && /\bwhy\b/.test(t)) scores.set('zoneExplain', (scores.get('zoneExplain') ?? 0) + 2)
 
+  // Pergunta curta que só cita uma zona ("and my blood pressure?") é sobre essa zona.
+  if (scores.size === 0 && zone && t.split(' ').length <= 6)
+    return { intent: 'zoneExplain', zone, crewId, emergency: false }
   if (scores.size === 0) return { intent: 'general', zone, crewId, emergency: false }
   const best = Math.max(...scores.values())
   const tied = [...scores.entries()].filter(([, s]) => s === best).map(([i]) => i)
   const intent = tied.length === 1 ? tied[0]! : 'whatNow'
   return { intent, zone, crewId, emergency: false }
+}
+
+/** Pergunta de seguimento curta ("why?", "tell me more"): aprofunda a resposta anterior. */
+export function isFollowUp(text: string): boolean {
+  const t = normalize(text)
+  if (!t || t.split(' ').length > 6) return false
+  return /^(why|how come|tell me more|more|go on|explain( that| more| why)?|what does (that|this) mean|and why|why is that|why so|really|can you explain|details?|more details?|elaborate)(?=[ ]|$)/.test(
+    t,
+  )
 }

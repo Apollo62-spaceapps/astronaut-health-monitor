@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import { orbitAnswer } from '@/ai/engine'
 import { ASSISTANT_NAME, ASSISTANT_TAGLINE } from '@/ai/identity'
-import { classify, isEmergency } from '@/ai/intent'
+import { classify, isEmergency, isFollowUp } from '@/ai/intent'
 import { startTriage, triageReply } from '@/ai/triage'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/state/store'
@@ -13,6 +13,10 @@ import { MeasurementDialog } from '@/features/routine/MeasurementDialog'
 import { OrbitConversation } from '@/features/assistant/OrbitConversation'
 import { OrbitMark } from '@/features/assistant/OrbitMark'
 import { PacketPreview } from '@/features/assistant/PacketPreview'
+import { GroundReportDialog } from '@/features/assistant/GroundReportDialog'
+
+/** Pausa de "Reading your data…" (ms). Curta: a resposta é local e determinística. */
+const THINK_MS = 420
 import { useOrbitStore } from '@/features/assistant/orbitStore'
 import { useOrbitContext } from '@/features/assistant/useOrbitContext'
 import type { RoutineItem } from '@/domain/types'
@@ -54,9 +58,20 @@ function useOrbitResponder() {
       }
       return
     }
+    // A resposta anterior dá contexto ao "why?" / "tell me more".
+    const previous = [...store.messages].reverse().find((m) => m.reply)?.reply
     store.setBusy(true)
-    void orbitAnswer(ctx, { ...q, intent }, aiMode)
-      .then((reply) => useOrbitStore.getState().push({ role: 'orbit', reply, at }))
+    // Uma pausa curta de "Reading your data…" antes da resposta (o texto depois aparece aos poucos).
+    const think = new Promise((r) => window.setTimeout(r, THINK_MS))
+    void Promise.all([
+      orbitAnswer(
+        ctx,
+        { ...q, intent: q.intent ?? (previous && isFollowUp(q.text) ? undefined : intent), previous },
+        aiMode,
+      ),
+      think,
+    ])
+      .then(([reply]) => useOrbitStore.getState().push({ role: 'orbit', reply, at }))
       .finally(() => useOrbitStore.getState().setBusy(false))
   }, [pending, ctx, aiMode])
 }
@@ -141,6 +156,7 @@ export default function OrbitRuntime() {
       <OrbitDrawerPanel />
       <OrbitMeasure />
       <PacketPreview />
+      <GroundReportDialog />
     </>
   )
 }

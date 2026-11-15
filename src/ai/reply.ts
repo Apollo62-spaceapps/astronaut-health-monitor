@@ -440,6 +440,17 @@ function prepareReport(ctx: OrbitContext): StructuredReply {
   })
 }
 
+/** Relatório completo para os flight surgeons (pitch, passo 4): o conteúdo vem de report.ts. */
+function groundReport(ctx: OrbitContext): StructuredReply {
+  return base('groundReport', ctx, {
+    summary:
+      'The full ground report is ready to review: alerts, vitals against your reference, trends, radiation, exercise, wellbeing and what you already did, with sources.',
+    facts: [],
+    actions: [{ kind: 'openReport' }, ...(ctx.groundReplySec > 0 ? [{ kind: 'notifyCmo' } as const] : [])],
+    escalate: engineEscalation(ctx),
+  })
+}
+
 function privacy(ctx: OrbitContext): StructuredReply {
   const label = {
     full: 'Visible',
@@ -678,6 +689,8 @@ export function buildReply(intent: Intent, ctx: OrbitContext, opts: ReplyOptions
       return routine(ctx)
     case 'prepareReport':
       return prepareReport(ctx)
+    case 'groundReport':
+      return groundReport(ctx)
     case 'privacy':
       return privacy(ctx)
     case 'riskOutlook':
@@ -706,6 +719,11 @@ export function suggestions(ctx: OrbitContext): string[] {
   }
   s.push(astronaut(ctx) ? 'How am I doing today?' : 'How is the crew member doing?', 'What should I do now?')
   if (ctx.trends.length) s.push('Am I drifting from my baseline?')
-  s.push('How long until the ground replies?', 'Who is at higher risk?', 'What can you see?')
+  s.push(
+    'Prepare the ground report',
+    'How long until the ground replies?',
+    'Who is at higher risk?',
+    'What can you see?',
+  )
   return [...new Set(s)].slice(0, 5)
 }

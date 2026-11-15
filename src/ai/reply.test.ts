@@ -11,7 +11,7 @@ import { testInput } from '@/ai/orbitTestUtils'
 
 const ENVS: MissionMode[] = ['EARTH', 'ISS', 'LUNAR', 'SPACECRAFT']
 const ROLES: Role[] = ['ASTRONAUT', 'CMO', 'FLIGHT_SURGEON']
-const ALLOWED_ACTIONS = new Set(['remeasure', 'notifyCmo', 'openChecklist', 'goto', 'startTriage'])
+const ALLOWED_ACTIONS = new Set(['remeasure', 'notifyCmo', 'openChecklist', 'goto', 'startTriage', 'openReport'])
 const textOf = (r: StructuredReply) =>
   [
     r.summary,
