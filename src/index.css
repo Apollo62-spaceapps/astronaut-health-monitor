@@ -1,0 +1,136 @@
+/* Tokens do docs/DESIGN-SYSTEM.md (Apollo 62 · NASA style). Não invente cores fora daqui.
+   O visual é sempre escuro: NÃO existe tema claro nem "modo noturno". O botão de modo de
+   ambiente só troca --color-banner (via data-environment) e o comportamento da plataforma. */
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme {
+  /* Marca e superfícies */
+  --color-ground: #000000; /* header e fundo da página */
+  --color-surface: #181a1b; /* cards e painéis — branco 17,5:1 */
+  --color-surface-2: #22252a; /* superfície elevada (hover de card, inputs) — DECISÃO */
+  --color-border: #34383d; /* bordas sutis — DECISÃO */
+  --color-banner: #093174; /* faixa da missão — muda por ambiente (data-environment) */
+  --color-action: #a52420; /* SÓ o botão primário — branco 7,3:1 */
+  --color-action-hover: #920107; /* hover/pressed — branco 9,4:1 */
+  --color-link: #6fa8ff; /* links — 7,3:1 sobre surface */
+  --color-muted: #a9afb5; /* texto secundário, Restricted e Adapting — 7,9:1 */
+  --color-foreground: #ffffff;
+
+  /* Status (sempre com ícone + texto; hachura no Urgent). Nunca use --color-action para status. */
+  --color-normal: #3ddc97; /* ✓ Normal — 9,9:1 */
+  --color-attention: #f5b83d; /* ▲ Attention — 9,8:1 */
+  --color-urgent: #ff6b63; /* ● Urgent — 6,3:1 */
+
+  /* Tipografia */
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Cor da faixa da missão por ambiente (DESIGN-SYSTEM §5). Só a faixa muda; status e ação não. */
+:root[data-environment='earth'] {
+  --color-banner: #093174;
+}
+:root[data-environment='station'] {
+  --color-banner: #0b4a5e;
+}
+:root[data-environment='moon'] {
+  --color-banner: #3a3f45;
+}
+:root[data-environment='spacecraft'] {
+  --color-banner: #2e1f66;
+}
+
+/* Variáveis que os componentes shadcn/ui esperam, apontando para os tokens acima */
+:root {
+  color-scheme: dark;
+  --radius: 0.5rem;
+  --background: var(--color-ground);
+  --foreground: var(--color-foreground);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-foreground);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-foreground);
+  --primary: var(--color-action);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-surface-2);
+  --secondary-foreground: var(--color-foreground);
+  --muted-foreground: var(--color-muted);
+  --accent: var(--color-surface-2);
+  --accent-foreground: var(--color-foreground);
+  --destructive: var(--color-urgent);
+  --input: var(--color-border);
+  --ring: var(--color-link);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html,
+  body {
+    @apply bg-ground text-foreground font-sans antialiased;
+    font-size: 16px;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  a {
+    @apply text-link underline-offset-2 hover:underline;
+  }
+  /* Foco sempre visível (NFR-01) */
+  :focus-visible {
+    outline: 3px solid var(--color-link);
+    outline-offset: 2px;
+  }
+}
+
+/* Números: sempre mono com algarismos tabulares (DESIGN-SYSTEM §2). Use a classe `num`. */
+@utility num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hachura para status não normais (CORE-03, BODY-04) — sempre junto da cor + ícone + texto */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, currentColor 35%, transparent) 0 2px,
+    transparent 2px 7px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
