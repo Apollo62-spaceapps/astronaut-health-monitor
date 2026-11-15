@@ -201,7 +201,7 @@ function exerciseAnswer(ctx: OrbitContext): MetricAnswer {
       a === null
         ? 'There is no exercise plan logged this week.'
         : `This week you completed ${Math.round(a)}% of the logged plan, with a ${ctx.exercise.streakDays}-day streak${ctx.exercise.postponed ? `; ${ctx.exercise.postponed} session${ctx.exercise.postponed === 1 ? ' is' : 's are'} postponed today because of the shelter` : ''}.`,
-      `Exercise is the daily countermeasure against bone and muscle loss in microgravity.${cite(['S19', 'S21'])}`,
+      `Exercise is the daily countermeasure against bone and muscle loss in microgravity.${cite(['S19'])}`,
     ],
     facts:
       a === null
