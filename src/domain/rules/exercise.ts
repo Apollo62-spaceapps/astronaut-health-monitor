@@ -50,7 +50,11 @@ export function adherenceLevel(
   return pct < attentionBelow ? 'attention' : 'normal'
 }
 
-/** Sequência de dias seguidos (até hoje) com todas as sessões `done` (EX-04, P1). Dia sem sessão quebra. */
+/**
+ * Sequência de dias seguidos (até hoje) com todas as sessões `done` (EX-04, P1). Dia sem sessão quebra.
+ * Dia com tudo `postponed` (abrigo) é pulado: não conta nem quebra — adiar por segurança não é falta
+ * (mesmo critério da adesão, R-EX-01).
+ */
 export function streakDays(sessions: readonly ExerciseSession[], todayIso: string): number {
   const byDay = new Map<string, ExerciseSession[]>()
   for (const s of sessions) byDay.set(s.date, [...(byDay.get(s.date) ?? []), s])
@@ -58,13 +62,21 @@ export function streakDays(sessions: readonly ExerciseSession[], todayIso: strin
   let t = Date.parse(todayIso.slice(0, 10))
   for (;;) {
     const day = byDay.get(new Date(t).toISOString().slice(0, 10))
-    if (!day || day.length === 0 || !day.every((s) => s.status === 'done')) return streak
-    streak++
+    const skipped = !!day && day.length > 0 && day.every((s) => s.status === 'postponed')
+    if (!skipped) {
+      if (!day || day.length === 0 || !day.every((s) => s.status === 'done')) return streak
+      streak++
+    }
     t -= DAY_MS
   }
 }
 
-/** R-EX-02: abrigo ativo → sessões de hoje ainda não feitas viram `postponed` ("shelter active") (RAD-05). */
+/**
+ * R-EX-02: abrigo ativo → TODAS as sessões de hoje viram `postponed` ("shelter active") (RAD-05).
+ * Precedência (polimento de 15/11): o abrigo vence o check-in. Uma sessão adiada nunca aparece também como
+ * "Done". Motivo: o cenário marca as sessões de hoje como feitas antes do horário delas (10:00), e a tela mostrava
+ * "Done" e "Postponed" juntos. Os dados guardados não mudam: ao encerrar o abrigo, o check-in volta.
+ */
 export function applyShelter(
   sessions: readonly ExerciseSession[],
   todayIso: string,
@@ -73,6 +85,6 @@ export function applyShelter(
   if (!shelterActive) return [...sessions]
   const today = todayIso.slice(0, 10)
   return sessions.map((s) =>
-    s.date === today && s.status !== 'done' ? { ...s, status: 'postponed', reason: 'shelter active' } : s,
+    s.date === today ? { ...s, status: 'postponed', doneMin: 0, reason: 'shelter active' } : s,
   )
 }

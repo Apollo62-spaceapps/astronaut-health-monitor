@@ -69,7 +69,35 @@ describe('Overview (L3 #54)', () => {
   it('ambiente sem taxa de dose não mostra número (ENV-04)', () => {
     render(<OverviewPage />)
     act(() => useAppStore.getState().setEnvironment('ISS'))
-    expect(document.body.textContent).toContain('rate not sourced for this environment')
+    expect(document.body.textContent).toContain('Not added on the Space Station (rate not sourced)')
+    act(() => useAppStore.getState().setEnvironment('EARTH'))
+    expect(document.body.textContent).toContain('Not added on Earth')
+  })
+
+  it('CMO e Flight Surgeon: "Crew member · day 120", terceira pessoa e sem "Log measurement"', () => {
+    useAppStore.setState({ role: 'CMO' })
+    render(<OverviewPage />)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Crew member · day 120')
+    expect(document.body.textContent).toContain("above the crew member's baseline")
+    expect(document.body.textContent).not.toContain('your own baseline')
+    expect(screen.queryByRole('button', { name: 'Log measurement' })).toBeNull()
+  })
+
+  it('abrigo ativo: o único primário é "View shelter procedure" e o rótulo da radiação diz Urgent', () => {
+    const { container } = render(<OverviewPage />)
+    act(() => useAppStore.getState().replaySolarEvent())
+    const primaries = [...container.querySelectorAll('[data-slot="button"][data-variant="default"]')]
+    expect(primaries.map((b) => b.textContent)).toEqual(['View shelter procedure'])
+    expect(zone('radiation').textContent).toContain('● Radiation · Urgent — shelter')
+  })
+
+  it('troca de gravidade: o card do Heart mostra Adapting e explica o desvio medido (R-PHASE-01)', () => {
+    render(<OverviewPage />)
+    act(() => useAppStore.getState().setEnvironment('LUNAR'))
+    const card = screen.getByRole('article')
+    expect(card.textContent).toContain('Adapting')
+    expect(card.textContent).not.toContain('Attention')
+    expect(card.textContent).toContain('+18% vs pre-flight · shown as Adapting during the 3-day window')
   })
 
   it('nunca usa palavras proibidas (BODY-07)', () => {

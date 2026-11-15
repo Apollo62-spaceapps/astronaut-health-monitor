@@ -98,7 +98,7 @@ const initialRuntime = () => ({
   ...(() => {
     const data = scenario()
     const simNowIso = missionDayToIso(DEMO_MISSION_DAY)
-    return { ...data, routine: updateRoutineForClock(data.routine, simNowIso, false) }
+    return { ...data, routine: updateRoutineForClock(markMeasuredToday(data.routine, data.vitals, simNowIso), simNowIso, false) }
   })(),
   missionDay: DEMO_MISSION_DAY,
   simNowIso: missionDayToIso(DEMO_MISSION_DAY),
@@ -178,7 +178,13 @@ export const useAppStore = create<AppState>()(
         set((s) => {
           const missionDay = s.missionDay + days
           const simNowIso = missionDayToIso(missionDay)
-          return { missionDay, simNowIso, routine: updateRoutineForClock(s.routine, simNowIso, s.shelterActive) }
+          // Dia novo: a agenda recomeça (Due/Overdue pelo relógio), e o que já tem leitura de hoje fica Done.
+          const fresh = days > 0 ? s.routine.map((item) => ({ ...item, status: 'due' as const })) : s.routine
+          return {
+            missionDay,
+            simNowIso,
+            routine: updateRoutineForClock(markMeasuredToday(fresh, s.vitals, simNowIso), simNowIso, s.shelterActive),
+          }
         }),
 
       advanceDemoMinutes: (minutes) =>
@@ -187,7 +193,11 @@ export const useAppStore = create<AppState>()(
           const dayChanged = simNowIso.slice(0, 10) !== s.simNowIso.slice(0, 10)
           const routine = dayChanged ? s.routine.map((item) => ({ ...item, status: 'due' as const })) : s.routine
           const missionDay = Math.floor((Date.parse(simNowIso) - Date.parse(MISSION_START_ISO)) / DAY_MS)
-          return { simNowIso, missionDay, routine: updateRoutineForClock(routine, simNowIso, s.shelterActive) }
+          return {
+            simNowIso,
+            missionDay,
+            routine: updateRoutineForClock(markMeasuredToday(routine, s.vitals, simNowIso), simNowIso, s.shelterActive),
+          }
         }),
 
       replaySolarEvent: () =>
@@ -219,6 +229,22 @@ export const useAppStore = create<AppState>()(
     },
   ),
 )
+
+/**
+ * Medida que já tem leitura de hoje (até agora) está feita: a rotina nunca diz "Overdue" ao lado de uma leitura
+ * do dia (ROUT-02, CORE-07). Itens adiados pelo abrigo continuam adiados.
+ */
+export function markMeasuredToday(routine: RoutineItem[], vitals: readonly VitalReading[], nowIso: string): RoutineItem[] {
+  const today = nowIso.slice(0, 10)
+  const now = Date.parse(nowIso)
+  return routine.map((item) =>
+    item.kind === 'measure' &&
+    item.status !== 'postponed' &&
+    vitals.some((r) => r.kind === item.vital && r.takenAt.slice(0, 10) === today && Date.parse(r.takenAt) <= now)
+      ? { ...item, status: 'done' }
+      : item,
+  )
+}
 
 function updateRoutineForClock(routine: RoutineItem[], nowIso: string, shelterActive: boolean): RoutineItem[] {
   if (shelterActive) return routine.map((item) => (item.status === 'done' ? item : { ...item, status: 'postponed' }))

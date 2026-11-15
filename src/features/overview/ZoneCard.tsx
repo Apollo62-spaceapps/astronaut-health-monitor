@@ -11,9 +11,12 @@ import { accessLevel } from '@/domain/rules/privacy'
 import { formatDeviation } from '@/domain/rules/vitals'
 import { RATE_NOT_SOURCED, SHELTER_LABEL, SHELTER_STEPS } from '@/domain/rules/radiation'
 import { StatusBadge } from '@/components/StatusBadge'
+import { SourceRef } from '@/components/SourceRef'
 import { ProvenanceBadge } from '@/components/ProvenanceBadge'
 import { IllustrativeThresholds } from '@/components/IllustrativeThresholds'
-import { VITAL_LABEL, VITAL_UNIT, formatVitalValue } from '@/lib/format'
+import { VITAL_LABEL, VITAL_UNIT, formatMSv, formatVitalValue } from '@/lib/format'
+import { ADAPTATION_WINDOW_DAYS } from '@/domain/rules/phase'
+import { shownLevel } from '@/features/overview/phaseDisplay'
 import { CONSULT, ZONE_ACTIONS, ZONE_CONTENT } from '@/features/overview/zoneContent'
 import type { MapTarget } from '@/features/overview/BodyMap'
 
@@ -30,18 +33,18 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 function Sources({ ids }: { ids: SourceId[] }) {
   if (ids.length === 0) return <span className="text-muted">No source yet. {CONSULT}</span>
-  return (
-    <span className="flex flex-wrap gap-2">
-      {ids.map((id) => (
-        <a key={id} href="#/sources" className="num text-link">
-          [{id}]
-        </a>
-      ))}
-    </span>
-  )
+  return <SourceRef ids={ids} />
 }
 
-function WhatToDo({ status }: { status: ZoneStatus | null }) {
+function WhatToDo({
+  status,
+  gravityZone,
+  adaptationActive,
+}: {
+  status: ZoneStatus | null
+  gravityZone: boolean
+  adaptationActive: boolean
+}) {
   if (status === 'attention' || status === 'urgent')
     return (
       <ul className="list-inside list-disc">
@@ -53,13 +56,20 @@ function WhatToDo({ status }: { status: ZoneStatus | null }) {
   if (status === 'adapting')
     return (
       <p>
-        Adapting after a change in gravity (up to 3 days on average for motion sickness [S04]). Keep your scheduled
-        measurements.
+        Adapting after a change in gravity: motion sickness lasts {ADAPTATION_WINDOW_DAYS} days on average{' '}
+        <SourceRef ids={['S04']} />. Keep your scheduled measurements.
       </p>
     )
   if (status === 'restricted')
     return <p>Private medical data. Visible only with the astronaut's consent or through audited emergency access.</p>
   if (status === null) return <p>No data yet — log a measurement from the mission routine.</p>
+  if (gravityZone && adaptationActive && status === 'normal')
+    return (
+      <p>
+        Gravity changed recently, but this zone stays Normal: the adaptation window only relabels Attention as
+        Adapting, and never hides Urgent (rule R-PHASE-01). Keep your scheduled measurements.
+      </p>
+    )
   return <p>Keep your scheduled measurements.</p>
 }
 
@@ -85,7 +95,17 @@ function Indicator({
           vs your pre-flight baseline{' '}
           <span className="num">{formatVitalValue(indicator, ev.baseline.preflightMean)}</span>
         </span>
-        <StatusBadge status={ev.level} detail={formatDeviation(ev.deviationPct)} />
+        {shownLevel(indicator, ev.level, out.body) === 'adapting' ? (
+          <>
+            <StatusBadge status="adapting" />
+            <span className="text-muted">
+              <span className="num">{formatDeviation(ev.deviationPct)}</span> vs pre-flight · shown as Adapting during
+              the {ADAPTATION_WINDOW_DAYS}-day window <SourceRef ids={['S04']} />
+            </span>
+          </>
+        ) : (
+          <StatusBadge status={ev.level} detail={formatDeviation(ev.deviationPct)} />
+        )}
         <ProvenanceBadge provenance={ev.latest.provenance} />
       </li>
     )
@@ -138,7 +158,18 @@ function HazardLine({ zone, mode }: { zone: BodyZone; mode: MissionMode }) {
   )
 }
 
-export function ZoneCard({ target, out, mode }: { target: MapTarget; out: EngineOutput; mode: MissionMode }) {
+export function ZoneCard({
+  target,
+  out,
+  mode,
+  adaptationActive = false,
+}: {
+  target: MapTarget
+  out: EngineOutput
+  mode: MissionMode
+  /** Janela de adaptação à gravidade ativa (R-PHASE-01): explica zonas de gravidade que ficaram Normal. */
+  adaptationActive?: boolean
+}) {
   if (target === 'radiation') {
     const d = out.radiation
     const shelter = out.alerts.find((a) => a.ruleId === 'R-RAD-03')
@@ -150,10 +181,14 @@ export function ZoneCard({ target, out, mode }: { target: MapTarget; out: Engine
         <Section title="Function">Overlay for the whole body: space radiation reaches every tissue.</Section>
         <Section title="Indicator">
           {d.pctOfLimit === null ? (
-            <p className="text-muted">Career dose: {RATE_NOT_SOURCED}.</p>
+            <p className="text-muted">
+              Prior career dose <span className="num">{formatMSv(d.priorMSv)}</span> mSv of{' '}
+              <span className="num">{d.limitMSv}</span> mSv <SourceRef ids={['S03']} /> · no new mission dose added
+              ({RATE_NOT_SOURCED}).
+            </p>
           ) : (
             <p className="flex flex-wrap items-center gap-2">
-              Career dose <span className="num font-semibold">{d.totalMSv!.toFixed(1)} mSv</span>
+              Career dose <span className="num font-semibold">{formatMSv(d.totalMSv!)} mSv</span>
               <span className="num text-muted">
                 = {Math.round(d.pctOfLimit)}% of {d.limitMSv} mSv
               </span>
@@ -179,7 +214,7 @@ export function ZoneCard({ target, out, mode }: { target: MapTarget; out: Engine
           )}
         </Section>
         <Section title="Source">
-          <Sources ids={[...RADIATION_OVERLAY.sourceIds, 'S09']} />
+          <Sources ids={[...RADIATION_OVERLAY.sourceIds, 'S05', 'S08', 'S09']} />
         </Section>
       </article>
     )
@@ -218,7 +253,7 @@ export function ZoneCard({ target, out, mode }: { target: MapTarget; out: Engine
       <Section title="How to measure">{content.howToMeasure}</Section>
       <Section title="Why it matters">{content.whyItMatters ? content.whyItMatters.text : CONSULT}</Section>
       <Section title="What to do">
-        <WhatToDo status={status} />
+        <WhatToDo status={status} gravityZone={zone.hazard === 'gravity'} adaptationActive={adaptationActive} />
         {(status === 'attention' || status === 'urgent') && <p className="mt-1 text-muted">{CONSULT}</p>}
       </Section>
       <Section title="Source">

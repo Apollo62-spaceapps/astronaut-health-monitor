@@ -31,3 +31,32 @@ export function formatDuration(sec: number): string {
   }
   return `about ${sec.toFixed(1)} seconds`
 }
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+/** Data/hora ISO em UTC legível: "2024-05-11T02:10Z" → "11 May 2024, 02:10 UTC". */
+export function formatUtc(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return iso
+  const hh = String(d.getUTCHours()).padStart(2, '0')
+  const mm = String(d.getUTCMinutes()).padStart(2, '0')
+  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}, ${hh}:${mm} UTC`
+}
+
+/** Só a hora UTC: "07:30 UTC". */
+export function formatUtcTime(iso: string): string {
+  const d = new Date(iso)
+  return `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')} UTC`
+}
+
+/** Dose em mSv sem casa decimal ("216 mSv"). */
+export function formatMSv(mSv: number): string {
+  return `${Math.round(mSv)}`
+}
+
+/** Tempo curto e consistente: "40 min", "2.6 s", "0 s". */
+export function formatShortDuration(sec: number): string {
+  if (sec >= 60) return `${Math.round(sec / 60)} min`
+  if (sec === 0) return '0 s'
+  return `${sec.toFixed(1)} s`
+}

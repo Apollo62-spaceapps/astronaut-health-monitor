@@ -46,7 +46,7 @@ export function AssistantPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex min-h-[calc(100vh-15rem)] flex-col gap-4">
       <section aria-labelledby="assistant-title" className="rounded-lg bg-surface p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -90,9 +90,9 @@ export function AssistantPage() {
         )}
       </section>
 
-      <section aria-label="Conversation" className="rounded-lg bg-surface p-6">
+      <section aria-label="Conversation" className="flex min-h-80 flex-1 flex-col rounded-lg bg-surface p-6">
         {history.length === 0 && <p className="text-muted">Choose a question below or type your own.</p>}
-        <ol ref={listRef} className="space-y-3">
+        <ol ref={listRef} className="flex-1 space-y-3 overflow-y-auto">
           {history.map((m, i) => (
             <li
               key={i}
@@ -101,7 +101,10 @@ export function AssistantPage() {
               <p>{m.text}</p>
               {m.role === 'assistant' && (
                 <p className="mt-2 text-xs text-muted">
-                  {AI_LABEL} · {m.engine === 'onboard-model' ? 'Onboard model' : 'Protocol mode'}
+                  {/* Protocol mode é determinístico: não é "AI-generated" (AI-06 vale só para o WebLLM). */}
+                  {m.engine === 'onboard-model'
+                    ? `${AI_LABEL.replace(/\.$/, '')} · Onboard model`
+                    : 'Rule-based response · Protocol mode'}
                 </p>
               )}
             </li>

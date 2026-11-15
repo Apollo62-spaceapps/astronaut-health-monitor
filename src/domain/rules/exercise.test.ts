@@ -46,11 +46,16 @@ describe('R-EX-01 · adesão semanal', () => {
 describe('R-EX-02 · abrigo ativo → postponed', () => {
   const day = [s('2026-11-14', 45, 45, 'done'), s('2026-11-14', 40, 0, 'skipped'), s('2026-11-13', 35, 0, 'skipped')]
 
-  it('sessões de hoje não feitas viram postponed com o motivo', () => {
+  it('todas as sessões de hoje viram postponed com o motivo; adiada nunca fica "done" (precedência do abrigo)', () => {
     const out = applyShelter(day, '2026-11-14T08:00:00Z', true)
-    expect(out[0]!.status).toBe('done')
+    expect(out[0]).toMatchObject({ status: 'postponed', doneMin: 0, reason: 'shelter active' })
     expect(out[1]).toMatchObject({ status: 'postponed', reason: 'shelter active' })
     expect(out[2]!.status).toBe('skipped') // outro dia não muda
+  })
+
+  it('dia adiado pelo abrigo não quebra a sequência (EX-04)', () => {
+    const sessions = [s('2026-11-13', 45, 45, 'done'), s('2026-11-14', 45, 45, 'done')]
+    expect(streakDays(applyShelter(sessions, '2026-11-14T08:00:00Z', true), '2026-11-14')).toBe(1)
   })
 
   it('sem abrigo nada muda', () => {

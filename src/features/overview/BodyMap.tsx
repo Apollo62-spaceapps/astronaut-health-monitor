@@ -1,12 +1,15 @@
 // Mapa do corpo (BODY-01, BODY-04, BODY-06): SVG com um <g data-zone> por zona.
 // O status vem das regras (R-BODY-01 via engine) e só troca o atributo data-status.
 // Acessibilidade: cor + ícone + texto, hachura em todo status não normal, zonas focáveis (Enter/Espaço) e aria-label.
-// Animação (opção A · Heartbeat pulse): ícone do coração + anel de pulso seguem o batimento; tronco respira devagar.
-// O ritmo é ilustrativo, não uma leitura ao vivo.
+// Animação (Heartbeat pulse): ícone do coração + anel de pulso em dois tempos; tronco respira devagar.
+// O ritmo é ilustrativo, não uma leitura ao vivo. Tudo para com prefers-reduced-motion.
+// Tamanhos: o viewBox tem 600 de largura e o mapa ocupa ~560 px na tela, então 16 unidades ≈ 15 px reais
+// (mínimo de 12 px renderizados). A legenda de status fica em HTML, abaixo do SVG.
 import type { KeyboardEvent, ReactNode } from 'react'
 import { HeartPulse, Lock } from 'lucide-react'
 import type { BodyZoneId, ZoneStatus } from '@/domain/types'
 import { STATUS_META } from '@/components/StatusBadge'
+import { ProvenanceBadge } from '@/components/ProvenanceBadge'
 
 export type MapTarget = BodyZoneId | 'radiation'
 
@@ -28,13 +31,16 @@ export interface BodyMapProps {
   status: Record<BodyZoneId, ZoneStatus | null>
   /** Texto extra do aria-label, ex.: "resting heart rate +18% vs baseline". */
   detail: Partial<Record<MapTarget, string>>
+  /** Sublinha curta visível sob o rótulo (ex.: "+18% vs baseline"). */
+  sub?: Partial<Record<MapTarget, string>>
   labels: Record<BodyZoneId, string>
+  /** Overlay de radiação. `label` já vem pronto (ex.: "Radiation · Urgent — shelter"). */
   radiation: { status: ZoneStatus | null; label: string }
   selected: MapTarget | null
   onSelect: (target: MapTarget) => void
   /** Zona Legs é P1 (L5): sem ela, as pernas aparecem só como contorno neutro. */
   showLegs?: boolean
-  /** Classe extra por status (ex.: animação do Urgent, L5). */
+  /** Liga a animação de pulso do Urgent (BODY-05). */
   pulse?: boolean
 }
 
@@ -89,7 +95,7 @@ const fillOpacity = (status: ZoneStatus | null) => (status === 'normal' ? 0.18 :
 const shapeClass = (selected: boolean) =>
   `transition-[stroke-width] group-hover:[stroke-width:4] group-focus-visible:[stroke-width:5] ${selected ? '[stroke-width:4]' : ''}`
 
-/** Rótulo ao lado do corpo, com subtítulo opcional. */
+/** Rótulo ao lado do corpo, com sublinha opcional. */
 function Label({
   x,
   y,
@@ -107,11 +113,11 @@ function Label({
 }) {
   return (
     <g aria-hidden>
-      <text x={x} y={y} textAnchor={anchor} className="fill-current text-[17px] font-semibold">
+      <text x={x} y={y} textAnchor={anchor} className="fill-current text-[18px] font-semibold">
         {glyph(status)} {text} · {statusText(status)}
       </text>
       {sub && (
-        <text x={x} y={y + 18} textAnchor={anchor} className="fill-muted text-[12px]">
+        <text x={x} y={y + 20} textAnchor={anchor} className="fill-muted font-mono text-[15px]">
           {sub}
         </text>
       )}
@@ -129,17 +135,17 @@ function Leader({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: nu
   )
 }
 
-const LEGEND: { status: ZoneStatus; x: number; y: number }[] = [
-  { status: 'normal', x: 508, y: 476 },
-  { status: 'attention', x: 568, y: 476 },
-  { status: 'urgent', x: 650, y: 476 },
-  { status: 'restricted', x: 508, y: 496 },
-  { status: 'adapting', x: 592, y: 496 },
-]
+// Geometria (centro do corpo em X = 300)
+const CX = 300
+const HX = CX + 6 // coração levemente à direita do centro
+const HY = 172
+const LEFT_TEXT = 196 // rótulos à esquerda terminam aqui
+const RIGHT_TEXT = 404 // rótulos à direita começam aqui
 
 export function BodyMap({
   status,
   detail,
+  sub = {},
   labels,
   radiation,
   selected,
@@ -157,19 +163,18 @@ export function BodyMap({
     pulse,
   })
   const statuses: ZoneStatus[] = ['attention', 'urgent', 'restricted', 'adapting']
-  const HX = 366
-  const HY = 172
   const skinDash = status.skin === 'normal' ? undefined : '10 5'
+  const radUrgent = radiation.status === 'urgent'
 
   return (
     <>
-      <svg viewBox="-40 0 760 520" className="h-auto w-full max-w-[760px]" role="group" aria-label="Body status map">
+      <svg viewBox="0 0 600 500" className="h-auto w-full max-w-[600px]" role="group" aria-label="Body status map">
         {/* BODY-05: Urgent pulsa a 1,25 Hz (abaixo do limite de 3/s da WCAG 2.3.1); Attention estático.
-            Batimento (~0,8 Hz) e respiração do tronco (lenta) são ilustrativos.
+            Batimento em dois tempos (~0,8 Hz) e respiração do tronco são ilustrativos.
             Nada se mexe com prefers-reduced-motion. */}
         <style>{`
-          @keyframes zone-pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.45 } }
-          @keyframes heart-beat { 0%, 56%, 100% { transform: scale(1) } 14% { transform: scale(1.18) } 42% { transform: scale(1.1) } 28% { transform: scale(1) } }
+          @keyframes zone-pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.35 } }
+          @keyframes heart-beat { 0%, 56%, 100% { transform: scale(1) } 14% { transform: scale(1.18) } 28% { transform: scale(1) } 42% { transform: scale(1.1) } }
           @keyframes heart-ring { 0% { transform: scale(0.85); opacity: 0.65 } 60%, 100% { transform: scale(1.55); opacity: 0 } }
           @keyframes torso-breathe { 0%, 100% { transform: scale(1) } 50% { transform: scale(1.035) } }
           .zone-pulse > :first-child { animation: zone-pulse 0.8s ease-in-out infinite; }
@@ -198,9 +203,39 @@ export function BodyMap({
           ))}
         </defs>
 
+        {/* Radiação: overlay do corpo inteiro, não é zona (§6.1.1). O anel tracejado é o 1º filho (pulsa no Urgent). */}
+        <Zone
+          id="radiation"
+          status={radiation.status}
+          label="Radiation (whole body)"
+          detail={detail.radiation}
+          selected={selected === 'radiation'}
+          onSelect={onSelect}
+          pulse={pulse}
+        >
+          <ellipse
+            cx={CX}
+            cy="244"
+            rx="150"
+            ry="236"
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity={radUrgent ? 1 : 0.45}
+            strokeWidth={radUrgent ? 3 : 2}
+            strokeDasharray="4 8"
+            className={shapeClass(selected === 'radiation')}
+          />
+          <ellipse cx={CX} cy="244" rx="150" ry="236" fill="none" stroke="transparent" strokeWidth="14" />
+          <Leader x1={8} y1={470} x2={160} y2={430} />
+          <text x={8} y={494} className="fill-current text-[18px] font-semibold" aria-hidden>
+            {radiation.status ? `${glyph(radiation.status)} ` : ''}
+            {radiation.label}
+          </text>
+        </Zone>
+
         {/* Pescoço (decorativo) */}
         <rect
-          x="346"
+          x={CX - 14}
           y="96"
           width="28"
           height="26"
@@ -212,26 +247,10 @@ export function BodyMap({
           aria-hidden
         />
 
-        {/* Radiação: corpo inteiro, não é zona (§6.1.1) — só rótulo + linha-guia */}
-        <Zone
-          id="radiation"
-          status={radiation.status}
-          label="Radiation (whole body)"
-          detail={detail.radiation}
-          selected={selected === 'radiation'}
-          onSelect={onSelect}
-          pulse={pulse}
-        >
-          <Leader x1={258} y1={106} x2={322} y2={106} />
-          <text x={250} y={112} textAnchor="end" className="fill-current text-[17px] font-semibold" aria-hidden>
-            {glyph(radiation.status)} {radiation.label}
-          </text>
-        </Zone>
-
         {/* Skin: silhueta do corpo (tronco + braços) */}
         <Zone {...z('skin')}>
           <rect
-            x="296"
+            x={CX - 64}
             y="116"
             width="128"
             height="178"
@@ -242,38 +261,29 @@ export function BodyMap({
             strokeDasharray={skinDash}
             className={shapeClass(selected === 'skin')}
           />
-          <rect
-            x="268"
-            y="128"
-            width="26"
-            height="116"
-            rx="13"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeDasharray={skinDash}
-            className={shapeClass(selected === 'skin')}
-          />
-          <rect
-            x="426"
-            y="128"
-            width="26"
-            height="116"
-            rx="13"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeDasharray={skinDash}
-            className={shapeClass(selected === 'skin')}
-          />
-          <Leader x1={258} y1={306} x2={300} y2={290} />
-          <Label x={250} y={312} anchor="end" status={status.skin} text={labels.skin} />
+          {[CX - 92, CX + 66].map((x) => (
+            <rect
+              key={x}
+              x={x}
+              y="128"
+              width="26"
+              height="116"
+              rx="13"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeDasharray={skinDash}
+              className={shapeClass(selected === 'skin')}
+            />
+          ))}
+          <Leader x1={LEFT_TEXT + 6} y1={300} x2={CX - 62} y2={282} />
+          <Label x={LEFT_TEXT} y={306} anchor="end" status={status.skin} text={labels.skin} sub={sub.skin} />
         </Zone>
 
         {/* Legs (P1) */}
         {showLegs ? (
           <Zone {...z('legs')}>
-            {[318, 368].map((x) => (
+            {[CX - 42, CX + 8].map((x) => (
               <rect
                 key={x}
                 x={x}
@@ -288,18 +298,12 @@ export function BodyMap({
                 className={shapeClass(selected === 'legs')}
               />
             ))}
-            <Leader x1={404} y1={396} x2={462} y2={396} />
-            <Label
-              x={470}
-              y={402}
-              status={status.legs}
-              text={labels.legs}
-              sub={detail.legs ? `${detail.legs} · SIMULATED` : undefined}
-            />
+            <Leader x1={CX + 44} y1={384} x2={RIGHT_TEXT - 6} y2={384} />
+            <Label x={RIGHT_TEXT} y={390} status={status.legs} text={labels.legs} sub={sub.legs} />
           </Zone>
         ) : (
           <g aria-hidden style={{ color: NO_DATA }}>
-            {[318, 368].map((x) => (
+            {[CX - 42, CX + 8].map((x) => (
               <rect
                 key={x}
                 x={x}
@@ -319,7 +323,7 @@ export function BodyMap({
         {/* Torso / metabolic: respira devagar */}
         <Zone {...z('torso')}>
           <rect
-            x="324"
+            x={CX - 36}
             y="134"
             width="72"
             height="120"
@@ -330,11 +334,11 @@ export function BodyMap({
             strokeWidth="2.5"
             className={`torso-breathe ${shapeClass(selected === 'torso')}`}
           />
-          <Leader x1={258} y1={198} x2={322} y2={198} />
-          <Label x={250} y={204} anchor="end" status={status.torso} text={labels.torso} />
+          <Leader x1={LEFT_TEXT + 6} y1={214} x2={CX - 38} y2={214} />
+          <Label x={LEFT_TEXT} y={220} anchor="end" status={status.torso} text={labels.torso} sub={sub.torso} />
         </Zone>
 
-        {/* Heart (por cima do torso): ícone bate, anel de pulso se expande */}
+        {/* Heart (por cima do torso): ícone bate em dois tempos, anel de pulso se expande */}
         <Zone {...z('heart')}>
           <circle
             cx={HX}
@@ -358,7 +362,6 @@ export function BodyMap({
             className="heart-ring"
             aria-hidden
           />
-          {/* Colchetes de foco */}
           <path
             d={`M${HX - 24} ${HY - 14} v-10 h10 M${HX + 24} ${HY - 14} v-10 h-10 M${HX - 24} ${HY + 14} v10 h10 M${HX + 24} ${HY + 14} v10 h-10`}
             fill="none"
@@ -371,20 +374,14 @@ export function BodyMap({
           <g className="heart-beat" aria-hidden>
             <HeartPulse x={HX - 14} y={HY - 14} width={28} height={28} strokeWidth={2.2} />
           </g>
-          <Leader x1={398} y1={HY} x2={462} y2={HY} />
-          <Label
-            x={470}
-            y={HY + 6}
-            status={status.heart}
-            text={labels.heart}
-            sub={detail.heart ? `${detail.heart} · SIMULATED` : undefined}
-          />
+          <Leader x1={HX + 34} y1={HY} x2={RIGHT_TEXT - 6} y2={HY} />
+          <Label x={RIGHT_TEXT} y={HY + 6} status={status.heart} text={labels.heart} sub={sub.heart} />
         </Zone>
 
         {/* Head (restrita para o CMO: cinza + cadeado, BODY-06) */}
         <Zone {...z('head')}>
           <ellipse
-            cx="360"
+            cx={CX}
             cy="58"
             rx="32"
             ry="38"
@@ -395,38 +392,24 @@ export function BodyMap({
             strokeDasharray={status.head === 'restricted' ? '5 5' : undefined}
             className={shapeClass(selected === 'head')}
           />
-          {status.head === 'restricted' && <Lock x={348} y={46} width={24} height={24} aria-hidden />}
-          <Leader x1={394} y1={58} x2={462} y2={58} />
-          <Label x={470} y={64} status={status.head} text={labels.head} />
+          {status.head === 'restricted' && <Lock x={CX - 12} y={46} width={24} height={24} aria-hidden />}
+          <Leader x1={CX + 34} y1={58} x2={RIGHT_TEXT - 6} y2={58} />
+          <Label x={RIGHT_TEXT} y={64} status={status.head} text={labels.head} sub={sub.head} />
         </Zone>
-
-        {/* Legenda de status (decorativa; ícone + texto, nunca só cor) */}
-        <g aria-hidden>
-          <rect
-            x="496"
-            y="430"
-            width="212"
-            height="78"
-            rx="10"
-            fill="#000"
-            fillOpacity={0.6}
-            stroke={NO_DATA}
-            strokeOpacity={0.5}
-          />
-          <text x="508" y="452" className="fill-muted font-mono text-[10px]" letterSpacing="1.5">
-            STATUS KEY
-          </text>
-          {LEGEND.map(({ status: s, x, y }) => (
-            <text key={s} x={x} y={y} className="text-[12px] font-semibold" fill={COLOR[s]}>
-              {STATUS_META[s].glyph} {STATUS_META[s].label}
-            </text>
-          ))}
-        </g>
       </svg>
-      <div className="flex w-full max-w-[760px] items-center justify-between gap-3 text-xs text-muted">
-        <span>Illustrative rhythm, not a live reading · torso breathes slowly · icon, text and hatch always present</span>
-        <span className="num shrink-0 rounded bg-muted/20 px-2 py-0.5 font-semibold tracking-wider">SIMULATED</span>
-      </div>
+
+      {/* Legenda de status (HTML para ficar legível): ícone + texto, nunca só cor */}
+      <ul aria-label="Status key" className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm font-semibold">
+        {(['normal', 'attention', 'urgent', 'restricted', 'adapting'] as const).map((s) => (
+          <li key={s} style={{ color: COLOR[s] }}>
+            <span aria-hidden>{STATUS_META[s].glyph}</span> {STATUS_META[s].label}
+          </li>
+        ))}
+      </ul>
+      <p className="flex flex-wrap items-center justify-center gap-2 text-center text-xs text-muted">
+        <span>Illustrative rhythm, not a live reading. Select a zone (click, Enter or Space) to see its card.</span>
+        <ProvenanceBadge provenance={{ kind: 'simulated' }} />
+      </p>
     </>
   )
 }
