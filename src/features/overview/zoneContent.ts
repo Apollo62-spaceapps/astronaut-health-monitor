@@ -39,6 +39,13 @@ export const ZONE_CONTENT: Record<BodyZoneId, ZoneContent> = {
       sourceIds: ['S19'],
     },
   },
+  arms: {
+    howToMeasure: 'Exercise sessions you check in (self-report), including resistance work on the arms.',
+    whyItMatters: {
+      text: 'NASA reports bone and muscle loss in microgravity.',
+      sourceIds: ['S19'],
+    },
+  },
   legs: {
     howToMeasure: 'Exercise sessions you check in (self-report).',
     whyItMatters: {

@@ -144,7 +144,8 @@ export type AlertLevel = 'normal' | 'attention' | 'urgent'
 export type ZoneStatus = AlertLevel | 'adapting' | 'restricted'
 
 /** Radiação é overlay do corpo inteiro, não zona. */
-export type BodyZoneId = 'head' | 'heart' | 'torso' | 'skin' | 'legs'
+/** Arms entrou em 15/11 (decisão do time): musculoesquelético, mesmo indicador de Legs. */
+export type BodyZoneId = 'head' | 'heart' | 'torso' | 'skin' | 'arms' | 'legs'
 export type BodyIndicator = VitalKind | 'mood' | 'sleep' | 'exerciseAdherence'
 
 export interface BodyZone {

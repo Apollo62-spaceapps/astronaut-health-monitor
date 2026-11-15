@@ -44,6 +44,18 @@ export const BODY_ZONES: readonly BodyZone[] = [
     priority: 'P0',
   },
   {
+    // Decisão do time (15/11): braços = musculoesquelético, com o mesmo indicador de Legs (adesão ao
+    // exercício resistido e aeróbico). Sem sensor de lesão no protótipo: nada de sintoma ou limiar inventado.
+    id: 'arms',
+    label: 'Arms',
+    functionText: 'Muscles and bones of the shoulders, arms and hands: reach, grip and handling tools.',
+    indicators: ['exerciseAdherence'],
+    hazard: 'gravity',
+    hazardBasis: 'fact', // [S19] perda de massa óssea e muscular em microgravidade
+    sourceIds: ['S19'],
+    priority: 'P1',
+  },
+  {
     id: 'legs',
     label: 'Legs',
     functionText: 'Muscles and bones that carry you in gravity.',

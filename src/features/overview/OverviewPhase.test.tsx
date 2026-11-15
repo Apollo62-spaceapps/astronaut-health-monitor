@@ -22,6 +22,17 @@ describe('Overview · L5 (P1)', () => {
     expect(screen.getByRole('article').textContent).toContain('Weekly exercise adherence')
   })
 
+  it('zona Arms: mesmo indicador de Legs (adesão), clicável e com card próprio', () => {
+    render(<OverviewPage />)
+    expect(zone('arms').getAttribute('data-status')).toBe(zone('legs').getAttribute('data-status'))
+    expect(zone('arms').getAttribute('aria-label')).toMatch(/^Arms — Normal/)
+    fireEvent.keyDown(zone('arms'), { key: 'Enter' })
+    const card = screen.getByRole('article')
+    expect(card.querySelector('h2')?.textContent).toBe('Arms')
+    expect(card.textContent).toContain('Weekly exercise adherence')
+    expect(card.textContent).toContain('Gravity fields')
+  })
+
   it('trocar para um ambiente com outra gravidade → Heart "Adapting"; 3 dias depois volta (BODY-09)', () => {
     render(<OverviewPage />)
     act(() => useAppStore.getState().setEnvironment('LUNAR'))
