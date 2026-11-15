@@ -181,7 +181,8 @@ export const useAppStore = create<AppState>()(
       version: 1,
       storage: createJSONStorage(() => localStorage),
       // Só preferências persistem; o cenário da demo sempre recomeça igual.
-      partialize: (s) => ({ environment: s.environment, role: s.role, aiMode: s.aiMode }),
+      // aiMode não persiste: o modelo de bordo precisa ser carregado de novo a cada sessão (começa em protocolo).
+      partialize: (s) => ({ environment: s.environment, role: s.role }),
     },
   ),
 )

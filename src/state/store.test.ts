@@ -51,9 +51,9 @@ describe('store (K2)', () => {
     expect(useAppStore.getState().outbox).toEqual([])
   })
 
-  it('só preferências persistem (ambiente, perfil, IA)', () => {
+  it('só preferências persistem (ambiente e perfil)', () => {
     useAppStore.getState().setEnvironment('LUNAR')
     const saved = JSON.parse(localStorage.getItem('apollo62:prefs') ?? '{}')
-    expect(saved.state).toEqual({ environment: 'LUNAR', role: 'ASTRONAUT', aiMode: 'protocol' })
+    expect(saved.state).toEqual({ environment: 'LUNAR', role: 'ASTRONAUT' })
   })
 })
