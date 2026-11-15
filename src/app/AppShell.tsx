@@ -6,7 +6,6 @@ import { MissionBanner } from '@/app/MissionBanner'
 import { EnvironmentModeButton } from '@/features/environment/EnvironmentModeButton'
 import { OverviewPage } from '@/features/overview/OverviewPage'
 import { VitalsPage } from '@/features/vitals/VitalsPage'
-import { RoutinePage } from '@/features/routine/RoutinePage'
 import { RadiationPage } from '@/features/radiation/RadiationPage'
 import { ExercisePage } from '@/features/exercise/ExercisePage'
 import { WellbeingPage } from '@/features/wellbeing/WellbeingPage'
@@ -19,7 +18,6 @@ import { useAppStore } from '@/state/store'
 const PAGES: Record<TabId, ComponentType> = {
   overview: OverviewPage,
   vitals: VitalsPage,
-  routine: RoutinePage,
   radiation: RadiationPage,
   exercise: ExercisePage,
   wellbeing: WellbeingPage,

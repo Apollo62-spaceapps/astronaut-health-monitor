@@ -3,7 +3,6 @@ import {
   Activity,
   BookOpen,
   Bot,
-  CalendarClock,
   Dumbbell,
   HeartPulse,
   Radiation,
@@ -12,7 +11,7 @@ import {
 } from 'lucide-react'
 
 export type TabId =
-  'overview' | 'vitals' | 'routine' | 'radiation' | 'wellbeing' | 'exercise' | 'assistant' | 'sources'
+  'overview' | 'vitals' | 'radiation' | 'wellbeing' | 'exercise' | 'assistant' | 'sources'
 
 export interface TabDef {
   id: TabId
@@ -25,7 +24,6 @@ export interface TabDef {
 export const TABS: readonly TabDef[] = [
   { id: 'overview', label: 'Overview', icon: Activity, owner: 'Lucas', task: 'L3 #54' },
   { id: 'vitals', label: 'Vitals', icon: HeartPulse, owner: 'Lucas', task: 'L4 #55' },
-  { id: 'routine', label: 'Routine', icon: CalendarClock, owner: 'Felipe', task: 'F1 #59' },
   { id: 'radiation', label: 'Radiation', icon: Radiation, owner: 'Felipe', task: 'F2 #45' },
   { id: 'exercise', label: 'Exercise', icon: Dumbbell, owner: 'Felipe', task: 'F3 #56' },
   { id: 'wellbeing', label: 'Wellbeing', icon: Smile, owner: 'Felipe', task: 'F4 #47' },
