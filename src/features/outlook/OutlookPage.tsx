@@ -1,7 +1,7 @@
 // Crew outlook (L7 §5A, R-RISK-01). Linha por tripulante: nível (cor + ícone + texto), hazard principal e os
 // drivers que mais contribuem, com selo. NÃO é previsão nem diagnóstico. Privacidade (R-PRIV-01): o astronauta vê
 // o próprio detalhe e só o nível dos colegas; o CMO não vê humor e sono sem break-glass.
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Lock, Sparkles } from 'lucide-react'
 import { OUTLOOK_DISCLAIMER } from '@/ai/identity'
 import { etaText, RISK_TEXT } from '@/ai/reply'
@@ -50,6 +50,13 @@ export function OutlookPage() {
   const ask = useOrbitStore((s) => s.ask)
   const setPacket = useOrbitStore((s) => s.setPacket)
   const [selectedId, setSelectedId] = useState('A')
+  const detailRef = useRef<HTMLElement>(null)
+  // Abaixo de xl (1280 px) o detalhe fica embaixo da lista: ao tocar num tripulante, rola até ele (no desktop nada muda).
+  function selectCrew(id: string) {
+    setSelectedId(id)
+    if (typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 1279px)').matches)
+      requestAnimationFrame(() => detailRef.current?.scrollIntoView?.({ block: 'start' }))
+  }
   const selected = ctx.crew.find((c) => c.id === selectedId) ?? ctx.crew[0]!
   const astronaut = ctx.role === 'ASTRONAUT'
   const label = (c: VisibleOutlook) => (c.isSelf && astronaut ? `${c.name} (you)` : c.name)
@@ -82,7 +89,7 @@ export function OutlookPage() {
                 <button
                   type="button"
                   aria-pressed={c.id === selected.id}
-                  onClick={() => setSelectedId(c.id)}
+                  onClick={() => selectCrew(c.id)}
                   className={cn(
                     'flex w-full cursor-pointer flex-col gap-2 rounded-md p-3 text-left hover:bg-surface-2',
                     c.id === selected.id && 'bg-surface-2',
@@ -90,7 +97,7 @@ export function OutlookPage() {
                 >
                   <span className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-semibold">{label(c)}</span>
-                    <span className="flex items-center gap-3">
+                    <span className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1">
                       {c.hazard && <span className="text-sm text-muted">{HAZARD_LABEL[c.hazard]}</span>}
                       <RiskBadge level={c.level} />
                     </span>
@@ -118,7 +125,11 @@ export function OutlookPage() {
           </p>
         </section>
 
-        <article aria-labelledby="outlook-detail" className="space-y-4 rounded-lg bg-surface p-5">
+        <article
+          ref={detailRef}
+          aria-labelledby="outlook-detail"
+          className="scroll-mt-4 space-y-4 rounded-lg bg-surface p-5 max-sm:p-4"
+        >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 id="outlook-detail" className="text-xl">
               {label(selected)}
@@ -185,6 +196,7 @@ export function OutlookPage() {
             <Button
               variant="outline"
               size="sm"
+              className="max-md:h-10 max-sm:flex-1"
               onClick={() =>
                 ask(
                   {
@@ -199,7 +211,7 @@ export function OutlookPage() {
               <Sparkles aria-hidden /> Explain with Orbit
             </Button>
             {(selected.level === 'elevated' || selected.level === 'high') && (
-              <Button variant="outline" size="sm" onClick={() => setPacket({})}>
+              <Button variant="outline" size="sm" className="max-md:h-10 max-sm:flex-1" onClick={() => setPacket({})}>
                 Notify CMO
               </Button>
             )}

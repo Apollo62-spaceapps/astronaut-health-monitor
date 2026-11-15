@@ -32,12 +32,12 @@ export function TriageFlow({ messageId, state }: { messageId: string; state: Tri
   }
 
   return (
-    <section aria-label="Symptom check" className="w-full space-y-3 rounded-lg bg-surface-2 p-4">
+    <section aria-label="Symptom check" className="w-full min-w-0 space-y-3 rounded-lg bg-surface-2 p-4 max-md:p-3">
       <p className="text-xs text-muted">{TRIAGE_DISCLAIMER}</p>
       <p className="text-[17px]">{q.question}</p>
       <div className="flex flex-wrap gap-2">
         {q.options.map((o) => (
-          <Button key={o} size="sm" variant="outline" onClick={() => answer(o)}>
+          <Button key={o} size="sm" variant="outline" onClick={() => answer(o)} className="max-md:h-10">
             {o}
           </Button>
         ))}
@@ -53,9 +53,15 @@ export function TriageFlow({ messageId, state }: { messageId: string; state: Tri
             onChange={(e) => setText(e.target.value)}
             placeholder="Describe it in your words…"
             autoComplete="off"
-            className="min-w-0 flex-1 rounded-md border border-border bg-surface px-3 py-1.5 text-sm"
+            className="min-w-0 flex-1 rounded-md border border-border bg-surface px-3 py-1.5 text-sm max-md:h-11 max-md:text-base"
           />
-          <Button type="submit" size="sm" variant="secondary" disabled={!text.trim()}>
+          <Button
+            type="submit"
+            size="sm"
+            variant="secondary"
+            disabled={!text.trim()}
+            className="max-md:h-11 max-md:px-4"
+          >
             Next
           </Button>
         </form>

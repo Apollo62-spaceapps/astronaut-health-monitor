@@ -29,7 +29,7 @@ function ExplainWithOrbit({ zone, label, status }: { zone: MapTarget; label: str
   const text = status ? `Why is my ${label.toLowerCase()} zone ${status}?` : `Explain my ${label.toLowerCase()} zone`
   return (
     <div>
-      <Button variant="outline" size="sm" onClick={() => ask({ text, intent: 'zoneExplain', zone }, { openDrawer: true })}>
+      <Button variant="outline" size="sm" className="max-sm:h-10" onClick={() => ask({ text, intent: 'zoneExplain', zone }, { openDrawer: true })}>
         <Sparkles aria-hidden /> Explain with Orbit
       </Button>
     </div>
@@ -190,7 +190,7 @@ export function ZoneCard({
     const d = out.radiation
     const shelter = out.alerts.find((a) => a.ruleId === 'R-RAD-03')
     return (
-      <article aria-labelledby="zone-card-title" className="flex flex-col gap-4 rounded-md bg-surface-2 p-5">
+      <article aria-labelledby="zone-card-title" className="flex min-w-0 flex-col gap-4 rounded-md bg-surface-2 p-5 break-words max-sm:p-4">
         <h2 id="zone-card-title" className="text-xl">
           Radiation · whole body
         </h2>
@@ -243,7 +243,7 @@ export function ZoneCard({
   const restricted = status === 'restricted'
 
   return (
-    <article aria-labelledby="zone-card-title" className="flex flex-col gap-4 rounded-md bg-surface-2 p-5">
+    <article aria-labelledby="zone-card-title" className="flex min-w-0 flex-col gap-4 rounded-md bg-surface-2 p-5 break-words max-sm:p-4">
       <div className="flex flex-wrap items-center gap-3">
         <h2 id="zone-card-title" className="text-xl">
           {zone.label}

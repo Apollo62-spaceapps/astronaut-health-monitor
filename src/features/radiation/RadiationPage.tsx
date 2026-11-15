@@ -37,12 +37,12 @@ export function RadiationPage() {
       {alert && (
         <Card className="border-2 border-urgent">
           <div aria-hidden className="hatch h-2 rounded-t-lg text-urgent" />
-          <CardHeader>
+          <CardHeader className="max-md:px-4">
             <CardTitle className="text-urgent">
               <span aria-hidden>●</span> Urgent · {alert.title}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 max-md:px-4">
             <ol className="list-decimal space-y-2 pl-5">
               {alert.safeActions.map((step) => (
                 <li key={step}>{step}</li>
@@ -52,7 +52,7 @@ export function RadiationPage() {
               {SHELTER_LABEL} <SourceRef ids={['S05']} />
             </p>
             <p className="text-xs text-muted">Consult your flight surgeon.</p>
-            <Button variant="outline" onClick={endShelter}>
+            <Button variant="outline" onClick={endShelter} className="max-md:h-11 max-md:w-full">
               End shelter · demo
             </Button>
           </CardContent>
@@ -61,16 +61,16 @@ export function RadiationPage() {
 
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader>
+          <CardHeader className="max-md:px-4">
             <CardTitle className="flex items-center gap-2">
               <Radiation aria-hidden className="size-5" />
               Career dose
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 max-md:px-4">
             {sourced ? (
               <>
-                <div className="flex items-baseline gap-2">
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   <span className="num text-4xl">{formatMSv(dose.totalMSv!)}</span>
                   <span className="text-muted">mSv</span>
                   <span className="ml-auto text-lg">
@@ -105,8 +105,8 @@ export function RadiationPage() {
             ) : (
               <div className="space-y-2 rounded-md bg-surface-2 p-4">
                 <p>
-                  <span className="num text-2xl">{formatMSv(dose.priorMSv)}</span> mSv accumulated before this
-                  mission, of <span className="num">{dose.limitMSv}</span> mSv.
+                  <span className="num text-2xl">{formatMSv(dose.priorMSv)}</span> mSv accumulated before this mission,
+                  of <span className="num">{dose.limitMSv}</span> mSv.
                 </p>
                 <p className="text-sm text-muted">
                   {environment === 'EARTH'
@@ -137,8 +137,9 @@ export function RadiationPage() {
                   <dd className="flex flex-wrap items-center gap-2">
                     <span className="num">{formatMSv(dose.missionMSv!)} mSv</span>
                     <span className="text-muted">
-                      = day <span className="num">{missionDay}</span> × <span className="num">{dose.rateMSvPerDay}</span>{' '}
-                      mSv/day, MSL/RAD cruise average (galactic cosmic rays)
+                      = day <span className="num">{missionDay}</span> ×{' '}
+                      <span className="num">{dose.rateMSvPerDay}</span> mSv/day, MSL/RAD cruise average (galactic cosmic
+                      rays)
                     </span>
                     <ProvenanceBadge provenance={{ kind: 'simulated', basis: 'S09' }} />
                     <SourceRef ids={['S08', 'S09']} />
@@ -150,13 +151,13 @@ export function RadiationPage() {
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="max-md:px-4">
             <CardTitle className="flex items-center gap-2">
               <AlertTriangle aria-hidden className="size-5" />
               Space weather event
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 max-md:px-4">
             {event && (
               <>
                 <p className="font-semibold">Solar energetic particle event · GOES-P SEISS</p>
@@ -166,15 +167,20 @@ export function RadiationPage() {
                   <SourceRef ids={['S07']} />
                 </p>
                 <p className="text-sm text-muted">
-                  Real event observed near Earth (NASA DONKI), replayed in this scenario. Data used under the CCMC
-                  terms <SourceRef ids={['S06']} />.
+                  Real event observed near Earth (NASA DONKI), replayed in this scenario. Data used under the CCMC terms{' '}
+                  <SourceRef ids={['S06']} />.
                 </p>
-                <div className="flex flex-wrap items-center gap-4">
-                  <a href={event.link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-4 max-md:flex-col max-md:items-stretch max-md:gap-2">
+                  <a
+                    href={event.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 max-md:min-h-10"
+                  >
                     Open event in NASA DONKI <ExternalLink aria-hidden className="size-4" />
                   </a>
                   {!eventReplayed && (
-                    <Button variant="outline" onClick={replaySolarEvent}>
+                    <Button variant="outline" onClick={replaySolarEvent} className="max-md:h-11 max-md:w-full">
                       Replay event · demo
                     </Button>
                   )}
@@ -187,10 +193,10 @@ export function RadiationPage() {
 
       {shelterActive && (
         <Card>
-          <CardHeader>
+          <CardHeader className="max-md:px-4">
             <CardTitle>Exercise schedule</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="max-md:px-4">
             <p className="text-muted">Today&apos;s sessions are postponed while the shelter is active.</p>
           </CardContent>
         </Card>

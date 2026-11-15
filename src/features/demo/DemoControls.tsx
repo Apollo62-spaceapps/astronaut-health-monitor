@@ -22,7 +22,7 @@ export function DemoControls() {
         <section
           id="demo-controls-panel"
           aria-labelledby="demo-controls-title"
-          className="w-[min(420px,calc(100vw-2rem))] space-y-4 rounded-lg border-2 border-dashed border-muted/60 bg-surface p-4 shadow-xl"
+          className="w-[min(420px,calc(100vw-2rem))] space-y-4 rounded-lg border-2 border-dashed border-muted/60 bg-surface p-4 shadow-xl max-md:max-h-[70dvh] max-md:overflow-y-auto max-md:overscroll-contain"
         >
           <div className="flex items-start justify-between gap-2">
             <div>
@@ -33,7 +33,7 @@ export function DemoControls() {
                 Demo controls
               </h2>
             </div>
-            <Button variant="ghost" size="icon" aria-label="Close demo controls" onClick={() => setOpen(false)}>
+            <Button variant="ghost" size="icon" className="max-md:size-10" aria-label="Close demo controls" onClick={() => setOpen(false)}>
               <X aria-hidden />
             </Button>
           </div>
@@ -42,12 +42,12 @@ export function DemoControls() {
             <p className="text-sm font-semibold">Solar event replay</p>
             <p className="text-xs text-muted">Starts the shelter flow and postpones today&apos;s exercise.</p>
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" onClick={replaySolarEvent} disabled={eventReplayed}>
+              <Button variant="outline" size="sm" className="max-md:h-10" onClick={replaySolarEvent} disabled={eventReplayed}>
                 <Sun aria-hidden />
                 {eventReplayed ? 'Event replayed · demo' : 'Replay solar event · demo'}
               </Button>
               {shelterActive && (
-                <Button variant="outline" size="sm" onClick={endShelter}>
+                <Button variant="outline" size="sm" className="max-md:h-10" onClick={endShelter}>
                   End shelter · demo
                 </Button>
               )}
@@ -61,6 +61,7 @@ export function DemoControls() {
             <Button
               variant="outline"
               size="sm"
+              className="max-md:h-10 max-sm:w-full"
               onClick={() => {
                 const s = useAppStore.getState()
                 const pre = s.preflight.filter((r) => r.kind === 'heartRate')
@@ -101,6 +102,7 @@ export function DemoControls() {
                   key={label}
                   variant="outline"
                   size="sm"
+                  className="max-md:h-10"
                   onClick={() => {
                     useOrbitStore.getState().ask({ ...q }, { openDrawer: true })
                     setOpen(false)
@@ -122,7 +124,7 @@ export function DemoControls() {
                   id="demo-time"
                   value={acceleration}
                   onChange={(e) => setTimeAcceleration(Number(e.target.value))}
-                  className="rounded-md border border-border bg-ground px-2 py-1"
+                  className="rounded-md border border-border bg-ground px-2 py-1 max-md:h-10 max-md:text-base"
                 >
                   <option value={1}>1× · paused</option>
                   <option value={60}>60×</option>
@@ -130,7 +132,7 @@ export function DemoControls() {
                 </select>
               </span>
             </label>
-            <Button variant="outline" size="sm" onClick={resetScenario}>
+            <Button variant="outline" size="sm" className="max-md:h-10" onClick={resetScenario}>
               <RotateCcw aria-hidden />
               Reset scenario · demo
             </Button>

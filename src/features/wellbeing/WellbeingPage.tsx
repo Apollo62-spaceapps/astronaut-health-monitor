@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { z } from 'zod'
 import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { History, Info, LockKeyhole, ShieldAlert } from 'lucide-react'
@@ -27,7 +27,23 @@ const JOURNAL_PROMPTS = ['What stood out during your day?', 'What helped you fee
 const daysBack = (iso: string, amount: number) =>
   new Date(Date.parse(`${iso.slice(0, 10)}T00:00:00Z`) - amount * 86_400_000).toISOString().slice(0, 10)
 
+/** Celular (< 640 px): menos rótulos no eixo X do gráfico de 14 dias, para não sobrepor. Desktop não muda. */
+function useNarrowScreen() {
+  const query = '(max-width: 639px)'
+  const get = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(query).matches
+  const [narrow, setNarrow] = useState(get)
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return
+    const mql = window.matchMedia(query)
+    const onChange = () => setNarrow(mql.matches)
+    mql.addEventListener?.('change', onChange)
+    return () => mql.removeEventListener?.('change', onChange)
+  }, [])
+  return narrow
+}
+
 export function WellbeingPage() {
+  const narrow = useNarrowScreen()
   const role = useAppStore((s) => s.role)
   const wellbeing = useAppStore((s) => s.wellbeing)
   const consent = useAppStore((s) => s.consent)
@@ -124,7 +140,7 @@ export function WellbeingPage() {
           aria-expanded={privacyInfoOpen}
           aria-controls="privacy-info"
           onClick={() => setPrivacyInfoOpen((v) => !v)}
-          className="mt-3 inline-flex items-center gap-1 text-sm text-link"
+          className="mt-3 inline-flex items-center gap-1 text-sm text-link max-md:mt-1 max-md:min-h-10"
         >
           <Info aria-hidden className="size-4" /> Why is this private?
         </button>
@@ -159,14 +175,14 @@ export function WellbeingPage() {
           <CardHeader>
             <CardTitle>Share wellbeing alerts (not details) with CMO</CardTitle>
           </CardHeader>
-          <CardContent className="flex items-center justify-between gap-4">
+          <CardContent className="flex items-center justify-between gap-4 max-sm:items-start">
             <p className="max-w-2xl text-sm text-muted">
               This shares only the alert level. Your mood and sleep entries remain private.
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-3">
               <span className="text-sm text-muted">{consent.shareWellbeingAlertsWithCmo ? 'On' : 'Off'}</span>
               <Switch
-                className="data-[state=checked]:bg-link"
+                className="relative data-[state=checked]:bg-link max-md:before:absolute max-md:before:-inset-3 max-md:before:content-['']"
                 checked={consent.shareWellbeingAlertsWithCmo}
                 onCheckedChange={setConsent}
                 aria-label="Share wellbeing alerts (not details) with CMO"
@@ -187,12 +203,12 @@ export function WellbeingPage() {
           <CardContent className="space-y-4">
             <p className="text-muted">Mood and sleep entries are private. Emergency access is audited.</p>
             {role === 'CMO' && !breakGlass.active && (
-              <Button variant="secondary" onClick={() => setDialogOpen(true)}>
+              <Button variant="secondary" onClick={() => setDialogOpen(true)} className="max-md:h-11 max-sm:w-full">
                 Emergency access
               </Button>
             )}
             {breakGlass.active && (
-              <Button variant="outline" onClick={endBreakGlass}>
+              <Button variant="outline" onClick={endBreakGlass} className="max-md:h-11 max-sm:w-full">
                 End emergency access
               </Button>
             )}
@@ -219,7 +235,7 @@ export function WellbeingPage() {
                         {MOOD_LABELS.map((label, index) => (
                           <label
                             key={label}
-                            className="flex cursor-pointer flex-col items-center gap-1 rounded-md border border-border px-1 py-2 text-center text-xs whitespace-nowrap has-[:checked]:border-link has-[:checked]:bg-surface-2"
+                            className="flex cursor-pointer flex-col items-center gap-1 rounded-md border border-border px-1 py-2 text-center text-xs whitespace-nowrap has-[:checked]:border-link has-[:checked]:bg-surface-2 max-sm:min-h-16 max-sm:justify-center max-sm:leading-tight max-sm:whitespace-normal"
                           >
                             <input
                               type="radio"
@@ -227,7 +243,7 @@ export function WellbeingPage() {
                               value={index + 1}
                               checked={mood === String(index + 1)}
                               onChange={(e) => setMood(e.target.value)}
-                              className="accent-link"
+                              className="accent-link max-md:size-5"
                             />
                             <span>{label}</span>
                           </label>
@@ -244,7 +260,7 @@ export function WellbeingPage() {
                         step="0.5"
                         value={sleepHours}
                         onChange={(e) => setSleepHours(e.target.value)}
-                        className="font-mono"
+                        className="font-mono max-md:h-11"
                       />
                     </div>
                     {error && (
@@ -252,15 +268,15 @@ export function WellbeingPage() {
                         {error}
                       </p>
                     )}
-                    <Button type="submit" variant="secondary">
+                    <Button type="submit" variant="secondary" className="max-md:h-11 max-sm:w-full">
                       Save check-in
                     </Button>
                   </form>
                 </CardContent>
               </Card>
-              <Card><CardHeader><CardTitle>Private journal</CardTitle></CardHeader><CardContent><form onSubmit={saveJournal} className="space-y-3"><p className="text-sm text-muted">{journalPrompt}</p>{todayEntry?.note && <p className="rounded-md bg-surface-2 p-3 text-sm">{todayEntry.note}</p>}<Label htmlFor="wellbeing-journal">A note for yourself · up to 600 characters</Label><textarea id="wellbeing-journal" value={journalDraft} maxLength={600} onChange={(e) => setJournalDraft(e.target.value)} rows={4} placeholder="Write only what you want to keep…" className="w-full resize-y rounded-md border border-border bg-surface-2 p-3 text-sm" /><div className="flex items-center justify-between text-xs text-muted"><span>{todayEntry ? 'Stored on this device for the selected environment.' : "Save today's check-in first; the note is attached to it."}</span><span className="num">{journalDraft.length}/600</span></div><Button type="submit" variant="secondary" disabled={!journalDraft.trim() || !todayEntry}>Save journal note</Button></form></CardContent></Card>
+              <Card><CardHeader><CardTitle>Private journal</CardTitle></CardHeader><CardContent><form onSubmit={saveJournal} className="space-y-3"><p className="text-sm text-muted">{journalPrompt}</p>{todayEntry?.note && <p className="rounded-md bg-surface-2 p-3 text-sm">{todayEntry.note}</p>}<Label htmlFor="wellbeing-journal">A note for yourself · up to 600 characters</Label><textarea id="wellbeing-journal" value={journalDraft} maxLength={600} onChange={(e) => setJournalDraft(e.target.value)} rows={4} placeholder="Write only what you want to keep…" className="w-full resize-y rounded-md border border-border bg-surface-2 p-3 text-sm max-md:text-base" /><div className="flex items-start justify-between gap-3 text-xs text-muted sm:items-center"><span>{todayEntry ? 'Stored on this device for the selected environment.' : "Save today's check-in first; the note is attached to it."}</span><span className="num shrink-0">{journalDraft.length}/600</span></div><Button type="submit" variant="secondary" className="max-md:h-11 max-sm:w-full" disabled={!journalDraft.trim() || !todayEntry}>Save journal note</Button></form></CardContent></Card>
             </div>}
-            <Card className={role !== 'ASTRONAUT' ? 'col-span-2' : ''}>
+            <Card className={role !== 'ASTRONAUT' ? 'lg:col-span-2' : ''}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   Last 14 days
@@ -280,7 +296,7 @@ export function WellbeingPage() {
                   </li>
                 </ul>
                 <div
-                  className="h-72"
+                  className="h-72 max-sm:h-60"
                   role="img"
                   aria-label="Chart of self-reported mood and sleep over the last 14 days"
                 >
@@ -291,7 +307,7 @@ export function WellbeingPage() {
                         dataKey="date"
                         stroke="var(--color-muted)"
                         tick={{ fontSize: 12, fontFamily: 'var(--font-mono)' }}
-                        interval={1}
+                        interval={narrow ? 3 : 1}
                       />
                       <YAxis
                         yAxisId="mood"
@@ -358,7 +374,7 @@ export function WellbeingPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <p className="text-sm text-muted">Access is being recorded. Reason: {breakGlass.reason}</p>
-                <Button variant="outline" onClick={endBreakGlass}>
+                <Button variant="outline" onClick={endBreakGlass} className="max-md:h-11 max-sm:w-full">
                   End emergency access
                 </Button>
               </CardContent>
@@ -383,7 +399,7 @@ export function WellbeingPage() {
               {auditEntries.map((entry) => (
                 <li
                   key={`${entry.at}-${entry.action}-${entry.actor}`}
-                  className="grid grid-cols-[210px_140px_1fr] gap-3 py-2"
+                  className="grid gap-1 py-2 md:grid-cols-[210px_140px_1fr] md:gap-3"
                 >
                   <span className="num text-muted">{formatUtc(entry.at)}</span>
                   <span>
@@ -416,6 +432,7 @@ export function WellbeingPage() {
                 id="break-glass-reason"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
+                className="max-md:h-11"
                 required
                 autoFocus
               />
@@ -426,7 +443,7 @@ export function WellbeingPage() {
               )}
             </div>
             <DialogFooter>
-              <Button type="submit" disabled={!reason.trim()}>
+              <Button type="submit" disabled={!reason.trim()} className="max-md:h-11">
                 Confirm access
               </Button>
             </DialogFooter>
