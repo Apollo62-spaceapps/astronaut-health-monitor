@@ -88,7 +88,7 @@ export function WellbeingPage() {
 
   function saveCheckIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const parsed = checkInSchema.safeParse({ mood: Number(mood), sleepHours: Number(sleepHours) })
+    const parsed = checkInSchema.safeParse({ mood: Number(mood), sleepHours: sleepHours.trim() === '' ? NaN : Number(sleepHours.trim().replace(',', '.')) })
     if (!parsed.success) {
       setError('Enter a mood from 1 to 5 and sleep from 0 to 24 hours.')
       return
@@ -254,10 +254,9 @@ export function WellbeingPage() {
                       <Label htmlFor="sleep-hours">Hours of sleep</Label>
                       <Input
                         id="sleep-hours"
-                        type="number"
-                        min="0"
-                        max="24"
-                        step="0.5"
+                        type="text"
+                        inputMode="decimal"
+                        autoComplete="off"
                         value={sleepHours}
                         onChange={(e) => setSleepHours(e.target.value)}
                         className="font-mono max-md:h-11"

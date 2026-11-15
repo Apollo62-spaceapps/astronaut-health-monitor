@@ -33,7 +33,10 @@ export function MeasurementDialog({ item, open, onOpenChange, onSave, nowIso }: 
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const parsed = measurementSchema.safeParse({ kind, value: Number(value) })
+    // Aceita "36,6" (teclado em português) e "36.6"; vazio ou texto vira mensagem clara, nunca falha em silêncio.
+    const num = value.trim() === '' ? NaN : Number(value.trim().replace(',', '.'))
+    if (!Number.isFinite(num)) { setError('Enter a number, for example 72 or 36.6.'); return }
+    const parsed = measurementSchema.safeParse({ kind, value: num })
     if (!parsed.success) { setError(parsed.error.issues[0]?.message ?? 'Enter a valid measurement.'); return }
     const unit = kind === 'heartRate' ? 'bpm' : kind === 'bodyTemp' ? '°C' : kind === 'glucose' ? 'mg/dL' : 'mmHg'
     onSave(item!, { kind, value: parsed.data.value, unit, takenAt: nowIso, provenance: { kind: 'simulated', note: 'Demo measurement' } })
@@ -45,7 +48,7 @@ export function MeasurementDialog({ item, open, onOpenChange, onSave, nowIso }: 
       <form onSubmit={submit}>
         <DialogHeader><DialogTitle>Log measurement</DialogTitle><DialogDescription>{item?.title ?? 'Record a mission measurement.'} · Illustrative thresholds</DialogDescription></DialogHeader>
         <div className="space-y-2 py-5"><Label htmlFor="measurement-value">{KIND_LABEL[kind]}</Label>
-          <Input id="measurement-value" type="number" step="any" value={value} onChange={(e) => setValue(e.target.value)} aria-invalid={!!error} className="max-sm:h-11" autoFocus />
+          <Input id="measurement-value" type="text" inputMode="decimal" autoComplete="off" value={value} onChange={(e) => setValue(e.target.value)} aria-invalid={!!error} className="max-sm:h-11" autoFocus />
           {error && <p role="alert" className="text-sm text-muted">{error}</p>}
           <p className="text-xs text-muted">Input plausibility check only; this is not a clinical threshold.</p>
         </div>

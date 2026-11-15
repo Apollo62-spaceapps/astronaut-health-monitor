@@ -3,7 +3,6 @@
 // Perfis: o astronauta lê "Your body"; CMO e Flight Surgeon leem "Crew member" em terceira pessoa,
 // sem a ação de registrar medida (que é do astronauta).
 import { useState, type FormEvent } from 'react'
-import { z } from 'zod'
 import { BODY_ZONES } from '@/domain/config/bodyZones'
 import { ENVIRONMENTS } from '@/domain/config/environments'
 import type { BodyZoneId, MissionMode, VitalKind } from '@/domain/types'
@@ -54,21 +53,51 @@ const ENV_PLACE: Record<MissionMode, string> = {
 }
 
 const ROLE_TEXT: Record<string, string> = { CMO: 'CMO', FLIGHT_SURGEON: 'flight surgeon', ASTRONAUT: 'astronaut' }
-const dailyCheckInSchema = z
-  .object({
-    mood: z.coerce.number().int().min(1).max(5),
-    sleepHours: z.coerce.number().min(0).max(24),
-    heartRate: z.coerce.number(),
-    systolicBP: z.coerce.number(),
-    diastolicBP: z.coerce.number(),
-    glucose: z.coerce.number(),
-    bodyTemp: z.coerce.number(),
-  })
-  .superRefine((v, ctx) => {
-    for (const kind of ['heartRate', 'systolicBP', 'diastolicBP', 'glucose', 'bodyTemp'] as const)
-      if (v[kind] < INPUT_PLAUSIBILITY[kind].min || v[kind] > INPUT_PLAUSIBILITY[kind].max)
-        ctx.addIssue({ code: 'custom', message: `${kind}: enter a plausible value.`, path: [kind] })
-  })
+const CHECKIN_VITALS = [
+  ['heartRate', 'Resting heart rate', 'bpm'],
+  ['systolicBP', 'Systolic blood pressure', 'mmHg'],
+  ['diastolicBP', 'Diastolic blood pressure', 'mmHg'],
+  ['glucose', 'Blood glucose', 'mg/dL'],
+  ['bodyTemp', 'Body temperature', '°C'],
+] as const
+type CheckInVital = (typeof CHECKIN_VITALS)[number][0]
+type CheckInUnit = (typeof CHECKIN_VITALS)[number][2]
+
+/** "36,6" (teclado em português) ou "36.6" → 36.6; vazio → null; texto inválido → NaN. */
+const parseDecimal = (s: string): number | null => {
+  const t = s.trim().replace(',', '.')
+  return t === '' ? null : Number(t)
+}
+
+/**
+ * Check-in diário: humor e sono obrigatórios; os vitais são OPCIONAIS (só os preenchidos viram leitura), para que
+ * atualizar o check-in não exija medir tudo de novo. Plausibilidade só bloqueia erro de digitação (não é critério
+ * clínico). Devolve os erros por campo, que a tela mostra (nunca falha em silêncio).
+ */
+export function validateDailyCheckIn(
+  mood: string,
+  sleepHours: string,
+  values: Partial<Record<CheckInVital, string>>,
+):
+  | { ok: true; mood: 1 | 2 | 3 | 4 | 5; sleepHours: number; vitals: [CheckInVital, number, CheckInUnit][] }
+  | { ok: false; errors: Record<string, string> } {
+  const errors: Record<string, string> = {}
+  const m = Number(mood)
+  if (!Number.isInteger(m) || m < 1 || m > 5) errors.mood = 'Choose your mood from 1 to 5.'
+  const sleep = parseDecimal(sleepHours)
+  if (sleep === null) errors.sleepHours = 'Enter how many hours you slept.'
+  else if (!Number.isFinite(sleep) || sleep < 0 || sleep > 24) errors.sleepHours = 'Enter a value between 0 and 24 hours.'
+  const vitals: [CheckInVital, number, CheckInUnit][] = []
+  for (const [kind, , unit] of CHECKIN_VITALS) {
+    const v = parseDecimal(values[kind] ?? '')
+    if (v === null) continue
+    const { min, max } = INPUT_PLAUSIBILITY[kind]
+    if (!Number.isFinite(v) || v < min || v > max) errors[kind] = `Enter a value between ${min} and ${max} ${unit}.`
+    else vitals.push([kind, v, unit])
+  }
+  if (Object.keys(errors).length) return { ok: false, errors }
+  return { ok: true, mood: m as 1 | 2 | 3 | 4 | 5, sleepHours: sleep!, vitals }
+}
 
 /** Desvio em palavras para o aria-label (BODY-04): "resting heart rate +18% vs baseline". */
 const devText = (ev: VitalEvaluation) =>
@@ -166,24 +195,25 @@ export function OverviewPage() {
   })
   const dateKey = simNowIso.slice(0, 10)
   const checkIn = wellbeing.find((x) => x.date === dateKey && (x.environment ?? 'EARTH') === environment)
+  const [checkInErrors, setCheckInErrors] = useState<Record<string, string>>({})
   function saveCheckIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const result = dailyCheckInSchema.safeParse({ mood, sleepHours, ...measurementValues })
-    if (!result.success) return
+    const result = validateDailyCheckIn(mood, sleepHours, measurementValues)
+    if (!result.ok) {
+      setCheckInErrors(result.errors)
+      // Leva o foco ao primeiro campo com erro (no celular o diálogo rola).
+      const first = Object.keys(result.errors)[0]
+      document.getElementById(first === 'mood' ? 'daily-mood-1' : `daily-${first}`)?.focus()
+      return
+    }
+    setCheckInErrors({})
     loadScenario({
       wellbeing: [
         ...wellbeing.filter((x) => x.date !== dateKey || (x.environment ?? 'EARTH') !== environment),
-        { date: dateKey, environment, mood: result.data.mood as 1 | 2 | 3 | 4 | 5, sleepHours: result.data.sleepHours },
+        { date: dateKey, environment, mood: result.mood, sleepHours: result.sleepHours },
       ],
     })
-    const metrics = [
-      ['heartRate', result.data.heartRate, 'bpm'],
-      ['systolicBP', result.data.systolicBP, 'mmHg'],
-      ['diastolicBP', result.data.diastolicBP, 'mmHg'],
-      ['glucose', result.data.glucose, 'mg/dL'],
-      ['bodyTemp', result.data.bodyTemp, '°C'],
-    ] as const
-    for (const [kind, value, unit] of metrics)
+    for (const [kind, value, unit] of result.vitals)
       addReading({
         kind,
         value,
@@ -191,6 +221,8 @@ export function OverviewPage() {
         takenAt: simNowIso,
         provenance: { kind: 'simulated', note: 'Daily astronaut self-report' },
       })
+    // Vitais já viraram leitura: limpa para a próxima atualização não duplicar.
+    setMeasurementValues({ heartRate: '', systolicBP: '', diastolicBP: '', glucose: '', bodyTemp: '' })
     setCheckInOpen(false)
   }
 
@@ -281,6 +313,7 @@ export function OverviewPage() {
               onClick={() => {
                 setMood(String(checkIn?.mood ?? 3))
                 setSleepHours(checkIn ? String(checkIn.sleepHours) : '')
+                setCheckInErrors({})
                 setCheckInOpen(true)
               }}
             >
@@ -461,7 +494,8 @@ export function OverviewPage() {
       )}
       <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}>
         <DialogContent className="max-h-[85dvh] overflow-y-auto max-sm:p-4">
-          <form onSubmit={saveCheckIn} className="space-y-3">
+          {/* noValidate: a validação é nossa e aparece na tela (o balão nativo some no celular e parecia "não salvar"). */}
+          <form onSubmit={saveCheckIn} noValidate className="space-y-3">
             <DialogHeader>
               <DialogTitle>Daily health check-in</DialogTitle>
               <DialogDescription>
@@ -476,47 +510,77 @@ export function OverviewPage() {
                     key={n}
                     className="flex items-center justify-center gap-2 rounded-md bg-surface-2 p-2 max-sm:min-h-11 max-sm:gap-1.5"
                   >
-                    <input type="radio" name="mood" checked={mood === String(n)} onChange={() => setMood(String(n))} />
+                    <input
+                      id={`daily-mood-${n}`}
+                      type="radio"
+                      name="mood"
+                      checked={mood === String(n)}
+                      onChange={() => setMood(String(n))}
+                    />
                     {n}
                   </label>
                 ))}
               </div>
+              {checkInErrors.mood && <p className="mt-1 text-sm text-attention">▲ {checkInErrors.mood}</p>}
             </fieldset>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {(
-                [
-                  ['sleepHours', 'Sleep last night (hours)', '0.5'],
-                  ['heartRate', 'Resting heart rate (bpm)', '1'],
-                  ['systolicBP', 'Systolic blood pressure (mmHg)', '1'],
-                  ['diastolicBP', 'Diastolic blood pressure (mmHg)', '1'],
-                  ['glucose', 'Blood glucose (mg/dL)', '1'],
-                  ['bodyTemp', 'Body temperature (°C)', '0.1'],
-                ] as const
-              ).map(([key, label, step]) => (
-                <div key={key} className="space-y-1">
-                  <Label htmlFor={`daily-${key}`}>{label}</Label>
-                  <Input
-                    id={`daily-${key}`}
-                    type="number"
-                    className="max-sm:h-11"
-                    step={step}
-                    required
-                    min={key === 'sleepHours' ? 0 : undefined}
-                    max={key === 'sleepHours' ? 24 : undefined}
-                    value={key === 'sleepHours' ? sleepHours : (measurementValues[key] ?? '')}
-                    onChange={(e) =>
-                      key === 'sleepHours'
-                        ? setSleepHours(e.target.value)
-                        : setMeasurementValues((v) => ({ ...v, [key]: e.target.value }))
-                    }
-                  />
-                </div>
-              ))}
+            <div className="space-y-1">
+              <Label htmlFor="daily-sleepHours">Sleep last night (hours)</Label>
+              <Input
+                id="daily-sleepHours"
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                className="max-sm:h-11"
+                value={sleepHours}
+                aria-invalid={!!checkInErrors.sleepHours}
+                aria-describedby={checkInErrors.sleepHours ? 'daily-sleepHours-error' : undefined}
+                onChange={(e) => setSleepHours(e.target.value)}
+              />
+              {checkInErrors.sleepHours && (
+                <p id="daily-sleepHours-error" className="text-sm text-attention">
+                  ▲ {checkInErrors.sleepHours}
+                </p>
+              )}
             </div>
+            <fieldset className="space-y-2">
+              <legend className="text-sm">Measurements · optional</legend>
+              <p className="text-xs text-muted">Fill in only what you measured now. Blank fields keep your last reading.</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {CHECKIN_VITALS.map(([key, label, unit]) => (
+                  <div key={key} className="space-y-1">
+                    <Label htmlFor={`daily-${key}`}>
+                      {label} ({unit})
+                    </Label>
+                    <Input
+                      id={`daily-${key}`}
+                      type="text"
+                      inputMode="decimal"
+                      autoComplete="off"
+                      className="max-sm:h-11"
+                      value={measurementValues[key] ?? ''}
+                      aria-invalid={!!checkInErrors[key]}
+                      aria-describedby={checkInErrors[key] ? `daily-${key}-error` : undefined}
+                      onChange={(e) => setMeasurementValues((v) => ({ ...v, [key]: e.target.value }))}
+                    />
+                    {checkInErrors[key] && (
+                      <p id={`daily-${key}-error`} className="text-sm text-attention">
+                        ▲ {checkInErrors[key]}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </fieldset>
+            {Object.keys(checkInErrors).length > 0 && (
+              <p role="alert" className="text-sm font-semibold text-attention">
+                ▲ Check the highlighted fields, then save again.
+              </p>
+            )}
             <p className="text-xs text-muted">
               Input plausibility only · Illustrative thresholds · Consult your flight surgeon.
             </p>
-            <DialogFooter>
+            {/* Save sempre visível no celular: rodapé fixo no fim do diálogo rolável. */}
+            <DialogFooter className="sticky -bottom-4 -mx-4 border-t border-border bg-background px-4 py-3 sm:static sm:mx-0 sm:border-0 sm:p-0">
               <Button type="submit" className="max-sm:h-11 max-sm:w-full">
                 Save daily check-in
               </Button>
