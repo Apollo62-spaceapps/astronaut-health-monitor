@@ -85,7 +85,7 @@ export function OverviewPage() {
   const measures = routine.filter((r) => r.kind === 'measure' && r.environments.includes(environment))
   const pending = measures.find((r) => r.status === 'due' || r.status === 'overdue')
   const logItem = pending ?? measures.find((r) => r.vital === 'heartRate') ?? null
-  // Só um botão vermelho por tela (DESIGN-SYSTEM §6): se a faixa da missão já mostra o lembrete, este fica secundário.
+  // Só um botão vermelho por tela (DESIGN-SYSTEM §4): se a faixa da missão já mostra o lembrete, este fica secundário.
   const bannerHasPrimary = !!pending && !shelterActive
 
   const hr = vitalCardProps(out, 'heartRate')
@@ -231,8 +231,11 @@ export function OverviewPage() {
             }
             provenance={dose.provenance ?? { kind: 'simulated' }}
           >
-            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10" role="presentation">
-              <div className="h-full bg-link" style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }} />
+            <div className="h-2 w-full overflow-hidden rounded-sm bg-surface-2" role="presentation">
+              <div
+                className="h-full rounded-sm bg-foreground"
+                style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }}
+              />
             </div>
           </MetricCard>
         )}

@@ -132,7 +132,7 @@ export function SourcesPage() {
             <span className="block text-xs font-semibold uppercase tracking-wider text-muted">
               Demo · simulated controls
             </span>
-            <span id="demo-controls-title" className="mt-1 block text-xl font-extrabold">
+            <span id="demo-controls-title" className="mt-1 block text-xl font-semibold">
               Demo controls
             </span>
           </span>

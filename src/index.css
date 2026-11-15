@@ -1,4 +1,4 @@
-/* Tokens do docs/DESIGN-SYSTEM.md (Apollo 62 · NASA style). Não invente cores fora daqui.
+/* Tokens do docs/DESIGN-SYSTEM.md (Apollo 62 · Design System v2). Não invente cores fora daqui.
    O visual é sempre escuro: NÃO existe tema claro nem "modo noturno". O botão de modo de
    ambiente só troca --color-banner (via data-environment) e o comportamento da plataforma. */
 @import 'tailwindcss';
@@ -13,21 +13,21 @@
   --color-banner: #093174; /* faixa da missão — muda por ambiente (data-environment) */
   --color-action: #a52420; /* SÓ o botão primário — branco 7,3:1 */
   --color-action-hover: #920107; /* hover/pressed — branco 9,4:1 */
-  --color-link: #6fa8ff; /* links — 7,3:1 sobre surface */
-  --color-muted: #a9afb5; /* texto secundário, Restricted e Adapting — 7,9:1 */
+  --color-link: #6fa8ff; /* links e foco — 7,1:1 sobre surface */
+  --color-muted: #a9afb5; /* texto secundário, Restricted e Adapting — 7,7:1 */
   --color-foreground: #ffffff;
 
   /* Status (sempre com ícone + texto; hachura no Urgent). Nunca use --color-action para status. */
-  --color-normal: #3ddc97; /* ✓ Normal — 9,9:1 */
-  --color-attention: #f5b83d; /* ▲ Attention — 9,8:1 */
-  --color-urgent: #ff6b63; /* ● Urgent — 6,3:1 */
+  --color-normal: #3ddc97; /* ✓ Normal — 9,6:1 */
+  --color-attention: #f5b83d; /* ▲ Attention — 9,6:1 */
+  --color-urgent: #ff6b63; /* ● Urgent — 6,1:1 */
 
   /* Tipografia */
   --font-sans: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-/* Cor da faixa da missão por ambiente (DESIGN-SYSTEM §5). Só a faixa muda; status e ação não. */
+/* Cor da faixa da missão por ambiente (DESIGN-SYSTEM §7). Só a faixa muda; status e ação não. */
 :root[data-environment='earth'] {
   --color-banner: #093174;
 }
@@ -100,9 +100,10 @@
     font-weight: 600;
     letter-spacing: -0.01em;
   }
-  /* Cantos contínuos estilo iOS onde o navegador suporta (Chrome/Edge 139+); senão, arredondado comum */
+  /* Cantos contínuos estilo iOS onde o navegador suporta (Chrome/Edge 139+); senão, arredondado comum.
+     Círculos e pílulas (rounded-full: switch, progress, chips) ficam de fora para não virarem quadrados. */
   @supports (corner-shape: squircle) {
-    [class*='rounded'] {
+    [class*='rounded']:not([class*='rounded-full']) {
       corner-shape: squircle;
     }
   }

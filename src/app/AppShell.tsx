@@ -44,9 +44,9 @@ export function AppShell() {
 
   return (
     <div className="flex min-h-screen min-w-[1280px] flex-col bg-ground">
-      {/* Header (ground #000) — DESIGN-SYSTEM §4 */}
+      {/* Header (ground #000) — DESIGN-SYSTEM §1 */}
       <header className="flex h-14 items-center justify-between px-6">
-        <span className="text-lg font-extrabold tracking-tight">APOLLO 62</span>
+        <span className="text-lg font-semibold tracking-wider">APOLLO 62</span>
         <span className="text-sm text-muted">Astronaut health monitor · prototype</span>
       </header>
 

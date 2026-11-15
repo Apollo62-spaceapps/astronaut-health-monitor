@@ -38,13 +38,13 @@
 - O vermelho da marca nunca sinaliza status. Urgent usa `#FF6B63`.
 - Status nunca só por cor. Urgent leva hachura; no mapa do corpo, todo status não normal leva hachura (BODY-04).
 - **Cinza é o padrão.** Uma tela normal é quase toda branca e cinza. Se uma cor aparece, ela significa algo.
-- Proibido: gradientes, brilho (glow), sombras decorativas, roxo/índigo como cor de interface.
+- Proibido: gradientes, brilho (glow), sombras decorativas, roxo/índigo como cor de interface. **Exceção provisória:** a faixa da Spacecraft (`#2E1F66`, §7), fixada no `CLAUDE.md` §5.1, até o time decidir se troca a cor.
 
 ---
 
 ## 2. Tipografia
 
-- **Família:** IBM Plex Sans (`@fontsource-variable/ibm-plex-sans`) e IBM Plex Mono (`@fontsource/ibm-plex-mono`, 400 e 500). Nada via CDN.
+- **Família:** IBM Plex Sans (`@fontsource-variable/ibm-plex-sans`) e IBM Plex Mono (`@fontsource/ibm-plex-mono`, 400, 500 e 600). Nada via CDN. O 600 existe porque há números em peso 600 (cards, contagem da faixa, números dentro de títulos); sem ele o navegador cria um negrito falso.
 - **Mono só em números** (`num` = mono + algarismos tabulares): `84`, `216.0 mSv`, `00 HRS 40 MINS`. Texto de status, rótulos e frases ficam em Plex Sans.
 - **Títulos:** peso 600, tracking leve (−0,01em). Tamanho de página: `text-3xl`. Nada de título gigante em peso 800.
 - **Corpo:** 16 px, regular. Texto secundário: `text-muted`.
@@ -80,6 +80,7 @@
 
 - **Funcional:** anima só mudança de estado (alerta aparece, zona muda de status, número atualiza). 150–250 ms, `ease-out`.
 - Nada de animação de entrada decorativa, nada de pulso contínuo. Pulso só em Urgent, ≤ 1,5 Hz (BODY-05).
+- **Exceção (decisão do time, commit `e4ee320`):** no mapa do corpo, o batimento ilustrativo do coração (ciclo de 1,2 s) e a respiração do tronco (ciclo de 5 s) ficam ligados, com o aviso "Illustrative rhythm, not a live reading". Eles não substituem o status (ícone, texto e hachura continuam) e param com `prefers-reduced-motion`.
 - Sempre respeitar `prefers-reduced-motion` (já está no `index.css`).
 
 ---
@@ -89,7 +90,7 @@
 O gráfico responde a **uma pergunta: "estou dentro do meu normal?"**. Tudo que não ajuda a responder isso sai.
 
 ### Regras
-1. **Uma referência só:** faixa cinza (`#fff` a 7%) = baseline pré-voo ± limiar de atenção. Rótulo direto "Your normal range". Os limiares são ilustrativos até P-01, e o rodapé do gráfico diz isso.
+1. **Uma referência só:** faixa cinza (`foreground` a 7%) com bordas tracejadas finas em `muted` = baseline pré-voo ± limiar de atenção (a mesma conta da regra R-VIT-02: o ponto de hoje fica fora da faixa só quando o status não é Normal). O preenchimento sozinho tem 1,22:1 com o fundo; as bordas garantem ≥ 3:1 (WCAG 1.4.11). Rótulo direto "Your normal range". Os limiares são ilustrativos até P-01, e o rodapé do gráfico diz isso.
 2. **Linha = média móvel de 7 dias**, branca, 1,75 px. Sem pontos diários na tela; eles ficam no tooltip.
 3. **Valor de hoje = ponto** com a cor do status e rótulo direto em mono (`84 today`). É o único elemento colorido do gráfico.
 4. **Eixos com 3 marcas** (mín., meio, máx.). Eixo X em dias de missão (`D0 · D60 · D120`). Unidade no card, não no eixo.
@@ -105,15 +106,20 @@ O gráfico responde a **uma pergunta: "estou dentro do meu normal?"**. Tudo que 
 |---|---|---|
 | Overview | "Algum indicador saiu do normal?" | Sparkline 30 dias: faixa cinza, linha, ponto de hoje colorido. Sem eixos |
 | Vitals | "Desde quando e quanto?" | Linha (regras acima), um por vital, mesmo eixo X |
-| Radiation | "Quanto do meu limite já usei?" | Régua 0–600 mSv: preenchimento branco, limite marcado em `urgent` com rótulo. **Nada de rosca/anel** |
-| Exercise | "Cumpri o plano da semana?" | 7 colunas (minutos feitos) com marca do prescrito em cada dia |
+| Radiation | "Quanto do meu limite já usei?" | Régua 0–600 mSv: preenchimento branco, limite marcado em cinza com rótulo. A cor de status só entra quando houver regra com nível para a dose (R-RAD-04, P1). **Nada de rosca/anel** |
+| Exercise | "Cumpri o plano da semana?" | 7 colunas (minutos feitos) com marca do prescrito em cada dia. Substitui o "anel de progresso semanal" da EX-04 (P1) |
 | Wellbeing | "Como andaram humor e sono?" | 14 pontos ligados por linha (poucos pontos: marcador permitido), eixo 1–5 com palavras nas pontas |
 
 ### Fundamentos (para defender no pitch)
-- Referência pessoal no lugar da faixa populacional melhora a compreensão (Scherer et al., JMIR 2018, doi:10.2196/11027).
-- Exibição visual em vez de tabela aumenta a sensibilidade a variações (Zikmund-Fisher et al., JAMIA 2017;24(3):520–528, doi:10.1093/jamia/ocw169).
-- Sparkline com faixa normal cinza e último valor destacado (Tufte, *Beautiful Evidence*, p. 46–63).
-- Evitar marcadores em linhas com muitos pontos; anotar só eventos significativos (ONS Service Manual, Line charts).
+
+Referências de design, não de saúde: não sustentam nenhuma afirmação na interface, por isso ficam fora do catálogo S01–S19 (`src/data/sources.ts`). Conferidas em 15/11/2026; a coluna "Status" diz o que ainda falta.
+
+| Ideia | Referência | Status |
+|---|---|---|
+| Substituir a faixa de referência, em vez de somar outra, melhora a compreensão do resultado | Scherer et al., "Improving the Understanding of Test Results by Substituting (Not Adding) Goal Ranges", *J Med Internet Res* 2018;20(10):e11027, doi:10.2196/11027 | Título e DOI conferidos (Crossref); ler o artigo antes de citar números |
+| Gráficos ajudam pacientes a distinguir desvios urgentes de não urgentes em exames | Zikmund-Fisher et al., "Graphics help patients distinguish between urgent and non-urgent deviations in laboratory test results", *JAMIA* 2017;24(3):520–528, doi:10.1093/jamia/ocw169 | Título e DOI conferidos (Crossref); ler o artigo antes de citar números |
+| Sparkline com faixa normal cinza e último valor destacado | Tufte, *Beautiful Evidence* (2006), capítulo sobre sparklines, p. 46–63 | Verificar as páginas |
+| Evitar marcadores em linhas com muitos pontos; anotar só eventos significativos | ONS Service Manual, Line charts — https://service-manual.ons.gov.uk/data-visualisation/chart-types/line-chart | Página conferida |
 
 ---
 
@@ -126,7 +132,7 @@ O botão de modo troca o comportamento da plataforma. Visualmente, **só a faixa
 | Earth | `earth` | `#093174` | 12,3:1 | `Globe` |
 | Space Station | `station` | `#0B4A5E` | 9,7:1 | `Satellite` |
 | Moon | `moon` | `#3A3F45` | 10,6:1 | `Moon` |
-| Spacecraft | `spacecraft` | `#2E1F66` *(PENDENTE: avaliar troca do roxo)* | 14,0:1 | `Rocket` |
+| Spacecraft | `spacecraft` | `#2E1F66` *(exceção à regra do roxo, §1; PENDENTE: decidir se troca)* | 14,0:1 | `Rocket` |
 
 ---
 
@@ -134,7 +140,7 @@ O botão de modo troca o comportamento da plataforma. Visualmente, **só a faixa
 
 - Inter, Roboto ou fonte de sistema como fonte principal.
 - Gradiente roxo/índigo, texto com gradiente, brilho, glassmorphism.
-- Selo com borda para tudo; dois selos por métrica.
+- Selo com borda para tudo; dois selos para o **mesmo** número. A regra é um selo por número: se um card junta um valor simulado e um limite real (ex.: Career dose, SIMULATED + REAL · NASA OCHMO), cada um leva o seu (NFR-05).
 - Mesmo raio dentro e fora; `rounded-2xl shadow-lg` como padrão de card.
 - Três cards iguais com ícone em fila como layout padrão.
 - Título hero gigante em peso 800 numa tela de dados.

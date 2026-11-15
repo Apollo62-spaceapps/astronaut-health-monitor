@@ -114,7 +114,7 @@ A SPEC foi convertida de `SPEC-frontend.docx` (v0.2 de 14/11/2026). Este arquivo
 O alias de import é `@/` → `src/` (exigido pelo shadcn; configurar em `tsconfig.app.json` e `vite.config.ts`).
 
 O visual segue o **`docs/DESIGN-SYSTEM.md`**:
-- estilo nasa.gov, escuro e de alto contraste;
+- escuro, alto contraste e pouca cor, como uma interface de cabine (v2; o v1 "NASA style" continua em `docs/design/`);
 - tokens Tailwind v4 (`ground`, `surface`, `banner`, `action`, `link`, `muted`, `normal`, `attention`, `urgent`) definidos no `@theme` do `src/index.css`;
 - IBM Plex Sans + IBM Plex Mono (mono só em números);
 - layout para notebook ≥ 1280 px.
@@ -191,7 +191,7 @@ scripts/
 
 **Como funciona por dentro:**
 - `store.environment` guarda o ambiente atual.
-- O atributo `data-environment` no `<html>` muda **só a cor da faixa da missão (banner) e o ícone**, conforme o `docs/DESIGN-SYSTEM.md` §5. Os contrastes com branco vão de 9,7:1 a 14:1. A escolha é salva no localStorage.
+- O atributo `data-environment` no `<html>` muda **só a cor da faixa da missão (banner) e o ícone**, conforme o `docs/DESIGN-SYSTEM.md` §7. Os contrastes com branco vão de 9,7:1 a 14:1. A escolha é salva no localStorage.
 - **Spacecraft** = a nave menor, em trânsito. **Space Station** = a estação maior, onde a nave atraca e o astronauta faz a manutenção dela (P-19 resolvida).
 - O comportamento vem de `src/domain/config/environments.ts`.
 - **As regras recebem o ambiente como entrada.** As telas não decidem nada sozinhas.

@@ -1,4 +1,4 @@
-// Faixa da missão (K4 #44) — DESIGN-SYSTEM §3/§4. A cor vem de --color-banner, que muda com o
+// Faixa da missão (K4 #44) — DESIGN-SYSTEM §4/§7. A cor vem de --color-banner, que muda com o
 // modo de ambiente (data-environment). O botão de modo de ambiente (K5) entra no `envSlot`.
 import type { ReactNode } from 'react'
 import { ENVIRONMENTS, groundReplySec } from '@/domain/config/environments'

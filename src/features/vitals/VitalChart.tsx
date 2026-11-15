@@ -7,6 +7,7 @@ import {
   LineChart,
   ReferenceArea,
   ReferenceDot,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -117,7 +118,9 @@ export function VitalChart({
           background: 'var(--color-surface-2)',
           border: 'none',
           borderRadius: 10,
-          fontFamily: 'var(--font-mono)',
+          // Texto em Plex Sans; números com algarismos tabulares (DESIGN-SYSTEM v2 §2: mono só em números).
+          fontFamily: 'var(--font-sans)',
+          fontVariantNumeric: 'tabular-nums',
         }}
         labelFormatter={(d) => `Mission day ${Math.round(Number(d))}`}
         formatter={(v, name) => [
@@ -128,12 +131,23 @@ export function VitalChart({
       <ReferenceArea
         y1={bandLow}
         y2={bandHigh}
-        fill="#ffffff"
+        fill="var(--color-foreground)"
         fillOpacity={0.07}
         stroke="none"
         ifOverflow="extendDomain"
         label={{ value: 'Your normal range', position: 'insideBottomLeft', fill: 'var(--color-muted)', fontSize: 11 }}
       />
+      {/* Bordas da faixa: o preenchimento tem 1,22:1 com o fundo; as bordas em muted, 7,7:1 (WCAG 1.4.11). */}
+      {[bandLow, bandHigh].map((y) => (
+        <ReferenceLine
+          key={y}
+          y={y}
+          stroke="var(--color-muted)"
+          strokeWidth={1}
+          strokeDasharray="2 3"
+          ifOverflow="extendDomain"
+        />
+      ))}
       <Line
         type="monotone"
         dataKey="avg"

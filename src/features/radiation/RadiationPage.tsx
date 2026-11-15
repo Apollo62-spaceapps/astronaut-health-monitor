@@ -51,7 +51,7 @@ export function RadiationPage() {
                 </span>
               </div>
               <div className="space-y-1">
-                <div className="flex justify-end text-xs text-urgent">
+                <div className="flex justify-end text-xs text-muted">
                   Career limit <span className="num ml-1">{dose.limitMSv} mSv</span>
                 </div>
                 <div
@@ -66,7 +66,8 @@ export function RadiationPage() {
                     className="h-full rounded-sm bg-foreground"
                     style={{ width: `${Math.min(100, dose.pctOfLimit)}%` }}
                   />
-                  <div aria-hidden className="absolute -top-1 right-0 h-5 w-0.5 bg-urgent" />
+                  {/* Marcador neutro: cor de status só com regra de nível para a dose (R-RAD-04, P1). */}
+                  <div aria-hidden className="absolute -top-1 right-0 h-5 w-0.5 bg-muted" />
                 </div>
                 <div className="num flex justify-between text-xs text-muted">
                   <span>0</span>

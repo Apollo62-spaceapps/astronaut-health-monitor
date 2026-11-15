@@ -1,4 +1,4 @@
-// Selo de proveniência: todo número na tela mostra REAL ou SIMULATED (NFR-05, DESIGN-SYSTEM §3).
+// Selo de proveniência: todo número na tela mostra REAL ou SIMULATED (NFR-05, DESIGN-SYSTEM §4).
 // Clicar leva à linha da fonte em Data & Sources (SRC-02): REAL → a fonte; SIMULATED → a base (basis) ou a nota de dados simulados.
 import { cn } from '@/lib/utils'
 import type { Provenance, SourceId } from '@/domain/types'
