@@ -23,6 +23,7 @@ import { formatUtc } from '@/lib/format'
 
 const checkInSchema = z.object({ mood: z.number().int().min(1).max(5), sleepHours: z.number().min(0).max(24) })
 const MOOD_LABELS = ['Very low', 'Low', 'Neutral', 'Good', 'Very good']
+const JOURNAL_PROMPTS = ['What stood out during your day?', 'What helped you feel settled or focused today?', 'What would you like to remember about today?']
 const daysBack = (iso: string, amount: number) =>
   new Date(Date.parse(`${iso.slice(0, 10)}T00:00:00Z`) - amount * 86_400_000).toISOString().slice(0, 10)
 
@@ -43,6 +44,7 @@ export function WellbeingPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [error, setError] = useState('')
   const [privacyInfoOpen, setPrivacyInfoOpen] = useState(false)
+  const [journalDraft, setJournalDraft] = useState('')
   const privacy = {
     role,
     consentShareWellbeingAlerts: consent.shareWellbeingAlertsWithCmo,
@@ -64,6 +66,8 @@ export function WellbeingPage() {
     [simNowIso, environmentEntries],
   )
   const chartEntries = chartData.filter((entry) => entry.mood !== null || entry.sleep !== null)
+  const todayEntry = environmentEntries.find((entry) => entry.date === today)
+  const journalPrompt = JOURNAL_PROMPTS[(new Date(`${today}T00:00:00Z`).getUTCDate() - 1) % JOURNAL_PROMPTS.length]!
   const notification = auditLog.findLast((entry) => entry.action === 'BREAK_GLASS_VIEW' && entry.actor === 'CMO')
 
   function saveCheckIn(event: FormEvent<HTMLFormElement>) {
@@ -78,9 +82,20 @@ export function WellbeingPage() {
       environment,
       mood: parsed.data.mood as WellbeingEntry['mood'],
       sleepHours: parsed.data.sleepHours,
+      note: environmentEntries.find((item) => item.date === today)?.note,
     }
     loadScenario({ wellbeing: [...wellbeing.filter((item) => item.date !== today || (item.environment ?? 'EARTH') !== environment), entry] })
     setError('')
+  }
+
+  function saveJournal(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const note = journalDraft.trim().slice(0, 600)
+    if (!note) return
+    const current = environmentEntries.find((item) => item.date === today)
+    const entry: WellbeingEntry = current ? { ...current, note } : { date: today, environment, mood: 3, sleepHours: 0, note }
+    loadScenario({ wellbeing: [...wellbeing.filter((item) => item.date !== today || (item.environment ?? 'EARTH') !== environment), entry] })
+    setJournalDraft('')
   }
 
   function submitBreakGlass(event: FormEvent<HTMLFormElement>) {
@@ -100,7 +115,7 @@ export function WellbeingPage() {
       <header>
         <p className="text-xs font-semibold uppercase tracking-wider text-muted">Wellbeing · private</p>
         <h1 className="mt-2 text-3xl">{role === 'ASTRONAUT' ? 'Daily check-in' : 'Crew wellbeing'}</h1>
-        <p className="mt-2 text-muted">Self-report, not a clinical assessment.</p>
+        <p className="mt-2 text-muted">{environment} · Private daily reflection and self-reported check-in. Not a clinical assessment.</p>
         {/* PRIV-05: contexto da privacidade, com fonte (S02, S04). */}
         <button
           type="button"
@@ -184,7 +199,7 @@ export function WellbeingPage() {
       ) : (
         <>
           <div className="grid items-start gap-6 lg:grid-cols-[minmax(360px,0.9fr)_1.1fr]">
-            {role === 'ASTRONAUT' && (
+            {role === 'ASTRONAUT' && <div className="space-y-4">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -241,7 +256,8 @@ export function WellbeingPage() {
                   </form>
                 </CardContent>
               </Card>
-            )}
+              <Card><CardHeader><CardTitle>Private journal</CardTitle></CardHeader><CardContent><form onSubmit={saveJournal} className="space-y-3"><p className="text-sm text-muted">{journalPrompt}</p>{todayEntry?.note && <p className="rounded-md bg-surface-2 p-3 text-sm">{todayEntry.note}</p>}<Label htmlFor="wellbeing-journal">A note for yourself · up to 600 characters</Label><textarea id="wellbeing-journal" value={journalDraft} maxLength={600} onChange={(e) => setJournalDraft(e.target.value)} rows={4} placeholder="Write only what you want to keep…" className="w-full resize-y rounded-md border border-border bg-surface-2 p-3 text-sm" /><div className="flex items-center justify-between text-xs text-muted"><span>Stored on this device for the selected environment.</span><span className="num">{journalDraft.length}/600</span></div><Button type="submit" variant="secondary" disabled={!journalDraft.trim()}>Save journal note</Button></form></CardContent></Card>
+            </div>}
             <Card className={role !== 'ASTRONAUT' ? 'col-span-2' : ''}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
