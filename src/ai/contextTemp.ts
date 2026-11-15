@@ -1,30 +1,51 @@
 // Monta o AssistantContext a partir do store (AI-07: a LLM só LÊ isto; nunca muda alertas).
-// TODO(Lucas): trocar `deviationPct`/`levelFor` pelas regras reais R-VIT-01/R-VIT-02 (task L1 #52).
-import { VITAL_DEVIATION_PCT } from '@/domain/config/thresholds'
+// Antes era temporário; agora usa as regras reais R-VIT-01/R-VIT-02 (L1 #52) e o engine (L2 #53).
+// Mantém a assinatura antiga para não quebrar o assistente (K7).
+import { buildBaseline, deviationPct as ruleDeviationPct, vitalLevel } from '@/domain/rules/vitals'
+import { buildAssistantContext as engineContext } from '@/domain/rules/engine'
 import type { AlertLevel, AssistantContext, VitalKind, VitalReading } from '@/domain/types'
 import { VITAL_KINDS } from '@/domain/types'
 import type { AppState } from '@/state/store'
 
-const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : NaN)
-
-/** TEMPORÁRIO (R-VIT-01): desvio % da última leitura em relação à média do pré-voo. */
+/** R-VIT-01: desvio % da última leitura vs baseline pré-voo (sem relógio: usa a última leitura). */
 export function deviationPct(kind: VitalKind, vitals: VitalReading[], preflight: VitalReading[]): number {
-  const base = mean(preflight.filter((r) => r.kind === kind).map((r) => r.value))
-  const last = vitals.filter((r) => r.kind === kind).at(-1)?.value
-  if (last === undefined || !Number.isFinite(base) || base === 0) return 0
-  return ((last - base) / base) * 100
+  const latest = vitals.filter((r) => r.kind === kind).at(-1)
+  if (!latest) return 0
+  const baseline = buildBaseline(kind, preflight, vitals, latest.takenAt)
+  return (baseline && ruleDeviationPct(latest.value, baseline)) ?? 0
 }
 
-/** TEMPORÁRIO (R-VIT-02): nível pelo desvio absoluto, com os placeholders de P-01. */
+/** R-VIT-02 com os limiares de config/thresholds.ts. */
 export function levelFor(kind: VitalKind, devPct: number): AlertLevel {
-  const t = VITAL_DEVIATION_PCT[kind]
-  const d = Math.abs(devPct)
-  return d >= t.urgent ? 'urgent' : d >= t.attention ? 'attention' : 'normal'
+  return vitalLevel(kind, devPct)
 }
 
-export function buildAssistantContext(
-  s: Pick<AppState, 'environment' | 'alerts' | 'vitals' | 'preflight' | 'eventReplayed' | 'spaceWeatherEvent'>,
-): AssistantContext {
+type CtxState = Pick<
+  AppState,
+  'environment' | 'alerts' | 'vitals' | 'preflight' | 'eventReplayed' | 'spaceWeatherEvent'
+>
+
+/** Contexto do assistente. Com o store completo, delega ao engine (privacidade incluída). */
+export function buildAssistantContext(s: CtxState | AppState): AssistantContext {
+  if ('simNowIso' in s && 'role' in s) {
+    const ctx = engineContext({
+      environment: s.environment,
+      role: s.role,
+      vitals: s.vitals,
+      preflight: s.preflight,
+      wellbeing: s.wellbeing,
+      exercise: s.exercise,
+      radiation: s.radiation,
+      missionDay: s.missionDay,
+      simNowIso: s.simNowIso,
+      spaceWeatherEvent: s.spaceWeatherEvent,
+      eventReplayed: s.eventReplayed,
+      shelterActive: s.shelterActive,
+      consent: s.consent,
+      breakGlass: s.breakGlass,
+    })
+    return ctx
+  }
   return {
     missionMode: s.environment,
     activeAlerts: s.alerts,
