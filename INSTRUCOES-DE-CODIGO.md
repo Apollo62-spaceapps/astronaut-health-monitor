@@ -10,6 +10,8 @@ Guia para o Kayque, o Lucas e o Felipe, com ou sem ferramenta de IA.
 
 **Kanban:** https://github.com/orgs/Apollo62-spaceapps/projects/3 (aba "Minhas tasks").
 
+**O que já está pronto e como usar:** [docs/JA-PRONTO.md](docs/JA-PRONTO.md) (store, tipos, componentes, dados e onde colocar o seu código).
+
 **O que é:** um **protótipo frontend navegável** para o pitch. Não tem backend, login nem dado real de saúde. A interface é **toda em inglês**.
 
 ---

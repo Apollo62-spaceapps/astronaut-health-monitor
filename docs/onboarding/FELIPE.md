@@ -2,6 +2,8 @@
 
 Você faz as telas dos módulos que **conversam com o núcleo de vitais**. As cores e os alertas vêm das regras do Lucas (`src/domain/rules/`): **as telas nunca decidem status**.
 
+> **Já está pronto na `main`:** K1 a K5 (projeto base, contrato, dados, componentes, botão de modo). Veja **[`docs/JA-PRONTO.md`](../JA-PRONTO.md)**: onde colocar o seu código, store, tipos, componentes e dados.
+
 ## 1. Leia antes (nesta ordem)
 1. [`CLAUDE.md`](../../CLAUDE.md): §0 regras inegociáveis, §5.1 ambientes.
 2. [`docs/SPEC-frontend.md`](../SPEC-frontend.md), nas seções das suas tasks:
