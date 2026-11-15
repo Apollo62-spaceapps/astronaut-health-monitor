@@ -5,19 +5,11 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Clock3 } from 'lucide-react'
 import { ENVIRONMENTS, groundReplySec } from '@/domain/config/environments'
-import type { Role } from '@/domain/types'
 import { useAppStore } from '@/state/store'
 import { isBlackoutActive } from '@/features/escalation/blackout'
 import { Button } from '@/components/ui/button'
 import { MeasurementDialog } from '@/features/routine/MeasurementDialog'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatShortDuration } from '@/lib/format'
-
-export const ROLE_LABEL: Record<Role, string> = {
-  ASTRONAUT: 'Astronaut',
-  CMO: 'CMO',
-  FLIGHT_SURGEON: 'Flight surgeon',
-}
 
 /** Divide segundos em horas, minutos e segundos. */
 export function splitHms(totalSec: number) {
@@ -80,7 +72,6 @@ export function GroundReplyWindow() {
 
 export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
   const role = useAppStore((s) => s.role)
-  const setRole = useAppStore((s) => s.setRole)
   const aiMode = useAppStore((s) => s.aiMode)
   const routine = useAppStore((s) => s.routine)
   const environment = useAppStore((s) => s.environment)
@@ -105,22 +96,6 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
     <div role="region" aria-label="Mission banner" className="bg-banner px-6 py-2 transition-colors">
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
         {envSlot}
-
-        <label className="flex items-center gap-2 text-sm">
-          <span className="text-white/85">Role:</span>
-          <Select value={role} onValueChange={(v) => setRole(v as Role)}>
-            <SelectTrigger aria-label="Role" className="h-8 w-40 border-white/30 bg-black/20">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(ROLE_LABEL) as Role[]).map((r) => (
-                <SelectItem key={r} value={r}>
-                  {ROLE_LABEL[r]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
 
         <span className="rounded bg-black/25 px-2 py-1 text-sm" aria-label="AI mode">
           AI: {aiMode === 'onboard-model' ? 'onboard model' : 'protocol mode'}
