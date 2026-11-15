@@ -1,270 +1,161 @@
 # Instruções para construção do código
 
-Guia para todos do time, com ou sem ferramenta de IA. Leia antes de abrir a primeira branch.
+Guia para o Kayque e o Lucas, com ou sem ferramenta de IA.
 
-- **Kanban (tasks):** https://github.com/orgs/Apollo62-spaceapps/projects/3 (aba "Minhas tasks").
-- **Contexto completo do produto:** [CLAUDE.md](CLAUDE.md). Este guia é o resumo prático para programar.
+- **Requisitos (fonte de verdade):** [docs/SPEC-frontend.md](docs/SPEC-frontend.md). Cite os IDs da SPEC (CORE-02, R-VIT-02…) em commits e PRs.
+- **Contexto e regras:** [CLAUDE.md](CLAUDE.md).
+- **Kanban:** https://github.com/orgs/Apollo62-spaceapps/projects/3 (aba "Minhas tasks").
+
+**O que é:** um **protótipo frontend navegável** para o pitch. Não tem backend, login nem dado real de saúde. A interface é **toda em inglês**.
 
 ---
 
 ## 1. Regras que não se quebram
 
-1. **Protótipo educacional, não é dispositivo médico.** Todo dado é simulado. Toda tela mostra o selo `SIMULADO · protótipo educacional`.
-2. **O app nunca escreve "apto", "inapto", "doença" ou "diagnóstico".** Ele usa "dentro do seu normal", "fora do seu normal" e "consulte o flight surgeon".
-3. **Nunca invente fonte, dose, conduta ou limiar.** Todo texto médico cita uma fonte da §9 do `CLAUDE.md`, pelo id (`F4`, `F9`…). Os ids ficam em `src/data/sources.json`. Sem fonte, a tela mostra "Sem protocolo citado — consulte o flight surgeon".
-4. **A cor do status vem de regras fixas no código**, nunca de IA.
-5. **Funciona sem internet.** O app não busca nada na rede: nada de `fetch`, CDN ou fonte tipográfica externa (Google Fonts etc.). Mostrar o link de uma citação na tela é permitido.
-6. **Status nunca só por cor:** sempre cor + palavra + ícone.
-7. **Limiar sem fonte** fica em `thresholds.json` marcado `placeholder` e aparece na tela como "valor ilustrativo".
-8. **Interface em português do Brasil, linguagem leiga.** Astronautas não são médicos.
+1. **Não é dispositivo médico.** O rodapé fixo diz: "Decision-support prototype — not a medical device, not for diagnosis. Some data simulated."
+2. **Nunca "fit", "apto", "healthy", diagnóstico ou prescrição.** Os rótulos são Normal / Attention / Urgent / Adapting / Restricted.
+3. **As regras decidem e a IA só conversa.** Cor, alerta e escalonamento vêm de `src/domain/rules/` (funções puras). A LLM só lê o `AssistantContext` e **nunca** muda o store de alertas.
+4. **Todo número mostra o selo REAL ou SIMULATED** e a fonte.
+5. **Nada médico ou científico sem fonte do catálogo** (S01–S19). Sem fonte, mostre "Consult your flight surgeon." Não invente limiar, sintoma, dose nem conduta.
+6. **Limiar sem fonte** fica em `src/domain/config/thresholds.ts`, com o comentário `// PENDENTE P-01 — valores ilustrativos`. A UI mostra o selo "Illustrative thresholds".
+7. **Status = cor + ícone + texto**, nunca só a cor.
+8. **Alertas de vitais só com ações não clínicas:** "Re-measure", "Notify CMO", "Follow the onboard medical checklist".
+9. **Privacidade:** o bem-estar é privado. O CMO só vê com consentimento (apenas o nível do alerta) ou via break-glass com motivo, registrado em auditoria.
+10. **Nada via CDN** (fontes via `@fontsource`). A única exceção são os pesos do modelo WebLLM, que ficam em cache.
+11. **Nenhum segredo** no repositório.
 
 ---
 
-## 2. Stack
+## 2. Stack e como rodar
 
 | Camada | Ferramenta |
 |---|---|
-| Interface | React + Vite + TypeScript |
-| Estilo | Tailwind CSS |
-| Gráficos | Recharts |
-| Dados e protocolos | Arquivos JSON em `src/data` |
-| Estado | Estado do React + localStorage (sem banco, sem login, sem servidor) |
-| Testes | Vitest |
-| Deploy | Vercel ou GitHub Pages (automático a partir da `main`) |
+| Build e UI | Vite 8 + React 19 + TypeScript 7 (strict) |
+| Estilo e componentes | Tailwind CSS 4 + shadcn/ui (Radix) + lucide-react |
+| Gráficos | Recharts 3 (linhas de baseline com `ReferenceLine`) |
+| Estado | Zustand 5 (store único em `src/state/store.ts`) |
+| Validação | Zod 4 (fixtures e formulários) |
+| Testes | Vitest 4 (regras P0) |
+| IA | WebLLM num Web Worker + ProtocolEngine determinístico |
+| Fontes | `@fontsource-variable/inter` + `@fontsource/jetbrains-mono` |
+| Qualidade | oxlint + Prettier |
 
-Pré-requisitos: **Node.js 22 ou 24** (no mínimo 20.19; confira com `node -v`) e **Git**.
+As versões são **fixas** no `package.json`. Não atualize nem adicione biblioteca sem combinar entre vocês dois.
 
-### Como rodar
-
-Disponível depois que a task #1 entrar na `main`.
+**Pré-requisitos:** Node.js 22 ou 24 (no mínimo 20.19) e Git. No Windows, clone **fora do OneDrive** (ex.: `C:\dev`) e prefira o Git Bash.
 
 ```bash
 git clone https://github.com/Apollo62-spaceapps/astronaut-health-monitor.git
 cd astronaut-health-monitor
 npm install
-npm run dev        # servidor de desenvolvimento; abra o endereço que aparecer no terminal
-npm test           # roda os testes uma vez (modo contínuo: npx vitest)
-npm run build      # gera a versão final
-npm run preview    # serve a versão final em http://localhost:4173 (modo usado na demo offline)
+npm run dev        # desenvolvimento
+npm test           # testes (uma vez)
+npm run lint       # oxlint
+npm run build      # versão final
+npm run preview    # serve a versão final em http://localhost:4173 (modo offline da demo)
 ```
 
-**No Windows:**
-- Prefira o **Git Bash**.
-- No PowerShell, se o npm der erro de "execução de scripts desabilitada", rode uma vez: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
-- Clone **fora do OneDrive** (ex.: `C:\dev`), porque a sincronização trava o `node_modules`.
+Para testar o assistente sem a LLM, abra a URL com `?ai=protocol`.
 
 ---
 
-## 3. Como o código é organizado
+## 3. Organização e quem mexe onde
 
-```
-src/
-  shared/   types.ts (contrato de dados), contexto global, componentes comuns
-  core/     regras puras, sem React: baseline.ts, rules.ts, trend.ts, flow.ts, summary.ts
-  data/     JSON: crew, phases, thresholds, indicators, hazards, cards, emergency-flow, sources
-  ui/       uma pasta por tela: Profile, CheckIn, Dashboard, Trend, Cards, Emergency, Summary, Scene, Body
-scripts/    gerador de dados simulados
-docs/       documentos do time (cena da demo, leituras, teste com pessoas, revisão de saúde)
-```
+A estrutura completa está na SPEC §5.3. O resumo:
 
-**Princípio:** a tela só chama funções do `core`, e o `core` só lê os JSON de `data`. Assim as regras são testáveis e o conteúdo médico é revisado separado das telas.
+| Pasta | O que tem | Dono |
+|---|---|---|
+| `src/app/`, `src/components/ui/`, `src/lib/` | AppShell, TopBar, Sidebar, tema, componentes shadcn | Kayque |
+| `src/domain/types.ts`, `src/state/store.ts`, `src/domain/config/` | Contrato de dados, store, missões, zonas do corpo, limiares | Kayque cria e congela às ~21h30; depois, só mudar combinando entre os dois |
+| `src/domain/rules/` (+ `*.test.ts`) | Motor de regras | **Lucas** |
+| `src/features/overview/`, `src/features/vitals/`, `src/features/exercise/` | Mapa do corpo, cards e gráficos de vitais, exercício | **Lucas** |
+| `src/features/radiation/`, `escalation/`, `wellbeing/`, `assistant/`, `sources/`, `demo/` | Radiação, comunicação e fila, bem-estar e privacidade, assistente, fontes, controles da demo | Kayque |
+| `src/ai/` | ProtocolEngine, WebLLM, prompts | Kayque |
+| `src/data/`, `scripts/` | Fixtures, DONKI, schemas Zod, catálogo de fontes | Kayque |
 
-### Quem mexe onde
-
-Cada frente edita só os próprios arquivos. Isso evita conflito de merge.
-
-| Frente | Arquivos |
-|---|---|
-| 0 · Fundação (Kayque) | estrutura e configs do projeto, CI, deploy, `src/shared/`, rotas, `src/data/indicators.json`, `thresholds.json`, `phases.json`, `hazards.json`, `sources.json`, `docs/teste-*.md` |
-| 1 · Núcleo de regras | `src/core/baseline.ts`, `rules.ts`, `trend.ts`, `summary.ts` e os testes deles |
-| 2 · Emergência | `src/core/flow.ts`, `src/data/emergency-flow.json`, `src/ui/Emergency/` |
-| 3 · Check-in, perfil e cartões | `src/ui/CheckIn/` (inclui o serviço de leituras `readings.ts`), `src/ui/Profile/`, `src/ui/Cards/`, `src/ui/Body/`, `docs/leitura-F10.md` |
-| 4 · Painel, tendência e conexão | `src/ui/Dashboard/`, `src/ui/Trend/`, `src/ui/Summary/`, `src/ui/Scene/` |
-| 5 · Dados e conteúdo | `scripts/`, `src/data/crew.json`, `src/data/cards.json`, `docs/cena-demo.md`, `docs/revisao-saude.md` |
-
-- **Precisa mudar algo fora da sua área?** Abra uma issue ou fale com o dono do arquivo. Depois da revisão de saúde (#39), as mudanças em `thresholds.json` e `emergency-flow.json` saem em PR revisado pelo dono (Kayque e frente 2).
-- **`src/shared/types.ts` é o contrato de todos.** Ele só muda por PR pequeno e separado, revisado pelo Kayque.
+**Integração entre as frentes:** as telas do Kayque consomem as regras do Lucas, e as telas do Lucas leem o store do Kayque. Enquanto uma regra não estiver pronta, use uma função temporária com a **mesma assinatura** (`// TODO(Lucas): trocar pela regra real`).
 
 ---
 
 ## 4. Decisões já tomadas
 
-Não reinvente nenhuma delas.
+- **Tipos:** os mesmos da SPEC §5.4 e §6.6, sem renomear. Se precisar de campo novo, combine primeiro.
+- **Status:** `AlertLevel` = `normal | attention | urgent`. O mapa do corpo usa `ZoneStatus` = `AlertLevel | adapting | restricted`. A zona mostra o **pior** status dos indicadores dela (R-BODY-01).
+- **Missões** (`config/missions.ts`):
+  - ISS: ~0 s;
+  - LUNAR: ~1,3 s;
+  - MARS_TRANSIT: 20 min.
 
-**Tipos.** O `src/shared/types.ts` (#2) parte da §5 do `CLAUDE.md`, com estas mudanças. Elas valem desde já, mesmo antes do #2 entrar:
-- `Phase` ganha `startDay` (dia da missão em que a fase começa).
-- `HazardLink` usa `sourceIds: string[]` e `proposal: true` (o mapa de hazards é proposta do grupo).
-- `Card` tem fonte por campo, `sources: { how: string[]; why: string[]; whatToDo: Record<'verde'|'amarelo'|'vermelho', string[]> }`, no lugar de `sourceIds`.
-- `EmergencyStep` ganha `reviewNote?: string`.
-- Tipos novos: `IndicatorMeta`, `Thresholds`, `BaselineResult`, `StatusResult`, `TrendResult`, `DailySummary`, `FlightSurgeonReport`, `EmergencyLogEntry`, `QueueItem`.
-
-**Tempo e fase.**
-- O contexto global (#4) já tem `crewId`, `simDay` (dia simulado), a fase e `linkUp` (conexão com o solo), com seus setters. Use esses campos. Não crie estado paralelo nem edite o provider.
-- A fase é **derivada** de `simDay` e do `startDay` de cada fase. Não existe seletor manual de fase.
-- Use sempre `simDay`, **nunca** `new Date()` nem a data do sistema.
-
-**Dados.**
-- Humor vai de 1 a 5. As unidades de todos os indicadores estão em `indicators.json`.
-- Limiares e pisos são sempre lidos de `thresholds.json`, nunca escritos no código.
-- Toda chave de localStorage começa com `demo:` e usa o helper de `src/shared`. `resetDemo()` limpa tudo.
-- **Leituras de saúde** só passam pelo serviço de leituras (#24). Painel, gráfico e perfil leem por ele e nunca importam `crew.json` direto.
-
-**Componentes prontos (#4).** Use estes em vez de criar os seus.
-
-| Componente | Para quê |
-|---|---|
-| `StatusBadge` | status com cor + palavra + ícone |
-| `IndicadorStatus` | indicador + valor + status + hazard + link para o cartão |
-| `ValorIlustrativo` | etiqueta "valor ilustrativo"; use sempre que `placeholderUsed` for `true` |
-| `FonteCitada` | mostra a fonte pelo id; lista vazia → "Sem protocolo citado — consulte o flight surgeon" |
-
-Palavras do `StatusBadge`:
-
-| Status | Palavra |
-|---|---|
-| verde | "dentro do seu normal" |
-| amarelo | "um pouco fora do seu normal" |
-| vermelho | "bem fora do seu normal · consulte o flight surgeon" |
-| sem-referencia | "sem referência ainda" |
-| adaptando | "adaptando à nova fase" |
-
-**Dependências.**
-- O resumo ao flight surgeon tem um esboço (stub) em `src/core/summary.ts` desde o #2. Use as assinaturas dele; o núcleo troca pela versão real depois.
-- **Esperando a task de outra pessoa?** Use dados falsos (mock) com o formato do `types.ts` e troque quando a task entrar.
+  O ETA de resposta do solo é **2 × o atraso de ida**.
+- **Radiação:**
+  - dose da missão = dias × 1,8 mSv [S08, S09];
+  - limite de carreira = 600 mSv [S03];
+  - o evento real é `2024-05-11T02:10:00-SEP-001` [S07].
+  - **Nunca** mostrar nível S1–S5 como dado real (RAD-07).
+- **Fixtures:** são gerados por `scripts/generate-fixtures.mjs` com semente fixa, e todo acesso passa pelos schemas Zod em `src/data/schemas.ts`. O dia da missão na demo é **120**.
+- **Tempo da demo:** tudo que é acelerado ou disparado pelo painel "Demo controls" recebe o rótulo "demo" na tela.
+- **Assistente** (padrão Strategy, com `AssistantEngine`):
+  - o `ProtocolEngine` é P0 e funciona sozinho;
+  - o `OnboardModelEngine` (WebLLM) entra depois;
+  - o motor `protocol` é usado com `?ai=protocol`, sem `navigator.gpu`, se o `init` falhar ou se passar de 20 s;
+  - cada mensagem da IA leva o rótulo "AI-generated — verify with CMO/flight surgeon."
+- **Visual:** tema escuro "mission control", notebook ≥ 1280 px, Inter + mono com algarismos tabulares, verde/âmbar/vermelho sempre com ícone e texto.
 
 ---
 
-## 5. Regras de código
+## 5. Fluxo de git (2 pessoas)
 
-**Núcleo (`src/core`)**
-- Funções puras: recebem dados e devolvem resultado. Nada de React, localStorage, `fetch` ou data do sistema.
-- Toda regra nova vem com teste Vitest.
+1. **Pegue a task** no kanban e mova para **Em andamento**.
+2. **Crie a branch a partir da `main` atualizada.** O nome é `kayque/ID-descricao` ou `lucas/ID-descricao`.
+   ```bash
+   git switch main && git pull
+   git switch -c lucas/L1-regras-vitais
+   ```
+3. **Faça commits pequenos, só com os seus arquivos** (nunca `git add .`). Cite os IDs da SPEC:
+   ```bash
+   git status
+   git add src/domain/rules/vitals.ts src/domain/rules/vitals.test.ts
+   git commit -m "L1: R-VIT-01/R-VIT-02 desvio % e nível (placeholders P-01)"
+   git push -u origin lucas/L1-regras-vitais
+   ```
+4. **Antes do PR**, rode `npm test`, `npm run lint` e `npm run build`. Os três precisam passar.
+5. **Abra o PR** com `Closes #N` na descrição e mova o card para **Em revisão**.
+6. **Revisão:**
+   - PR que mexe em `src/domain/` precisa da revisão do outro;
+   - PR só de tela pode ser mergeado pelo autor, se os três comandos passaram.
+7. **Merge:** use **Squash and merge** e mova o card para **Feito**.
 
-**Telas (`src/ui`)**
-- Nunca calcule status na tela; chame o `core`.
-- Textos médicos (como medir, o que fazer, passos da emergência) nunca ficam no componente. Eles moram em `cards.json` e `emergency-flow.json`, com as fontes.
-- Use Tailwind. Mantenha alto contraste, botões grandes e foco visível no teclado.
-
-**Nomes**
-- Código (variáveis, funções, tipos) em inglês, seguindo o `types.ts`.
-- Ids que já estão no contrato ficam como estão (`'verde'`, `'terra'`, `'estacao'`…).
-- Textos da interface em português.
-
-**Proibido**
-- Chave de API ou senha no repositório.
-- Buscar qualquer coisa na internet (rede, CDN, fonte tipográfica externa).
-- Biblioteca nova sem combinar no grupo.
-- Usar dados de astronautas reais.
-
----
-
-## 6. Passo a passo de uma task
-
-**1. Pegue a task** no kanban e mova para **Em andamento**. Confira se as tasks em "Depende de" já estão prontas; se não, use mock.
-
-**2. Atualize a `main` e crie a sua branch.** O nome é `frente/ID-descricao`, sem acento. Os prefixos são `fundacao`, `nucleo`, `emergencia`, `checkin`, `painel` e `dados`. O ID (K1, N1, E1, C1, D1, S1…) está no começo do título da issue.
-
+**Para atualizar a sua branch com a `main`:**
 ```bash
-git switch main
-git pull
-git switch -c nucleo/N1-normal-pessoal
+git fetch origin && git merge origin/main --no-edit && git push
 ```
-
-**3. Programe só nos seus arquivos.** Faça commits pequenos e adicione só os seus arquivos, nunca `git add .`:
-
-```bash
-git status                                                # veja o que mudou
-git add src/core/baseline.ts src/core/baseline.test.ts   # só os seus arquivos
-git commit -m "N1: calcula média e desvio por fase"
-git push -u origin nucleo/N1-normal-pessoal               # só na primeira vez; depois, só git push
-```
-
-Não commite `package.json` nem `package-lock.json`, a não ser que você tenha adicionado uma biblioteca combinada com o grupo. Se eles mudaram sozinhos, desfaça com `git restore package.json package-lock.json`.
-
-**4. Antes do PR**, rode `npm test` e `npm run build`. Os dois precisam passar.
-
-**5. Abra o Pull Request no GitHub.**
-- Na descrição, escreva `Closes #N`, onde `N` é o número da issue.
-- Mova o card para **Em revisão**.
-
-**6. Peça revisão** a alguém de outra frente. O revisor confere o checklist da seção 8.
-
-**7. Faça o merge** com "Squash and merge". A issue fecha sozinha por causa do `Closes #N`. **Mova o card para Feito.**
-
-**Se a `main` mudou enquanto você trabalhava**, traga as novidades para a sua branch:
-
-```bash
-git fetch origin
-git merge origin/main --no-edit
-git push
-```
-
-- Se abrir uma tela de texto estranha (é o editor Vim), digite `:wq` e aperte Enter.
-- Se der conflito num arquivo que não é seu, não resolva no chute: chame o dono do arquivo.
+Se abrir o editor Vim, digite `:wq` e aperte Enter.
 
 ---
 
-## 7. Usando IA (qualquer uma, ou nenhuma)
+## 6. Usando IA
 
-Cada issue foi escrita para ser autossuficiente: dá para programar só com o texto dela, sem IA.
+- **Claude Code** lê o `CLAUDE.md` sozinho. Peça: "Faça a issue #N seguindo a SPEC (docs/SPEC-frontend.md) e o INSTRUCOES-DE-CODIGO.md".
+- **ChatGPT, Gemini ou Copilot gratuitos:** antes de pedir código, cole:
+  1. a seção 1 e a seção 4 deste arquivo;
+  2. o texto da issue;
+  3. os trechos da SPEC citados pela issue;
+  4. o `src/domain/types.ts`.
 
-**Claude Code** lê o `CLAUDE.md` sozinho. Peça: "Faça a issue #N seguindo o CLAUDE.md e o INSTRUCOES-DE-CODIGO.md".
-
-**ChatGPT, Gemini, Copilot ou outra IA gratuita** não conhece o projeto. Antes de pedir código, cole:
-
-1. As seções 1 e 4 deste arquivo.
-2. O texto completo da issue.
-3. O conteúdo de `src/shared/types.ts`. Se o #2 ainda não entrou, cole a §5 do `CLAUDE.md`: as mudanças em relação a ela já estão na seção 4 deste guia.
-4. O arquivo que você vai editar, se ele já existir.
-
-Modelo de pedido:
-
-```
-Projeto: app React + Vite + TypeScript + Tailwind, sem internet, sem servidor.
-Regras e decisões: [cole as seções 1 e 4 do INSTRUCOES-DE-CODIGO.md]
-Contrato de tipos: [cole src/shared/types.ts]
-Tarefa: [cole o texto da issue]
-Faça só o que a tarefa pede, só nos arquivos: [liste os arquivos].
-Não invente fonte, dose, conduta nem limiar. Não adicione biblioteca nova.
-Inclua testes Vitest quando for código do src/core.
-```
-
-**Cuidados com qualquer IA:**
-- Leia e entenda o código antes de commitar. Quem responde pelo PR é você.
-- Rode os testes e abra o app para conferir.
-- Confira se a IA não mexeu em arquivo de outra frente nem no `types.ts`.
-- Confira se a IA não escreveu número, conduta ou fonte que não está na issue. IA costuma inventar isso.
+**Regras:**
+- Leia o código antes de commitar.
+- A IA não pode inventar fonte, limiar ou conduta, nem mudar o `types.ts` sem combinar.
+- **A lógica do motor de regras e a decisão dos limiares (P-01) são do time** (risco R-10): use a IA para digitar, não para decidir.
 
 ---
 
-## 8. Checklist do PR
+## 7. Checklist do PR
 
-- [ ] Faz o que os critérios de aceite da issue pedem.
-- [ ] `npm test` e `npm run build` passam.
-- [ ] Só mexeu nos arquivos da sua frente (ou combinou antes); `package-lock.json` não mudou sem motivo.
-- [ ] Nenhum "apto", "inapto", "doença" ou "diagnóstico" na interface.
-- [ ] Todo texto médico tem fonte da §9 do `CLAUDE.md` (id que existe em `sources.json`) ou mostra "Sem protocolo citado — consulte o flight surgeon".
-- [ ] Nenhum limiar escrito no código; limiar placeholder mostra "valor ilustrativo".
-- [ ] Status com cor + palavra + ícone.
-- [ ] Funciona com a internet desligada.
-- [ ] Selo `SIMULADO · protótipo educacional` visível nas telas novas.
-- [ ] Descrição do PR com `Closes #N`.
-
----
-
-## 9. Prioridade e prazo
-
-- **Primeiro, o que trava o teste com pessoas** (até domingo de manhã):
-
-  | O quê | Issues |
-  |---|---|
-  | Base do app e CI | #1 a #5 |
-  | Normal pessoal, cor do status e tendência | #11, #12, #13 |
-  | Serviço de leituras | #24 |
-  | Dados e cena da demo | #36, #37 |
-  | Painel e tela "mesmo valor, dois tripulantes" | #31, #32 |
-  | Preparação do teste | #6 |
-
-- **Depois, o resto do essencial para a demo:** emergência, resumo ao flight surgeon, check-in, perfil, gráfico e cartões.
-- **Tasks com "(Extra)" no nome** só começam quando o essencial estiver pronto. Se não der tempo, ficam de fora.
-- **Travou por mais de 30 minutos?** Avise no grupo.
+- [ ] Atende os critérios de aceite da issue e os IDs da SPEC citados.
+- [ ] `npm test`, `npm run lint` e `npm run build` passam.
+- [ ] Interface em inglês; nenhum "fit", "healthy", diagnóstico ou prescrição.
+- [ ] Todo número tem selo REAL ou SIMULATED; o que é médico ou científico tem fonte S01–S19 ou mostra "Consult your flight surgeon."
+- [ ] Status com cor + ícone + texto; teclado e foco funcionam.
+- [ ] A LLM não altera alerta, status nem escalonamento.
+- [ ] Nada via CDN; nenhum segredo.
+- [ ] O PR tem `Closes #N`.

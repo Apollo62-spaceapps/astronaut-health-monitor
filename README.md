@@ -1,52 +1,67 @@
 # 🚀 Apollo 62 — NASA Space Apps Challenge 2026
 Official repository for team **Apollo 62** (Goiânia, Brazil 🇧🇷) for the **NASA Space Apps Challenge 2026**.
 
+> **Decision-support prototype — not a medical device, not for diagnosis.** This is a navigable frontend prototype built for the pitch. Some data is simulated, and every number on screen is labeled **REAL** or **SIMULATED**.
+
 ## 🩺 Challenge
 **Create Health Monitoring Software for Astronauts on Space Missions** (AEB / NASA) — Development of a visual health self-assessment and medical guidance tool for astronauts on space missions.
 
+## 💡 What we are building
+
+The astronaut self-assesses through a **core of vital signs compared with their own baseline**, plus three modules that talk to each other: **radiation**, **mental wellbeing** and **exercise adherence**. The system keeps working far from Earth and escalates to the Crew Medical Officer (CMO) or to the ground, respecting who is allowed to see each piece of data.
+
+| Feature | What it shows |
+|---|---|
+| **Body Status Map** | A clickable silhouette. Each zone (head, heart, torso, skin, plus a radiation overlay) shows the worst status of its indicators. The zone card shows the value vs. the personal baseline, the related NASA hazard and the source. |
+| **Vitals** | Heart rate, blood pressure, glucose and temperature, each with its % deviation from the pre-flight and in-flight baselines, its trend and a provenance badge. |
+| **Radiation** | Career dose vs. the 600 mSv limit. A **real solar particle event from NASA DONKI** (May 11, 2024) is replayed in the scenario and triggers a shelter flow adapted from NASA's Orion procedure. |
+| **Wellbeing (restricted)** | Daily mood and sleep self-report, private by default. The CMO sees it only with the astronaut's consent, or through an audited **break-glass** emergency access. |
+| **Exercise** | Adherence to the prescribed ARED / T2 / CEVIS plan. |
+| **Mission mode** | ISS / Moon / Mars transit. The communication delay is part of the interface: "Ground reply in ~40 min — follow these safe actions now", with a store-and-forward queue. |
+| **Assistant** | An on-device language model running in the browser (WebLLM), with a deterministic protocol fallback. The AI only talks and summarizes; it never changes an alert. |
+| **Data & Sources** | Every source used, with links and terms. |
+
+**Principles:**
+- **Rules decide, AI assists.** Colors, alerts and escalation come from a deterministic, tested rule engine.
+- **Works without Earth.** Everything runs locally, aligned with NASA's Earth-Independent Medical Operations research.
+- **Visible provenance:** REAL vs. SIMULATED on every number.
+- **Privacy by role**, in line with NASA's private medical communications.
+- **Never "fit", "healthy" or a diagnosis.** Statuses are Normal / Attention / Urgent / Adapting / Restricted, always shown with color + icon + text.
+
+## 🔍 Real vs. simulated
+
+| Real | Simulated |
+|---|---|
+| NASA DONKI solar particle event `2024-05-11T02:10:00-SEP-001` | Astronaut, vitals, wellbeing and exercise history (fixed-seed synthetic data) |
+| 600 mSv career limit (NASA OCHMO) | Prior career dose; dose increments during the event |
+| 1.8 mSv/day cruise average measured by MSL/RAD | Mission day 120 scenario |
+| Communication delay range of 4–24 min to Mars (NASA) | Alert thresholds, labeled *Illustrative thresholds* |
+| ARED / T2 / CEVIS and ~2 h/day of exercise (NASA) | Exercise prescription split between devices |
+
+## 🛠️ Tech stack
+
+React 19 · TypeScript 7 (strict) · Vite 8 · Tailwind CSS 4 · shadcn/ui (Radix) · Recharts 3 · Zustand · Zod · Vitest · WebLLM (in a Web Worker) · oxlint + Prettier. No backend, no API keys, nothing loaded from a CDN. The only exception is the one-time download of the model weights, which are then cached for offline use.
+
+## 🚀 Getting started
+
+Requirements: Node.js 22 or 24 (minimum 20.19) and Git.
+
+```bash
+npm install
+npm run dev        # development server
+npm test           # run the rule-engine tests once
+npm run build      # production build
+npm run preview    # serve the production build at http://localhost:4173 (offline demo mode)
+```
+
+Add `?ai=protocol` to the URL to run the assistant without the language model.
+
+## 📚 Docs
+
+- [Frontend specification (pt-BR)](docs/SPEC-frontend.md): requirements, rules, data model, demo script and the full source catalog.
+- [Project context (pt-BR)](CLAUDE.md)
+- [Coding guide (pt-BR)](INSTRUCOES-DE-CODIGO.md)
+- [Team kanban](https://github.com/orgs/Apollo62-spaceapps/projects/3)
+
 ## 👨‍💻 Team
 Software Engineering students from the **Federal University of Goiás (UFG)** and researchers from the **Center of Excellence in Artificial Intelligence (CEIA-UFG)**.
-
-## 🧬 Scientific Foundation & Data Sources
-
-The clinical triage engine, emergency protocols, and environmental thresholds of this software were modeled directly from official guidelines and research published by the **NASA Human Research Program (HRP)** and the **Canadian Space Agency (CSA)**.
-
-| Official Source | Risks & Metrics Extracted | Direct Software Implementation |
-| :--- | :--- | :--- |
-| 🚀 **NASA HRP — 5 Hazards of Human Spaceflight** | Radiation, isolation, distance from Earth, altered gravity, and closed environments (CO₂/pressure). | Dynamic parameter calibration by mission profile (**Spacecraft, Space Station, Lunar Base**) and **100% offline-first** autonomous operation. |
-| 🩺 **NASA HRP — Risks of Human Spaceflight** | Cardiovascular deconditioning, bone loss, immune dysregulation, fatigue, and sleep disorders. | Vital sign anomaly thresholds, step-by-step emergency protocols (e.g., acute chest pain), and fatigue/circadian alerts. |
-| 📊 **NASA HRP — Ongoing Research & Standard Measures** | Core set of physiological and cognitive biomarkers collected in-flight (plus HERA/MMEA analogs). | Selection of priority vital indicators and guided workflows explaining *"How to Measure"* and *"Why It Matters"* for non-physicians. |
-| ☢️ **CSA — Radiation Monitoring & Microgravity Science** | Cumulative radiation dosimetry and microgravity biological research (ISS). | Cumulative ionizing radiation exposure tracking module and solar particle event (SPE) preventive alerts. |
-
-<details>
-<summary><strong>📚 Click to expand the complete catalog of analyzed sources and sub-sources (NASA HRP & CSA)</strong></summary>
-
-<br>
-
-### 🛸 1. NASA — Human Research Program (HRP)
-* **5 Hazards of Human Spaceflight:**
-  * **1.1 Space Radiation:** Biological impact of invisible ionizing particles and ground-based simulation laboratories.
-  * **1.2 Isolation & Confinement:** Behavioral responses, mental health, and crew dynamics in confined spaces over extended durations.
-  * **1.3 Distance from Earth:** Operational autonomy challenges and communication latency/lack of real-time medical support on deep-space missions (e.g., Mars).
-  * **1.4 Gravity Fields:** Muscular, skeletal, vestibular, and organ adaptation to microgravity and altered gravity environments (Moon/Mars).
-  * **1.5 Hostile/Closed Environments:** Spacecraft internal ecology (temperature, cabin pressure, noise, lighting, CO₂ levels, and microbiomes).
-* **Risks of Human Spaceflight:**
-  * **2.1 Risks Involving Human Physiology:** Immune system alterations, cardiovascular adaptations, bone density loss, malnutrition, and Extravehicular Activity (EVA) risks.
-  * **2.2 Risks Involving Behavioral Performance:** Sleep disturbances, chronic fatigue, isolation-induced psychiatric disorders, and crew communication breakdowns.
-  * **2.3 Risks Involving Space Radiation:** Cellular damage, genetic mutations, and cancer risks induced by galactic cosmic rays (GCR) and solar storms.
-* **Ongoing HRP Research in Space:**
-  * **3.1 Spaceflight Standard Measures:** Core suite of physiological and psychological metrics collected from astronauts to characterize human adaptation.
-  * **3.2 Ground Analogs & Studies (HERA & MMEA):** Earth-based isolation and mission simulators used to validate human resilience and countermeasures.
-
-### 🍁 2. CSA (Canadian Space Agency)
-* **Monitoring Radiation for Astronaut Health:**
-  * **4.1 Dosimetry & Sensors:** Canadian dosimetry technologies and cumulative radiation tracking systems for long-duration crews.
-* **Why Do We Conduct Science Experiments in Space?:**
-  * **5.1 Microgravity Medical Research:** Advanced biological and medical experiments conducted aboard the International Space Station (ISS) targeting human physiology.
-
-</details>
-
-## 🛠️ For contributors
-
-- [Coding guide (pt-BR)](INSTRUCOES-DE-CODIGO.md): stack, project structure, git workflow and AI usage.
-- [Team kanban](https://github.com/orgs/Apollo62-spaceapps/projects/3)

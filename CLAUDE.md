@@ -1,257 +1,238 @@
-# CLAUDE.md — Monitor de saúde para astronautas (NASA Space Apps 2026, Goiânia)
+# CLAUDE.md — Protótipo frontend de monitoramento de saúde de astronautas (Apollo 62, NASA Space Apps 2026)
 
-Este arquivo dá ao Claude o contexto completo do projeto: o que será construído, por que cada decisão foi tomada e de quais fontes cada informação veio. Leia tudo antes de escrever código.
+Contexto para o Claude e para qualquer IA ou pessoa do time. **A fonte de verdade dos requisitos é a SPEC**, em `docs/SPEC-frontend.md` (convertida de `SPEC-frontend.docx`, v0.2 de 14/11/2026). Este arquivo resume o que é preciso para programar sem errar. Cite sempre os IDs da SPEC: CORE-xx, BODY-xx, RAD-xx, MH-xx, EX-xx, ESC-xx, AI-xx, PRIV-xx, SRC-xx, DEMO-xx, R-xxx, NFR-xx e P-xx.
+
+> **Versão 3 (14/11/2026, noite).** Tudo é **frontend prototipado**: sem backend, sem login, sem dados reais de saúde. Time de código: **Kayque (K4yquee)** e **Lucas Batista (lucasba07)**. Entrega: **domingo, ~15h**; o código congela às ~12h.
+>
+> As versões 1 e 2 (agente Terra → agente de bordo) estão arquivadas em `contexto ia/backup-v2-2026-11-14/`, fora do repositório.
 
 ## 0. Regras inegociáveis (ler primeiro)
 
-1. **Protótipo educacional, não é dispositivo médico.** Todo dado é simulado. Toda tela mostra o selo `SIMULADO · protótipo educacional`.
-2. **O app nunca diz "apto", "inapto", "doença" nem "diagnóstico".** Ele usa: "dentro do seu normal", "fora do seu normal", "consulte o flight surgeon". Quem decide aptidão é o médico de voo (ver fontes F11 e F12).
-3. **Todo passo médico tem fonte.** Se não houver protocolo citado, a tela mostra "Sem protocolo citado — consulte o flight surgeon". **Nunca invente conduta, dose, limiar ou fonte.**
-4. **Nunca invente uma fonte.** Só cite documentos da seção 9. Uma proposta anterior citava "NASA HRP – Behavioral Health Guidelines", que **não existe nas fontes lidas**: não use.
-5. **A cor (verde/amarelo/vermelho) é decidida por regras determinísticas, nunca por IA.**
-6. **O núcleo e a emergência funcionam sem internet.** Nada crítico depende de rede.
-7. **Status nunca só por cor:** sempre cor + palavra + ícone.
-8. Limiares sem fonte ficam em arquivo de configuração, marcados como `placeholder`, e aparecem na UI como "valor ilustrativo".
-9. Idioma da interface: português do Brasil, linguagem leiga (astronautas não são médicos — vídeo da AEB).
+1. **Protótipo de apoio à decisão, não é dispositivo médico.** O rodapé fixo diz: "Decision-support prototype — not a medical device, not for diagnosis. Some data simulated." (NFR-08).
+2. **Nunca "fit", "apto", "healthy", diagnóstico ou prescrição.** Os rótulos são **Normal / Attention / Urgent / Adapting / Restricted** (BODY-07).
+3. **As regras decidem e a IA só auxilia.** Cor, alerta e escalonamento vêm do motor de regras determinístico (funções puras em `src/domain/rules/`). A LLM só conversa e resume, e **nunca** altera status, alerta ou escalonamento (AI-07).
+4. **Proveniência visível.** Nenhum número aparece sem o selo **REAL** ou **SIMULATED** e a fonte (NFR-05).
+5. **Toda afirmação médica ou científica tem fonte do catálogo da §8.** Sem fonte, mostrar "Consult your flight surgeon." Nunca invente limiar, dose, conduta, sintoma ou fonte. Itens marcados [PENDENTE P-xx] na SPEC continuam pendentes até alguém achar a fonte.
+6. **Limiares sem fonte** ficam em `src/domain/config/thresholds.ts`, com o comentário `// PENDENTE P-01 — valores ilustrativos`. A UI mostra o selo **"Illustrative thresholds"** (CORE-04).
+7. **Status nunca só por cor:** sempre cor + ícone + texto, e hachura nos status não normais do mapa do corpo (CORE-03, BODY-04).
+8. **Ações em alertas de vitais são só não clínicas:** "Re-measure", "Notify CMO", "Follow the onboard medical checklist" (CORE-09). Orientação de tratamento exige fonte médica (P-12).
+9. **Privacidade por perfil.** O bem-estar (humor e sono) é privado. O CMO só vê com consentimento (apenas o nível do alerta) ou via break-glass auditado (PRIV-03, BODY-06). A matriz de acesso está na SPEC §6.7.
+10. **Funciona sem a Terra.** Tudo roda local. Nada via CDN; as fontes tipográficas vêm do `@fontsource`. A **única exceção** são os pesos do modelo WebLLM, baixados uma vez e guardados em cache (NFR-02, R-06).
+11. **Interface toda em inglês.** Documentos e conversa do time em português.
+12. **Nenhum segredo no repositório** (não há chave de API). O `.env` vai para o `.gitignore`.
+13. **Autoria do time** (risco R-10, de desclassificação por "feito por IA"): a lógica central (motor de regras), os limiares (P-01) e o roteiro da demo são decididos e defendidos pelo time. A IA ajuda, mas não decide sozinha.
 
-## 1. Contexto do desafio
+## 1. Desafio e proposta
 
-- **Evento:** NASA Space Apps Challenge 2026, edição Goiânia (13 a 15/11/2026). Equipe de 6 pessoas.
-- **Desafio:** "Create Health Monitoring Software for Astronauts on Space Missions", autor: Agência Espacial Brasileira (AEB). [F1, F2]
-- **Pedido do vídeo da AEB** [F2]: um colega sente dor aguda no peito e desmaia a caminho de Marte. O que fazer? Criar um software que ajude astronautas a avaliar a própria saúde e oriente na emergência. Para cada medição: como fazer, por que importa e o que fazer se o valor não parecer normal. Ir além: lembrar de medir e adaptar a ambientes (nave, estação, base lunar). Explorar o HRP e o OSDR.
-- **Indicadores sugeridos pelo desafio** [F1]: pressão arterial, frequência cardíaca, glicemia, temperatura corporal, horas de sono e humor.
+- **Evento:** NASA Space Apps Challenge 2026, Goiânia (13–15/11/2026). Equipe Apollo 62.
+- **Desafio:** "Create Health Monitoring Software for Astronauts on Space Missions" [S01].
+  - O briefing pede uma ferramenta visual de autoavaliação, com orientação.
+  - Cita os 5 hazards do Human Research Program: radiação, isolamento e confinamento, distância da Terra, campos gravitacionais e ambientes hostis e fechados.
+  - Cita os indicadores: pressão arterial, frequência cardíaca, glicemia, temperatura, sono e humor.
+- **Proposta (SPEC §1):** o astronauta se autoavalia num **núcleo de sinais vitais com baseline individual** e em **três módulos que conversam entre si**:
+  - radiação;
+  - bem-estar mental;
+  - adesão ao exercício.
 
-### Requisitos oficiais (texto do grupo)
-- Check-in curto: sono, humor, FC de repouso, pressão, temperatura, mais 1 ou 2 contextos de cabine.
-- Comparação com a linha de base do próprio astronauta e detecção de tendência.
-- Status com cor e texto ou ícone, mais o hazard relacionado.
-- Caixa "o que fazer", com contramedidas citando a fonte NASA.
-- Botão que gera um resumo para o flight surgeon (por causa do atraso de comunicação).
-- **Fora:** decisão de trajeto ou duração, controle automático da nave, diagnóstico, login.
+  O sistema continua funcionando longe da Terra e escalona para o CMO ou para o solo, respeitando quem pode ver cada dado.
+- **Diferenciais para o pitch (SPEC §6.1.1, §6.5, §6.7):**
+  1. **O atraso de comunicação faz parte da interface.** Trocar de ISS para Marte muda o escalonamento ao vivo ("Ground reply in ~40 min — safe actions now"). É o "diferencial em 10 segundos" da demo.
+  2. **Privacidade médica real.** A cabeça fica cinza com cadeado para o CMO, e existe break-glass com motivo e auditoria.
+  3. **Evento solar real da NASA (DONKI)** reproduzido no cenário, gerando o fluxo de abrigo baseado na Orion.
+  4. **Proveniência** REAL/SIMULATED em cada número.
+  5. **IA local no navegador** (WebLLM) com **fallback seguro** (protocolo determinístico): sem a LLM, o semáforo não muda.
 
-## 2. O MVP
+## 2. Escopo
 
-**Monitor de saúde offline-first por fases da missão.** Cada tripulante é comparado com o **seu próprio normal** em cada fase da missão. O app funciona sem internet, guia a tripulação numa emergência e usa a conexão só para o que não é urgente.
+**P0 (obrigatório para a demo):**
+- **Overview com mapa do corpo:** zonas Head, Heart, Torso e Skin, mais o overlay de radiação (CORE-01, BODY-01…04, 06, 07).
+- **Cards e gráficos de vitais**, com baseline pré-voo e em voo (CORE-02…05, 08, 09).
+- **Radiação:** dose de carreira; evento DONKI real; replay → alerta urgent + fluxo de abrigo; exercício adiado (RAD-01…05, 07).
+- **Bem-estar:** check-in, gráfico de 14 dias, consentimento (MH-01, 02, 04).
+- **Exercício:** plano, check-in, adesão (EX-01…03, 05).
+- **Missão e escalonamento:** seletor ISS/Lua/Marte, ETA de 2 × o atraso, fila store-and-forward (ESC-01…04).
+- **Assistente:**
+  - ProtocolEngine, que funciona 100% sozinho;
+  - WebLLM num Web Worker, com seleção automática e manual do motor;
+  - selos e rótulos de IA (AI-01…08).
+- **Perfis e privacidade:** seletor de perfil, bem-estar bloqueado para o CMO, break-glass, notificação (PRIV-01…04).
+- **Data & Sources** (SRC-01, 03) e **Demo controls** (DEMO-01, 02).
 
-### Por que este MVP
-- **O normal muda de fase.** O trânsito a Marte tem cerca de seis meses em ausência de peso, a superfície tem gravidade parcial e, na volta, a tripulação se readapta. [F5] Uma faixa fixa ignora isso.
-- **Sono e humor pesam.** Perda de sono, dessincronização circadiana e sobrecarga de trabalho agravam o isolamento. O diário é usado para avaliar o estado emocional. [F4]
-- **Cabine importa.** Temperatura, pressão, iluminação e ruído são fatores de habitabilidade. [F7]
-- **Autonomia.** As tripulações precisam lidar com emergências médicas com ajuda mínima do solo, e as mensagens podem levar até 20 minutos em um sentido. [F6]
-- **Responde aos requisitos oficiais e ao cenário central do vídeo.**
-- **Hipótese nossa, ainda não provada:** o mesmo valor pode significar coisas diferentes para pessoas diferentes. O teste com pessoas verifica isso.
+**P1 (se sobrar tempo):**
+- CORE-06 (Log measurement) e CORE-07 (Today's measurements);
+- BODY-05 (animação), BODY-08 (Advance day), BODY-09 + R-PHASE-01 (Adapting) e zona Legs;
+- RAD-06, MH-03, EX-04 (gamificação sóbria), ESC-05 (blackout), PRIV-05, SRC-02.
 
-### Por que offline-first (a questão da internet)
-- A ISS tem internet via satélites TDRS em banda Ku, mas os astronautas acessam um computador em solo, em Houston, por área de trabalho remota. [F15, F16]
-- A conexão só existe quando há contato de rádio em banda Ku [F17]. Um cosmonauta relatou acesso em cerca de 80% do tempo, com períodos sem comunicação. [F18]
-- A caminho de Marte, até 20 min de atraso em um sentido. [F6]
-- **Decisão:** status, tendência e emergência rodam no aparelho. O resumo ao solo usa a rede quando houver link. IA e APIs externas ficam como extras opcionais e não urgentes.
+**P2 (só roadmap no pitch):**
+- autenticação e backend;
+- sensores reais e dados ao vivo NOAA/DONKI;
+- faixas clínicas validadas e instrumento validado de saúde mental;
+- PWA;
+- dados de cabine (P-15);
+- fluxo guiado de dor no peito (BODY-10, bloqueado por P-12).
 
-| Fase | Conexão | Comportamento do resumo ao flight surgeon |
-|---|---|---|
-| Terra (pré-missão) | Contínua | Enviado na hora |
-| Estação | Intermitente | Entra na fila e sai quando o link volta |
-| Trânsito a Marte | Atraso de até 20 min por sentido | Enviado com o atraso visível (na demo, comprimido) |
+**Ordem de corte (SPEC §11):** completar o fluxo P0 de ponta a ponta antes de qualquer P1. Se o tempo acabar, o que sobra é um fluxo completo, não telas pela metade.
 
-## 3. Escopo
+## 3. Stack (decidida em 14/11; versões fixas, todas publicadas há 2+ semanas)
 
-### P0 — mínimo para a demo
-1. **Fluxo de emergência** (dor no peito e desmaio): passos guiados em alto contraste, cada um com fonte (seção 6). Funciona sem internet e termina no resumo ao flight surgeon.
-2. **Perfil** com exame pré-voo simulado, que define o normal pessoal.
-3. **Check-in curto:** sono, humor, FC de repouso, pressão (sistólica e diastólica), temperatura e 1–2 dados de cabine (sugestão: temperatura e ruído da cabine).
-4. **Regras sem IA:** verde, amarelo ou vermelho, com texto, ícone e hazard relacionado.
-5. **Gráfico de tendência** com a faixa pessoal de fundo e botão para avançar o tempo.
-6. **Cartão por indicador:** como medir, por que importa, o que fazer.
-7. **Botão de resumo ao flight surgeon**, mostrando o estado da conexão (seção 2).
+| Camada | Escolha | Versão | Motivo |
+|---|---|---|---|
+| Build | Vite | 8.3.5 | Template oficial `react-ts` (create-vite 9.3.3) |
+| UI | React + TypeScript strict | 19.3.1 / 7.0.2 | Linha estável; o TS strict evita erro de unidade |
+| Estilo | Tailwind CSS (`@tailwindcss/vite`) | 4.3.3 | Rápido e consistente |
+| Componentes | shadcn/ui (CLI `shadcn@4.23.0`) sobre `radix-ui` 1.8.1, `lucide-react` 1.65.0, `class-variance-authority` 0.7.1, `clsx` 2.1.1, `tailwind-merge` 3.7.0, `tw-animate-css` 1.4.0 | — | Acessível (teclado e ARIA); suporte a Tailwind v4 e React 19 [S18] |
+| Gráficos | **Recharts** | 3.10.1 | **Desvio da SPEC (que pedia ECharts).** Com 2 pessoas: já instalado, API declarativa React, `ReferenceLine` e `ReferenceArea` prontas para os baselines, sem wrapper próprio. Acessibilidade: `accessibilityLayer`, e o status nunca só pela cor |
+| Estado | Zustand (store único) | 5.0.16 | Simples |
+| Validação | Zod | 4.6.7 | Valida fixtures e entradas |
+| Testes | Vitest (+ jsdom e Testing Library) | 4.1.12 / 30.1.3 / 16.3.3 | Testes do motor de regras (P0) |
+| LLM | `@mlc-ai/web-llm` num Web Worker + ProtocolEngine | 0.2.87 | No navegador, offline depois do cache, sem chave. Modelo candidato: `Llama-3.2-1B-Instruct-q4f32_1-MLC` (P-03: confirmar o ID, a licença e o cache) |
+| Fontes | `@fontsource-variable/inter` + `@fontsource/jetbrains-mono` (algarismos tabulares) | 5.3.0 | Nada via CDN |
+| Qualidade | oxlint + Prettier | 1.89.0 / 3.9.10 | **Desvio da SPEC (que pedia ESLint):** o template atual do Vite já traz oxlint |
 
-Ordem de corte se o tempo apertar: (a) dados de cabine → só 1; (b) botão de avançar o tempo → série fixa. **A emergência e o resumo nunca saem.**
+O alias de import é `@/` → `src/` (exigido pelo shadcn; configurar em `tsconfig.app.json` e `vite.config.ts`). O tema é escuro, estilo "mission control", com layout para notebook ≥ 1280 px (NFR-07).
 
-### P1 — se houver tempo, nesta ordem
-1. Troca de fase com o estado "adaptando" (recalcula o normal após a adaptação).
-2. Corpo clicável (zonas coloridas com status e hazard).
-3. PWA instalável offline.
-
-### Fora
-Login, diagnóstico, "apto para missão", gamificação, IA como núcleo, backend, banco de dados, wearables reais, dose de radiação no P0 (P2: dose acumulada simulada, só depois de confirmar o limite na fonte oficial).
-
-## 4. Stack
-
-| Camada | Escolha | Motivo |
-|---|---|---|
-| Interface | React + Vite + TypeScript | Mais conhecido pelo grupo e bem suportado por ferramentas de IA |
-| Estilo | Tailwind CSS | Telas de alto contraste rápidas |
-| Gráficos | Recharts | Tendência com faixa de fundo |
-| Dados e protocolos | Arquivos JSON em `src/data` | Offline; o revisor de saúde edita sem mexer em telas |
-| Estado | Estado do React + localStorage | Sem banco, sem login |
-| Testes | Vitest | Garante que as regras dão a cor certa |
-| Deploy | Vercel ou GitHub Pages | Link público para os jurados |
-| Offline instalável | vite-plugin-pwa (P1) | O build estático já roda sem rede na demo |
-
-Nenhuma chave de API no repositório. Se um dia houver IA na nuvem, a chamada passa por um servidor intermediário, nunca pelo front-end.
-
-## 5. Arquitetura e contratos de dados
+## 4. Arquitetura (SPEC §5.2 e §5.3)
 
 ```
 src/
-  core/        regras puras, sem React, com testes (baseline.ts, rules.ts, trend.ts, flow.ts, summary.ts)
-  data/        crew.json, phases.json, thresholds.json, hazards.json, cards.json, emergency-flow.json, sources.json
-  ui/          Profile/, CheckIn/, Dashboard/, Trend/, Cards/, Emergency/, Summary/
-  shared/      types.ts
+  app/              App.tsx, AppShell (Sidebar, TopBar), providers
+  features/
+    overview/       mapa do corpo, cards de status, alertas ativos
+    vitals/         cards e gráficos por indicador (Recharts)
+    radiation/      barra de dose, evento DONKI, fluxo de abrigo
+    wellbeing/      check-in de humor/sono, bloqueio por perfil, break-glass
+    exercise/       plano do dia, check-in, adesão
+    assistant/      chat, selo de modo de IA
+    escalation/     painel de comunicação, fila store-and-forward
+    sources/        página Data & Sources
+    demo/           painel Demo controls
+  domain/
+    types.ts        contrato de dados (SPEC §5.4 + §6.6)
+    rules/          engine.ts, vitals.ts, body.ts, radiation.ts, exercise.ts, escalation.ts, privacy.ts + *.test.ts
+    config/         thresholds.ts (P-01, placeholders), missions.ts, bodyZones.ts
+  ai/               engine.ts (Strategy), protocol.ts, onboard.ts, onboard.worker.ts, prompts.ts
+  data/
+    fixtures/       astronaut.json, vitals.json, wellbeing.json, exercise.json   [SIMULATED]
+    nasa/           donki-sep-2024-05.json   [REAL, cópia fiel da API]
+    schemas.ts      Zod; todo acesso aos fixtures passa por aqui
+    sources.ts      catálogo de fontes (§8)
+  state/store.ts    Zustand
+  components/ui/    gerado pelo shadcn
+  lib/              format.ts (unidades, datas), utils.ts (cn)
+scripts/
+  generate-fixtures.mjs   dados sintéticos com semente fixa
 ```
 
-Princípio: **a interface só chama funções puras do `core`; o `core` só lê os JSON de `data`.** Assim as regras são testáveis e o conteúdo médico é revisável à parte.
+**Princípios:**
+- A UI só chama o store e as funções puras de `domain/`.
+- As regras não importam React.
+- A LLM recebe só o `AssistantContext`, que é montado pelas regras, e nunca escreve no store de alertas.
 
-### Tipos (contrato combinado na primeira hora)
-```ts
-type Indicator = 'sleep' | 'mood' | 'hr' | 'sys' | 'dia' | 'temp' | 'cabinTemp' | 'cabinNoise';
-type PhaseId = 'terra' | 'estacao' | 'transito';
-type Status = 'verde' | 'amarelo' | 'vermelho' | 'sem-referencia' | 'adaptando';
+## 5. Contrato de dados e regras
 
-interface Reading { indicator: Indicator; value: number; at: string /* ISO */; phase: PhaseId; origin: 'simulado' | 'manual'; }
-interface CrewMember { id: string; name: string; preflight: Reading[]; readings: Reading[]; }
-interface Phase { id: PhaseId; label: string; connection: 'continua' | 'intermitente' | 'atraso'; delayMinutes: number; adaptationDays: number; }
-interface HazardLink { indicator: Indicator; hazard: string; sourceId: string; }
-interface Card { indicator: Indicator; how: string[]; why: string; whatToDo: Record<'verde'|'amarelo'|'vermelho', string>; sourceIds: string[]; }
-interface EmergencyStep { id: string; title: string; text: string; sourceId: string | null; options?: { label: string; next: string }[]; metronomeBpm?: number; }
-interface Source { id: string; title: string; url: string; note?: string; }
-```
+- **Tipos:** exatamente os da SPEC §5.4 e §6.6, em `src/domain/types.ts`. Os principais são:
+  - leituras e baseline: `Provenance`, `VitalReading`, `Baseline`;
+  - módulos: `WellbeingEntry`, `ExerciseSession`, `RadiationState`, `SpaceWeatherEvent`;
+  - missão e perfil: `MissionProfile`, `Role`;
+  - status e mapa do corpo: `AlertLevel`, `ZoneStatus`, `BodyZone`;
+  - alertas e comunicação: `Alert`, `AuditEntry`, `OutboundPacket`;
+  - assistente: `AssistantContext`, `ChatMessage`, `AssistantEngine`.
 
-### Regras (core)
-- **Normal pessoal:** média e desvio-padrão das medições da pessoa naquela fase. Antes de existir medições suficientes na fase, usa o pré-voo. Sem medições mínimas: `sem-referencia`.
-- **Status por desvio:** distância do valor ao normal pessoal, em desvios-padrão, com piso de desvio por indicador (evita que poucos exames parecidos deixem tudo "fora").
-- **Tendência:** amarelo quando o indicador fica fora da faixa pessoal por 3 dias seguidos (regra proposta pelo Erick).
-- **Adaptação:** durante `adaptationDays` após a troca de fase, mostrar `adaptando` em vez de alarme; depois, recalcular o normal com as medições da nova fase (ideia da linha de base em camadas, do Lucas).
-- **Limites absolutos:** camada que sempre alerta, independentemente do normal pessoal. **Vazia até haver fonte.**
-- **Resumo do dia:** qualquer vermelho, ou 2+ amarelos → "sinalizar ao flight surgeon". Nunca "apto".
+  **O contrato congela no sábado ~21h30**; depois disso, só muda por combinação entre Kayque e Lucas.
+- **Regras P0, com teste** (SPEC §7):
+  - R-VIT-01 (desvio %) e R-VIT-02 (nível, placeholders);
+  - R-RAD-01 (% de 600 mSv), R-RAD-02 (dias × 1,8 mSv), R-RAD-03 (SEP ativo → urgent + abrigo);
+  - R-EX-01 (adesão) e R-EX-02 (abrigo → postponed);
+  - R-ESC-01 (nível + missão → destinatários, ETA = 2 × atraso, pacote);
+  - R-PRIV-01 (perfil + consentimento + break-glass → pode ver?);
+  - R-BODY-01 (pior status da zona; Head restricted para o CMO).
+- **Regras P1:** R-PHASE-01 ("Adapting" só substitui attention; urgent nunca é mascarado), R-RAD-04 e R-MH-01.
+- **Missões:**
 
-### Parâmetros — TODOS são placeholders sem fonte clínica
-| Parâmetro | Valor inicial | Status |
-|---|---|---|
-| Mínimo de medições para ter referência | 5 | placeholder |
-| Verde | até 2 desvios-padrão | convenção estatística, não clínica |
-| Amarelo | de 2 a 3 desvios-padrão | placeholder |
-| Vermelho | acima de 3 desvios-padrão | placeholder |
-| Piso do desvio | FC 3 bpm; sistólica 5 mmHg; diastólica 4 mmHg; temperatura 0,2 °C; sono 0,5 h; humor 0,5 | placeholder |
-| Dias de adaptação por fase | definir com o grupo | placeholder |
-| Dias seguidos para tendência | 3 | proposta do grupo |
+  | Missão | Atraso de ida | Origem |
+  |---|---|---|
+  | ISS | ~0 s | simplificação |
+  | LUNAR | ~1,3 s | cálculo físico |
+  | MARS_TRANSIT | 20 min | dentro da faixa de 4–24 min [S10]; ida e volta de ~40 min |
+- **Dados:**
+  - fixtures sintéticos com semente fixa: dia de missão 120, ~14 dias de pré-voo e 120 dias em voo;
+  - dose da missão no dia 120 = 120 × 1,8 = 216 mSv;
+  - dose prévia fictícia, com o total abaixo de 600 mSv;
+  - evento real `2024-05-11T02:10:00-SEP-001` (GOES-P SEISS >100 MeV) [S07], com o rótulo "Real event observed near Earth (NASA DONKI), replayed in this scenario."
+  - não inventar tendências fisiológicas como fato: as séries são ruído em torno do baseline mais um desvio roteirizado (P-07).
 
-Mostrar na UI que esses valores são ilustrativos. Revisar com um profissional de saúde.
+## 6. Roteiro da demo (SPEC §10)
 
-### Mapa de hazards (proposta nossa, não da NASA)
-| Indicador | Hazard do HRP |
-|---|---|
-| Sono, humor | Isolamento e confinamento [F4] |
-| FC, pressão | Campos gravitacionais — circulação [F5, F8] |
-| Temperatura corporal, cabine | Ambientes hostis e fechados [F7] |
+1. **Overview** (Astronauta, Marte, dia 120): o mapa do corpo aparece com as zonas coloridas. Clicar no coração e mostrar o card (função, desvio contra o baseline, hazard, fonte), a dose de carreira e os selos REAL/SIMULATED.
+2. **Replay event:** o evento DONKI real gera o alerta urgent e o fluxo de abrigo da Orion, e o exercício passa para postponed.
+3. **Assistente** (WebLLM), com o selo do modo de IA.
+4. **Escalonamento:** em Marte aparece "Ground reply in ~40 min — safe actions now" e o pacote entra na fila. Trocando para ISS, a mesma situação tem resposta quase imediata.
+5. **Perfil CMO:** a cabeça fica cinza com cadeado e o bem-estar fica bloqueado. Fazer o break-glass com motivo e mostrar o registro de auditoria.
+6. **Fallback:** mudar para o protocol mode. O semáforo e os alertas não mudam.
+7. **Data & Sources.**
 
-### Dados simulados
-- 2 ou 3 tripulantes com corpos diferentes (ex.: FC de repouso média ~84 bpm em um e ~56 bpm em outro), todos inventados.
-- Exame pré-voo com várias medições por pessoa; séries diárias por fase.
-- **Cena da demo e do teste:** os dois tripulantes registram o **mesmo valor** de FC; para um está dentro do normal, para o outro está fora.
-- Gerar com semente fixa, para a demo ser sempre igual.
-- Nenhum número de astronauta real (dados clínicos de astronautas são restritos [F13]).
+## 7. Time, tarefas e prazos
 
-## 6. Fluxo de emergência (P0)
+- **Kanban:** https://github.com/orgs/Apollo62-spaceapps/projects/3. As tasks são só do Kayque e do Lucas.
+- **Kayque (K4yquee):**
+  - base, design system, AppShell e TopBar;
+  - contrato (tipos, store, configs), fixtures, DONKI e catálogo de fontes;
+  - radiação, escalonamento (UI), bem-estar e privacidade, assistente, Data & Sources, Demo controls;
+  - ensaio da demo.
+- **Lucas (lucasba07):**
+  - motor de regras P0 com testes, incluindo a decisão dos placeholders de P-01;
+  - Overview com o mapa do corpo;
+  - cards e gráficos de vitais;
+  - exercício.
+- **Marcos:**
 
-Cada passo cita a fonte. O que não tem fonte fica como "consulte o flight surgeon".
+  | Quando | O quê |
+  |---|---|
+  | Sáb. ~21h30 | Tipos e contrato do store congelados |
+  | Sáb. ~01h | Fluxo P0 navegável de ponta a ponta, mesmo feio |
+  | Dom. manhã | Integração, polimento, testes passando, ensaio no notebook do pitch (cache do modelo + `?ai=protocol`) |
+  | Dom. ~12h | Código congelado |
+  | Dom. ~15h | Entrega |
 
-| # | Passo | Fonte |
-|---|---|---|
-| 1 | Verificar responsividade, pedir ajuda, acionar resposta de emergência, buscar o DEA | AHA 2025 SBV adulto [F9] |
-| 2 | Checar respiração e pulso ao mesmo tempo, em até 10 s | AHA 2025 SBV [F9] |
-| 3a | Sem respiração normal e sem pulso: RCP 30 compressões : 2 ventilações, DEA assim que disponível, 100–120 compressões/min (metrônomo a 110) | AHA 2025 SBV [F9]; a taxa 100–120/min foi confirmada só por resumo secundário [F9b] |
-| 3b | Respira e tem pulso: monitorar até chegar o suporte | AHA 2025 SBV [F9] |
-| 4 | Técnica e contenção em microgravidade | Diretriz DGLRM/ESAM [F10] — **ainda não lida; não detalhar até alguém ler** |
-| 5 | Dor no peito com a pessoa consciente: perguntar sobre pressão/aperto/peso, irradiação para braço/pescoço/mandíbula, náusea, palpitações, falta de ar, gatilho por esforço | Diretriz AHA/ACC 2021 de dor torácica [F11b] — feita para pronto-socorro, precisa de adaptação por revisor |
-| 6 | Medir FC, PA e temperatura; ECG se houver. **Nunca atrasar a RCP por medições** | Mesma diretriz [F11b] |
-| 7 | Gerar o resumo ao flight surgeon, com o atraso de comunicação visível | NASA-STD-3001 §6.2 [F12] |
+## 8. Fontes (SPEC §16, acesso em 14/11/2026)
 
-**Sem fonte, não entra como conduta:** aspirina ou nitroglicerina, posição de recuperação em microgravidade, investigação de síncope, decisão de evacuar ou abortar. Na tela: "consulte o flight surgeon".
+Cite pelo id S01–S19. Os itens marcados "Verificar" precisam ser abertos por alguém do time antes de irem para o pitch.
 
-Contexto útil para a UI (não é conduta): a página de gravidade cita tontura e desmaio na passagem da ausência de peso para a gravidade [F5]. As tripulações da ISS têm oficiais médicos treinados em ACLS que normalmente não são médicos, e usam um checklist médico com algoritmo baseado na AHA [F14] — o app é complemento, não substituto.
+| ID | Provedor | Título / URL | Termos |
+|---|---|---|---|
+| S01 | NASA Space Apps | Create Health Monitoring Software for Astronauts on Space Missions — https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/?tab=details | Briefing |
+| S02 | NASA OCHMO | NASA-STD-3001 Vol. 1 Rev. C (2023) — https://www.nasa.gov/wp-content/uploads/2023/11/nasa-std-3001-vol-1-rev-c-with-signature.pdf | Verificar |
+| S03 | NASA OCHMO | OCHMO-TB-020 Design for Ionizing Radiation Protection — https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-020-radiation-protection.pdf | Verificar |
+| S04 | NASA OCHMO | OCHMO-TB-044 Medical Operations (13/08/2025) — https://www.nasa.gov/wp-content/uploads/2025/08/ochmo-tb-044-medical-operations.pdf | Verificar |
+| S05 | NASA | Crew Systems (Orion), Radiation Shelter — https://www.nasa.gov/reference/crew-systems/ · https://www.nasa.gov/missions/artemis/orion/scientists-and-engineers-evaluate-orion-radiation-protection-plan/ | Verificar |
+| S06 | NASA GSFC CCMC | DONKI System (termos de uso) — https://ccmc.gsfc.nasa.gov/tools/DONKI/ | Dados de qualidade de protótipo; sem endosso; seguir a política da CCMC |
+| S07 | NASA GSFC CCMC | DONKI API GET /get/SEP; evento 2024-05-11T02:10:00-SEP-001 — https://ccmc.gsfc.nasa.gov/DONKI-API/get/SEP?startDate=2024-05-01&endDate=2024-05-31 · https://ccmc.gsfc.nasa.gov/DONKI/view/SEP/30714/-1 | Termos de S06 |
+| S08 | PubMed | Zeitlin et al., 2013, MSL/RAD (PMID 23723233) — https://pubmed.ncbi.nlm.nih.gov/23723233/ | Conferir o valor antes de citar |
+| S09 | SwRI | SwRI-led team calculates the radiation exposure associated with a trip to Mars — https://www.swri.org/newsroom/press-releases/swri-led-team-calculates-the-radiation-exposure-associated-trip-mars | Citar |
+| S10 | NASA NTRS | Robinson et al., IAC-19 (atraso de 4–24 min; apagões de até 2 semanas) — https://ntrs.nasa.gov/api/citations/20190032318/downloads/20190032318.pdf | Verificar |
+| S11 | NASA NTRS | Expertise and Training Considerations for Crew… Mars Vicinity (2025) — https://ntrs.nasa.gov/api/citations/20250007638/downloads/Crew_Complement_Mars_Vicinity_Final.pdf | Verificar |
+| S12 | NASA Ames | CDSS for Earth-independent Medical Operations (2024); Russell et al., npj Microgravity 9, 46 (2023) — https://www.nasa.gov/centers-and-facilities/ames/ames-science/ames-space-biosciences/a-clinical-decision-support-system-for-earth-independent-medical-operations/ · https://doi.org/10.1038/s41526-023-00284-1 | Verificar |
+| S13 | NASA | Astronaut Exercise (ARED, T2, CEVIS; ~2 h/dia) — https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/ | Verificar |
+| S14 | NOAA SWPC | GOES Proton Flux; NOAA Space Weather Scales — https://www.swpc.noaa.gov/products/goes-proton-flux · https://www.swpc.noaa.gov/noaa-scales-explanation | Verificar (só explicativo, RAD-07) |
+| S15 | Google Cloud Blog | How Google and NASA are testing AI for medical care in space (07/08/2025) — https://cloud.google.com/blog/topics/public-sector/how-google-and-nasa-are-testing-ai-for-medical-care-in-space | Contexto para o pitch |
+| S16 | ISO/IEC | IEC 62304:2006 — https://www.iso.org/standard/38421.html | Referência; não alegar conformidade |
+| S17 | WebLLM / MLC | https://webllm.mlc.ai/docs/ · https://arxiv.org/abs/2412.15803 | Verificar as licenças (P-03) |
+| S18 | shadcn/ui | Tailwind v4 — https://ui.shadcn.com/docs/tailwind-v4 | — |
+| S19 | NASA HRP | The Human Body in Space — https://www.nasa.gov/humans-in-space/the-human-body-in-space/ | Verificar |
 
-Interface: uma ação por tela, botões grandes, alto contraste, cronômetro visível desde o início, metrônomo sonoro.
+**Fontes extras verificadas em 14/11** (podem reforçar o pitch; detalhes em `contexto ia/pesquisa-fontes-2026-11-14.md`):
+- **CMO-DA offline em teste em solo** (blog da Red Hat, jun/2026): não há registro de uso em voo.
+- **Atraso de até ~22 min e interrupção de 2–3 semanas na conjunção** (NASA NTRS 20220013418).
+- **Cabine** (NASA-STD-3001 / OCHMO-TB-002): 18–27 °C e CO2 ≤ 3 mmHg.
 
-## 7. Roteiro da demo (3 min) e teste
+Ao usar uma delas, acrescente-a ao `src/data/sources.ts` com um id novo (S20+).
 
-**Demo:**
-1. Terra: dia normal, conectado.
-2. Trânsito: sono e humor se desviam aos poucos; o mesmo valor tem significados diferentes para dois tripulantes; o resumo ao solo sai com atraso.
-3. Emergência: colega sente dor no peito e desmaia; o app guia sem depender da Terra.
+## 9. Pendências que mais pesam (SPEC §13)
 
-**Teste com pessoas (critério definido antes, conforme guia do evento [F3]):**
-- 5 pessoas de fora do grupo, sem explicação prévia, veem a cena "mesmo valor, dois tripulantes".
-- Pergunta: "Quem precisa de atenção hoje, e por quê?"
-- Acertamos se ≥ 4 de 5 apontarem o tripulante certo em < 2 min, sem ajuda, e explicarem pela faixa pessoal. Nenhuma pode ler o resultado como diagnóstico ou aprovação para missão.
-- Com 5 pessoas, o teste só pega problemas de entendimento; não prova eficácia clínica. Dizer isso no pitch.
-- No pitch, deixar claro o que é real e o que é simulado.
-
-## 8. Divisão de tarefas (6 pessoas)
-
-Primeira hora, todos: combinar os tipos da seção 5 (responsáveis: pessoas 1 e 5). A pessoa 6 cria o repositório, o projeto Vite e o deploy.
-
-| Pessoa | Frente | Tasks em ordem |
-|---|---|---|
-| 1 | Núcleo de regras | Tipos e JSON → normal pessoal por fase → cor + hazard → tendência de 3 dias → testes Vitest |
-| 2 | Emergência | Fluxo em JSON com fontes → telas de alto contraste → cronômetro e metrônomo → saída para o resumo |
-| 3 | Check-in e cartões | Perfil com normal pessoal → check-in → cartões "como medir / por que importa / o que fazer" → corpo clicável (P1) |
-| 4 | Painel e conexão | Painel de status → gráfico de tendência com faixa → avançar o tempo → resumo com conexão, fila e atraso → troca de fase "adaptando" (P1) |
-| 5 | Dados e conteúdo | Tripulantes simulados e pré-voo → séries por fase e cena da demo → textos dos cartões com fonte → ler DGLRM/ESAM e achar revisor de saúde → mapa de hazards |
-| 6 | Setup, teste e pitch | Repositório e deploy → roteiro e recrutamento → teste e ficha de evidências → slide "real vs simulado" e pitch → PWA (P1) |
-
-Dependências: tipos (pessoa 1) antes de 2, 3 e 4 ligarem dados; cena da demo (pessoa 5) antes do teste (pessoa 6); repositório (pessoa 6) antes de todos.
-
-## 9. Fontes
-
-Cite pelo id. Não use fontes fora desta lista.
-
-**Arquivos do projeto**
-- **F1** — Desafio oficial "Create Health Monitoring Software for Astronauts on Space Missions", NASA Space Apps 2026 (PDF): indicadores sugeridos, ferramenta visual, instruções simples, cores, gráficos.
-- **F2** — Transcrição do vídeo da AEB (Rodrigo Leonardi): cenário do desmaio, "astronautas não são médicos", como medir/por que importa/o que fazer, lembretes, ambientes, HRP e OSDR.
-- **F3** — Guia "MVP e Validação" (Thaynara Mábille, UFG): mapa de suposições, cartão de teste, teste de 5 min, ficha de evidências, real vs simulado.
-
-**NASA Human Research Program**
-- **F4** — Isolation and Confinement: https://www.nasa.gov/hrp/hazard-isolation-and-confinement/ — sono, ritmo circadiano, sobrecarga, diário, terapia de luz, HERA (45 dias).
-- **F5** — Gravity Fields: https://www.nasa.gov/hrp/hazard-gravity-fields/ — fases de gravidade, fluidos, vestibular, tontura e desmaio na transição.
-- **F6** — Distance from Earth: https://www.nasa.gov/hrp/hazard-distance-from-earth/ — autonomia médica, até 20 min de atraso por sentido, HERA com até 5 min.
-- **F7** — Hostile/Closed Environments: https://www.nasa.gov/hrp/hazard-hostile-closed-environments/ — temperatura, pressão, iluminação, ruído, micróbios, imunidade (não cita CO2).
-- **F8** — Risks of Human Spaceflight: https://www.nasa.gov/hrp/risks/ — adaptações cardiovasculares, sono inadequado, riscos comportamentais.
-- F8b — 5 Hazards: https://www.nasa.gov/hrp/hazards/ · Space Radiation: https://www.nasa.gov/hrp/hazard-space-radiation/ (sem limites de dose na página) · Ongoing Research: https://www.nasa.gov/hrp/ongoing-hrp-research/ · Collaborate (Standard Measures, MMEA): https://www.nasa.gov/hrp/collaborate-with-hrp/ (não lista as medidas).
-
-**Emergência e operação médica**
-- **F9** — AHA 2025, Parte 7, Suporte Básico de Vida do adulto: https://professional.heart.org/en/guidelines-statements/part-7-adult-basic-life-support-2025-american-heart-association-guidelines-forcir0000000000001369 · algoritmo: https://cpr.heart.org/-/media/CPR-Files/CPR-Guidelines-Files/2025-Algorithms/Algorithm-BLS-Adult-Healthcare-250701.pdf
-- F9b — Resumo secundário (taxa 100–120/min): https://journalfeed.org/article-a-day/2025/new-aha-bls-2025-updates/
-- **F10** — DGLRM/ESAM, RCP em microgravidade: https://pmc.ncbi.nlm.nih.gov/articles/PMC7607644 (não lida)
-- **F11** — NASA NTRS, operações de médicos de voo na ISS e certificação médica: https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20080010877.pdf
-- F11b — AHA/ACC 2021, dor torácica (pontos principais): https://acc.org/Latest-in-Cardiology/ten-points-to-remember/2021/10/27/14/06/2021-Guideline-for-Chest-Pain-gl_chestpain
-- **F12** — NASA-STD-3001, operações médicas (comunicação médica privada): https://www.nasa.gov/reference/6-0-medical-operations/
-- **F13** — NASA NTRS, acesso a dados de astronautas (restrito): https://ntrs.nasa.gov/api/citations/20150020970/downloads/20150020970.pdf
-- **F14** — NASA NTRS, algoritmo ACLS do checklist médico da ISS: https://ntrs.nasa.gov/api/citations/20070030123/downloads/20070030123.pdf
-
-**Internet na ISS**
-- **F15** — Internet In Space: https://internetinspace.pages.dev/blog/how-astronauts-get-online
-- **F16** — IBTimes: https://ibtimes.com/how-do-astronauts-use-internet-space-2571640
-- **F17** — DLR: https://www.dlr.de/en/blog/archive/2014/astronauts-and-the-internet-the-final-frontier
-- **F18** — Viory (cosmonauta Borisov): https://viory.video/en/videos/x4021_04032024/online-in-orbit-cosmonaut-borisov-gets-on-the-net-aboard-iss-exclusive-
-
-**Outros**
-- CSA, monitoramento de radiação (CANS, nêutrons): https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp
-- NASEM, revisão sobre arritmias (sem evidência definitiva de aumento no voo espacial — não exagerar o risco cardíaco no pitch): https://www.nationalacademies.org/read/24953/chapter/7
-
-## 10. Pontos em aberto e não verificado
-
-- Limiares e pisos da seção 5: sem fonte clínica. Precisam de revisor da área da saúde ou rótulo "ilustrativo".
-- Faixas de referência populacionais (FC, PA, glicemia, temperatura, sono) **não foram verificadas**; não usar sem conferir em AHA, ADA ou CDC.
-- Diretriz DGLRM/ESAM não lida: não detalhar técnica de RCP em microgravidade.
-- Limite de dose de radiação: confirmar na fonte oficial antes de qualquer uso (P2).
-- Gravidade de Marte: as páginas da NASA divergem (três oitavos vs. cerca de um terço); conferir antes de usar em texto.
-- O guia de avaliação encontrado pelo grupo é de 2025; conferir o de 2026.
-- Proposta do Erick (IA Phi-3 local via Ollama): fica como extra opcional futuro; nunca decide a cor nem cita fonte por conta própria.
-
-## 11. Origem das ideias (para o pitch)
-
-- **Lucas:** núcleo de regras sem IA, linha de base em camadas, prioridades P0/P1/P2, rótulo SIMULADO.
-- **Erick:** estrutura de telas, sistema de cores, tendência de 3 dias, botão de resumo; IA local como extra futuro.
-- **Luiz:** tríade por indicador, botão de pânico (emergência no P0), avatar anatômico (P1).
-- **Kayque:** fases da missão, cena "mesmo valor, dois tripulantes", teste com critério, o que fica fora.
-- **Requisitos oficiais e vídeo da AEB:** check-in, linha de base, hazard, "o que fazer", resumo ao flight surgeon, cenário do desmaio.
+- **P-01:** limiares do semáforo e janela do baseline em voo. É decisão do time (Lucas lidera); até lá ficam os placeholders com selo.
+- **P-03:** WebLLM (ID do modelo, licença, worker, cache offline). Kayque confirma na documentação antes de integrar.
+- **P-05:** sintomas pós-radiação sem fonte, então só a checagem genérica.
+- **P-06:** agradecimento ao DONKI conforme a política da CCMC.
+- **P-11:** nome do sistema.
+- **P-12:** orientação clínica e fluxo de dor no peito. Bloqueado: só ações não clínicas.
+- **P-13:** hazard da glicemia. O card mostra "Related hazard: under review".
