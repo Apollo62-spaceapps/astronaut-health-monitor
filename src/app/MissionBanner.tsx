@@ -54,12 +54,14 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
   const aiMode = useAppStore((s) => s.aiMode)
   const missionDay = useAppStore((s) => s.missionDay)
   const routine = useAppStore((s) => s.routine)
+  const environment = useAppStore((s) => s.environment)
   const shelterActive = useAppStore((s) => s.shelterActive)
   const simNowIso = useAppStore((s) => s.simNowIso)
   const addReading = useAppStore((s) => s.addReading)
   const setRoutineStatus = useAppStore((s) => s.setRoutineStatus)
   const [logItemId, setLogItemId] = useState<string | null>(null)
-  const reminder = routine.find((item) => item.kind === 'measure' && (item.status === 'overdue' || item.status === 'due'))
+  // Só lembra itens da rotina do ambiente atual (ROUT-01/03).
+  const reminder = routine.find((item) => item.kind === 'measure' && item.environments.includes(environment) && (item.status === 'overdue' || item.status === 'due'))
   const logItem = routine.find((item) => item.id === logItemId) ?? reminder ?? null
 
   return (
