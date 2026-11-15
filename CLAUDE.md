@@ -1,8 +1,16 @@
 # CLAUDE.md — Protótipo frontend de monitoramento de saúde de astronautas (Apollo 62, NASA Space Apps 2026)
 
-Contexto para o Claude e para qualquer IA ou pessoa do time. **A fonte de verdade dos requisitos é a SPEC**, em `docs/SPEC-frontend.md` (convertida de `SPEC-frontend.docx`, v0.2 de 14/11/2026). Este arquivo resume o que é preciso para programar sem errar. Cite sempre os IDs da SPEC: CORE-xx, BODY-xx, RAD-xx, MH-xx, EX-xx, ESC-xx, AI-xx, PRIV-xx, SRC-xx, DEMO-xx, R-xxx, NFR-xx e P-xx.
+Contexto para o Claude e para qualquer IA ou pessoa do time.
 
-> **Versão 3 (14/11/2026, noite).** Tudo é **frontend prototipado**: sem backend, sem login, sem dados reais de saúde. Time de código: **Kayque (K4yquee)** e **Lucas Batista (lucasba07)**. Entrega: **domingo, ~15h**; o código congela às ~12h.
+**Ordem de leitura obrigatória antes de codificar:**
+1. Este arquivo.
+2. `docs/SPEC-frontend.md`, a fonte de verdade dos requisitos, incluindo os adendos §17 (ambientes) e §18 (rotina e briefing).
+3. **`docs/DESIGN-SYSTEM.md`**, obrigatório em qualquer tela.
+4. `INSTRUCOES-DE-CODIGO.md` e o seu arquivo em `docs/onboarding/`.
+
+A SPEC foi convertida de `SPEC-frontend.docx` (v0.2 de 14/11/2026). Este arquivo resume o que é preciso para programar sem errar. Cite sempre os IDs da SPEC: CORE-xx, BODY-xx, RAD-xx, MH-xx, EX-xx, ESC-xx, AI-xx, PRIV-xx, SRC-xx, DEMO-xx, R-xxx, NFR-xx e P-xx.
+
+> **Versão 3 (14/11/2026, noite).** Tudo é **frontend prototipado**: sem backend, sem login, sem dados reais de saúde. Time de código: **Kayque (K4yquee)**, **Lucas Batista (lucasba07)** e **Felipe Gabriel (FELIIPE505)**. Entrega: **domingo, ~15h**; o código congela às ~12h.
 >
 > As versões 1 e 2 (agente Terra → agente de bordo) estão arquivadas em `contexto ia/backup-v2-2026-11-14/`, fora do repositório.
 
@@ -20,7 +28,15 @@ Contexto para o Claude e para qualquer IA ou pessoa do time. **A fonte de verdad
 10. **Funciona sem a Terra.** Tudo roda local. Nada via CDN; as fontes tipográficas vêm do `@fontsource`. A **única exceção** são os pesos do modelo WebLLM, baixados uma vez e guardados em cache (NFR-02, R-06).
 11. **Interface toda em inglês.** Documentos e conversa do time em português.
 12. **Nenhum segredo no repositório** (não há chave de API). O `.env` vai para o `.gitignore`.
-13. **Autoria do time** (risco R-10, de desclassificação por "feito por IA"): a lógica central (motor de regras), os limiares (P-01) e o roteiro da demo são decididos e defendidos pelo time. A IA ajuda, mas não decide sozinha.
+13. **Design system obrigatório** (`docs/DESIGN-SYSTEM.md`):
+    - use só os tokens dele;
+    - o vermelho da marca é só para o botão primário e nunca para status;
+    - status = cor + ícone (✓ ▲ ● ◼ ↻) + texto, com hachura no Urgent;
+    - números em mono tabular;
+    - sentence case.
+
+    Em conflito com a SPEC, vale o design system.
+14. **Autoria do time** (risco R-10, de desclassificação por "feito por IA"): a lógica central (motor de regras), os limiares (P-01) e o roteiro da demo são decididos e defendidos pelo time. A IA ajuda, mas não decide sozinha.
 
 ## 1. Desafio e proposta
 
@@ -58,10 +74,14 @@ Contexto para o Claude e para qualquer IA ou pessoa do time. **A fonte de verdad
   - WebLLM num Web Worker, com seleção automática e manual do motor;
   - selos e rótulos de IA (AI-01…08).
 - **Perfis e privacidade:** seletor de perfil, bem-estar bloqueado para o CMO, break-glass, notificação (PRIV-01…04).
+- **Rotina da missão e lembretes** (SPEC §18; atende ao briefing [S01]):
+  - agenda do dia por ambiente, incluindo, na Space Station, a manutenção da Spacecraft;
+  - estados Due / Overdue / Done / Postponed com estilo neutro;
+  - lembrete na faixa da missão;
+  - **Log measurement** (CORE-06) e **Today's measurements** (CORE-07), que agora são **P0** (ROUT-01…05).
 - **Data & Sources** (SRC-01, 03) e **Demo controls** (DEMO-01, 02).
 
 **P1 (se sobrar tempo):**
-- CORE-06 (Log measurement) e CORE-07 (Today's measurements);
 - BODY-05 (animação), BODY-08 (Advance day), BODY-09 + R-PHASE-01 (Adapting) e zona Legs;
 - RAD-06, MH-03, EX-04 (gamificação sóbria), ESC-05 (blackout), PRIV-05, SRC-02.
 
@@ -91,7 +111,13 @@ Contexto para o Claude e para qualquer IA ou pessoa do time. **A fonte de verdad
 | Fontes | `@fontsource-variable/inter` + `@fontsource/jetbrains-mono` (algarismos tabulares) | 5.3.0 | Nada via CDN |
 | Qualidade | oxlint + Prettier | 1.89.0 / 3.9.10 | **Desvio da SPEC (que pedia ESLint):** o template atual do Vite já traz oxlint |
 
-O alias de import é `@/` → `src/` (exigido pelo shadcn; configurar em `tsconfig.app.json` e `vite.config.ts`). O tema é escuro, estilo "mission control", com layout para notebook ≥ 1280 px (NFR-07).
+O alias de import é `@/` → `src/` (exigido pelo shadcn; configurar em `tsconfig.app.json` e `vite.config.ts`).
+
+O visual segue o **`docs/DESIGN-SYSTEM.md`**:
+- estilo nasa.gov, escuro e de alto contraste;
+- tokens Tailwind v4 (`ground`, `surface`, `banner`, `action`, `link`, `muted`, `normal`, `attention`, `urgent`) definidos no `@theme` do `src/index.css`;
+- Inter + JetBrains Mono;
+- layout para notebook ≥ 1280 px.
 
 ## 4. Arquitetura (SPEC §5.2 e §5.3)
 
@@ -106,6 +132,7 @@ src/
     exercise/       plano do dia, check-in, adesão
     assistant/      chat, selo de modo de IA
     environment/    seletor de ambiente (Earth / Space Station / Moon / Spacecraft) e tema por ambiente
+    routine/        agenda do dia, lembretes, Log measurement (SPEC §18)
     escalation/     painel de comunicação, fila store-and-forward
     sources/        página Data & Sources
     demo/           painel Demo controls
@@ -164,7 +191,8 @@ O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
 
 **Como funciona por dentro:**
 - `store.environment` guarda o ambiente atual.
-- O atributo `data-environment` no `<html>` controla a cor de destaque (tokens CSS), sempre com contraste AA. A escolha é salva no localStorage.
+- O atributo `data-environment` no `<html>` muda **só a cor da faixa da missão (banner) e o ícone**, conforme o `docs/DESIGN-SYSTEM.md` §5. Os contrastes com branco vão de 9,7:1 a 14:1. A escolha é salva no localStorage.
+- **Spacecraft** = a nave menor, em trânsito. **Space Station** = a estação maior, onde a nave atraca e o astronauta faz a manutenção dela (P-19 resolvida).
 - O comportamento vem de `src/domain/config/environments.ts`.
 - **As regras recebem o ambiente como entrada.** As telas não decidem nada sozinhas.
 
@@ -177,12 +205,12 @@ O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
   - `emphasizedHazards: Hazard[]`;
   - `themeToken`.
 
-| Ambiente (UI) | id | Gravidade | Atraso de ida | Taxa de dose diária | Exercício | Destaque visual |
+| Ambiente (UI) | id | Gravidade | Atraso de ida | Taxa de dose diária | Exercício | Faixa (banner) |
 |---|---|---|---|---|---|---|
-| **Earth** (pré-voo e pós-voo) | `EARTH` | 1 g | 0 s; flight surgeon acessível direto | não exibir número (fora do escopo) | — (plano de solo) | azul-esverdeado |
-| **Space Station** | `ISS` | microgravidade | ~0 s, quase tempo real [DECISÃO, simplificação da SPEC] | `null` → "rate not sourced for this environment" (P-16) | ARED, T2, CEVIS, ~2 h/dia [S13] | ciano |
-| **Moon** (superfície) | `LUNAR` | parcial (P-17: confirmar fração e fonte antes de mostrar número) | ~1,3 s (cálculo físico) | `null` (P-16) | `null` → "simulated habitat equipment" (P-18) | prata |
-| **Spacecraft** (trânsito, cenário a caminho de Marte) | `SPACECRAFT` | microgravidade | 20 min (dentro da faixa de 4–24 min [S10]); apagão de até 2–3 semanas [S10, S11] | **1,8 mSv/dia** (média de cruzeiro do MSL/RAD) [S08, S09] | `null` (P-18) | índigo |
+| **Earth** (pré-voo e pós-voo) | `EARTH` | 1 g | 0 s; flight surgeon acessível direto | não exibir número (fora do escopo) | — (plano de solo) | `#093174` |
+| **Space Station** (estação maior; manutenção da Spacecraft) | `ISS` | microgravidade | ~0 s, quase tempo real [DECISÃO, simplificação da SPEC] | `null` → "rate not sourced for this environment" (P-16) | ARED, T2, CEVIS, ~2 h/dia [S13] | `#0B4A5E` |
+| **Moon** (superfície) | `LUNAR` | parcial (P-17: confirmar fração e fonte antes de mostrar número) | ~1,3 s (cálculo físico) | `null` (P-16) | `null` → "simulated habitat equipment" (P-18) | `#3A3F45` |
+| **Spacecraft** (nave menor em trânsito, cenário a caminho de Marte) | `SPACECRAFT` | microgravidade | 20 min (dentro da faixa de 4–24 min [S10]); apagão de até 2–3 semanas [S10, S11] | **1,8 mSv/dia** (média de cruzeiro do MSL/RAD) [S08, S09] | `null` (P-18) | `#2E1F66` |
 
 **O que muda ao trocar de ambiente:**
 - **Comunicação e escalonamento (R-ESC-01):** ETA = 2 × o atraso. Na Terra, aparece "Flight surgeon available now". Na Spacecraft: "Ground reply in ~40 min — follow these safe actions now".
@@ -190,7 +218,8 @@ O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
 - **Gravidade e fases:** trocar de gravidade (ex.: Spacecraft → Moon, ou Spacecraft → Earth no retorno) dispara "Adapting" no mapa do corpo (BODY-09, R-PHASE-01, P1). Urgent nunca é mascarado.
 - **Exercício:** os equipamentos e o plano do ambiente. Sem fonte, aparece "simulated".
 - **Hazards em destaque:** o card do mapa do corpo destaca o hazard mais relevante do ambiente. Por exemplo, "distance from Earth" na Spacecraft e "gravity fields" na volta à Terra.
-- **Visual:** a cor de destaque e o ícone do ambiente na TopBar. Os status (verde, âmbar e vermelho) **não** mudam de cor entre ambientes.
+- **Visual:** a cor da faixa da missão e o ícone do ambiente. Os status (verde, âmbar e vermelho) e o botão primário **não** mudam de cor entre ambientes.
+- **Rotina (SPEC §18):** a agenda do dia muda com o ambiente. Na Space Station, entra a manutenção da Spacecraft.
 
 **Regras novas:**
 - **ENV-01:** seletor na TopBar com 4 botões (ícone + texto), acessível por teclado.
@@ -203,7 +232,8 @@ O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
 ## 6. Roteiro da demo (SPEC §10)
 
 1. **Overview** (Astronauta, **Spacecraft**, dia 120): o mapa do corpo aparece com as zonas coloridas. Clicar no coração e mostrar o card (função, desvio contra o baseline, hazard, fonte), a dose de carreira e os selos REAL/SIMULATED.
-   - **Momento "modo noturno":** apertar Earth → Space Station → Moon → Spacecraft. O tema, o atraso, o escalonamento, a taxa de dose e o exercício mudam na frente dos jurados.
+   - **Momento "modo noturno":** apertar Earth → Space Station → Moon → Spacecraft. O tema, o atraso, o escalonamento, a taxa de dose, o exercício e a rotina mudam na frente dos jurados.
+   - **Rotina:** um lembrete vence ("Time to measure your resting heart rate"). Clicar em **Log measurement**, registrar, e o mapa do corpo e o gráfico se atualizam.
 2. **Replay event:** o evento DONKI real gera o alerta urgent e o fluxo de abrigo da Orion, e o exercício passa para postponed.
 3. **Assistente** (WebLLM), com o selo do modo de IA.
 4. **Escalonamento:** na Spacecraft aparece "Ground reply in ~40 min — safe actions now" e o pacote entra na fila. Trocando para Space Station ou Earth, a mesma situação tem resposta quase imediata.
@@ -213,18 +243,25 @@ O astronauta (ou o apresentador) aperta **um** botão e o sistema inteiro muda.
 
 ## 7. Time, tarefas e prazos
 
-- **Kanban:** https://github.com/orgs/Apollo62-spaceapps/projects/3. As tasks são só do Kayque e do Lucas.
-- **Kayque (K4yquee):**
-  - base, design system, AppShell e TopBar;
-  - **seletor de ambiente e tema por ambiente (K12)**;
+- **Kanban:** https://github.com/orgs/Apollo62-spaceapps/projects/3. As tasks são do Kayque, do Lucas e do Felipe.
+- **Kayque (K4yquee), tasks K\*:**
+  - base, tokens do design system, AppShell e TopBar com a faixa da missão;
+  - seletor de ambiente (K12);
   - contrato (tipos, store, configs), fixtures, DONKI e catálogo de fontes;
-  - radiação, escalonamento (UI), bem-estar e privacidade, assistente, Data & Sources, Demo controls;
+  - comunicação e fila;
+  - assistente;
   - ensaio da demo.
-- **Lucas (lucasba07):**
+- **Lucas Batista (lucasba07), tasks L\*:**
   - motor de regras P0 com testes, incluindo a decisão dos placeholders de P-01;
   - Overview com o mapa do corpo;
-  - cards e gráficos de vitais;
-  - exercício.
+  - cards e gráficos de vitais.
+- **Felipe Gabriel (FELIIPE505), tasks F\*:**
+  - radiação (dose, evento DONKI, abrigo);
+  - bem-estar e privacidade (break-glass);
+  - exercício;
+  - rotina e lembretes, com Log measurement;
+  - Data & Sources e Demo controls.
+- **Instruções de cada um:** `docs/onboarding/LUCAS.md` e `docs/onboarding/FELIPE.md`.
 - **Marcos:**
 
   | Quando | O quê |
@@ -280,4 +317,4 @@ Ao usar uma delas, acrescente-a ao `src/data/sources.ts` com um id novo (S20+).
 - **P-16** (novo): taxa de dose diária na Space Station, na Moon e na Earth. Sem fonte, não mostrar número; só a Spacecraft tem fonte (1,8 mSv/dia [S08, S09]).
 - **P-17** (novo): fração da gravidade lunar. As páginas da NASA divergem (1/6 vs. outros valores) e a de Marte também (3/8 vs. ~1/3). Confirmar a fonte antes de mostrar o número.
 - **P-18** (novo): equipamentos de exercício fora da ISS (Moon e Spacecraft). Sem fonte, mostrar "simulated habitat equipment".
-- **P-19** (novo): "Espaçonave" foi interpretada como **nave em trânsito**. Se o time quiser **EVA** (atividade fora da nave), ela vira um 5º modo ou substitui a Spacecraft.
+- **P-19** (resolvida em 14/11): Spacecraft é a nave menor em trânsito, e Space Station é a estação maior, onde a nave atraca para manutenção.

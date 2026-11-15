@@ -20,6 +20,7 @@ The astronaut self-assesses through a **core of vital signs compared with their 
 | **Environment switch** | Like a dark-mode toggle: **Earth · Space Station · Moon · Spacecraft**. One click changes the whole system: accent theme, communication delay, escalation, gravity phase, daily radiation dose rate and exercise equipment. Numbers without a source for that environment are not shown. |
 | **Delay-aware escalation** | The communication delay is part of the interface. On the Spacecraft: "Ground reply in ~40 min — follow these safe actions now", with a store-and-forward queue. On Earth: "Flight surgeon available now". |
 | **Assistant** | An on-device language model running in the browser (WebLLM), with a deterministic protocol fallback. The AI only talks and summarizes; it never changes an alert. |
+| **Mission routine** | The tool prompts the astronaut to take specific measurements and do activities at set times, as part of the mission routine (e.g. resting heart rate in the morning, wellbeing check-in, exercise, and spacecraft maintenance while docked at the Space Station). One click on **Log measurement** updates the body map and the charts. |
 | **Data & Sources** | Every source used, with links and terms. |
 
 **Principles:**
@@ -61,6 +62,8 @@ Add `?ai=protocol` to the URL to run the assistant without the language model.
 ## 📚 Docs
 
 - [Frontend specification (pt-BR)](docs/SPEC-frontend.md): requirements, rules, data model, demo script and the full source catalog.
+- [Design system (NASA style)](docs/DESIGN-SYSTEM.md): colors, type, components ([PDF](docs/design/)).
+- Onboarding: [Lucas](docs/onboarding/LUCAS.md) · [Felipe](docs/onboarding/FELIPE.md)
 - [Project context (pt-BR)](CLAUDE.md)
 - [Coding guide (pt-BR)](INSTRUCOES-DE-CODIGO.md)
 - [Team kanban](https://github.com/orgs/Apollo62-spaceapps/projects/3)

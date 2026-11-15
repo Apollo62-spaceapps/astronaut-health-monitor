@@ -730,4 +730,31 @@ interface MissionProfile {
 - **P-16:** taxa de dose na ISS, na Lua e na Terra.
 - **P-17:** fração da gravidade lunar, com fonte.
 - **P-18:** equipamentos de exercício fora da ISS.
-- **P-19:** confirmar se "Spacecraft" é a nave em trânsito ou EVA (atividade fora da nave).
+- **P-19 (resolvida em 14/11):** Spacecraft é a **nave menor em trânsito**. Space Station é a **estação maior**, onde a nave atraca e o astronauta faz manutenção nela.
+
+## 18. Adendo v0.3 (14/11/2026, noite): o que o briefing pede, rotina da missão e design system
+
+**Itens do briefing que o protótipo precisa mostrar com clareza [S01]:**
+
+| Pedido do briefing | Onde atende | Prioridade |
+| --- | --- | --- |
+| Código de cores para o astronauta entender rápido o estado de cada indicador | CORE-03, BODY-04, StatusBadge do design system (✓ Normal · ▲ Attention · ● Urgent · ◼ Restricted) | P0 |
+| Instruções e explicações simples sobre medições, indicadores e riscos | CORE-08 (ⓘ "Why this matters"), BODY-03 (card: Function · How to measure · Why it matters · What to do · Source), card de hazard | P0 |
+| Gráficos dinâmicos de como os indicadores mudam com o tempo | CORE-05 (série temporal com baselines) + "Advance day" (BODY-08) | P0 (Advance day: P1) |
+| Pedir ao astronauta, de tempos em tempos, medições e atividades específicas como parte da rotina | **ROUT-01…05 (novo, abaixo)** + CORE-06 e CORE-07, que **sobem para P0** | **P0** |
+
+**Rotina da missão e lembretes (novo):**
+
+| ID | Requisito | Prioridade |
+| --- | --- | --- |
+| ROUT-01 | Agenda do dia por ambiente: lista "Mission routine" com itens programados. Exemplos: medir FC e PA pela manhã, check-in de bem-estar, sessões de exercício e, **na Space Station, a manutenção da Spacecraft**. Horários e itens são `[SIMULATED]` e marcados assim | P0 |
+| ROUT-02 | Cada item tem o estado **Due / Overdue / Done / Postponed**, mostrado com texto e ícone **neutros**. Não usa as cores de saúde (Normal/Attention/Urgent), para não confundir rotina com estado de saúde | P0 |
+| ROUT-03 | Lembrete dentro do app: quando um item vence, aparece um aviso na faixa da missão ("Time to measure your resting heart rate") com o botão primário **Log measurement**. Sem notificação real do sistema operacional | P0 |
+| ROUT-04 | **Log measurement** (era CORE-06, agora P0): formulário com Zod e só limites de plausibilidade de entrada. Ao salvar, o item da rotina vira Done e as regras recalculam o status | P0 |
+| ROUT-05 | A aceleração de tempo no Demo controls faz os lembretes vencerem durante a demo, com o rótulo "demo". O abrigo de radiação (RAD-05) passa itens para Postponed | P0 |
+
+**Design system:** [`docs/DESIGN-SYSTEM.md`](DESIGN-SYSTEM.md) (PDF em `docs/design/`). É obrigatório em toda tela e substitui o NFR-07 se houver conflito.
+- O vermelho da marca é só para ação.
+- Status = cor + ícone + texto, com hachura no Urgent.
+- Números em mono tabular.
+- A faixa da missão muda de cor por ambiente (§17).
