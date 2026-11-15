@@ -2,7 +2,8 @@
 // Tudo vem do motor de regras (useEngine); a tela não decide status nenhum.
 // Perfis: o astronauta lê "Your body"; CMO e Flight Surgeon leem "Crew member" em terceira pessoa,
 // sem a ação de registrar medida (que é do astronauta).
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
+import { z } from 'zod'
 import { BODY_ZONES } from '@/domain/config/bodyZones'
 import { ENVIRONMENTS } from '@/domain/config/environments'
 import type { BodyZoneId, MissionMode, VitalKind } from '@/domain/types'
@@ -14,6 +15,9 @@ import { useAppStore } from '@/state/store'
 import { usePhaseStore } from '@/state/phase'
 import { useEngine } from '@/state/useEngine'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { MetricCard } from '@/components/MetricCard'
 import { StatusBadge } from '@/components/StatusBadge'
 import { DayLabel } from '@/components/DayLabel'
@@ -39,6 +43,7 @@ const ENV_PLACE: Record<MissionMode, string> = {
 }
 
 const ROLE_TEXT: Record<string, string> = { CMO: 'CMO', FLIGHT_SURGEON: 'flight surgeon', ASTRONAUT: 'astronaut' }
+const dailyCheckInSchema = z.object({ mood: z.coerce.number().int().min(1).max(5), sleepHours: z.coerce.number().min(0).max(24) })
 
 /** Desvio em palavras para o aria-label (BODY-04): "resting heart rate +18% vs baseline". */
 const devText = (ev: VitalEvaluation) =>
@@ -104,6 +109,8 @@ export function OverviewPage() {
   const role = useAppStore((s) => s.role)
   const missionDay = useAppStore((s) => s.missionDay)
   const routine = useAppStore((s) => s.routine)
+  const wellbeing = useAppStore((s) => s.wellbeing)
+  const loadScenario = useAppStore((s) => s.loadScenario)
   const shelterActive = useAppStore((s) => s.shelterActive)
   const simNowIso = useAppStore((s) => s.simNowIso)
   const addReading = useAppStore((s) => s.addReading)
@@ -112,6 +119,18 @@ export function OverviewPage() {
   const gravityChangeIso = usePhaseStore((s) => s.gravityChangeIso)
   const [selected, setSelected] = useState<MapTarget>('heart')
   const [logOpen, setLogOpen] = useState(false)
+  const [checkInOpen, setCheckInOpen] = useState(false)
+  const [mood, setMood] = useState('3')
+  const [sleepHours, setSleepHours] = useState('')
+  const dateKey = simNowIso.slice(0, 10)
+  const checkIn = wellbeing.find((x) => x.date === dateKey && (x.environment ?? 'EARTH') === environment)
+  function saveCheckIn(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const result = dailyCheckInSchema.safeParse({ mood, sleepHours })
+    if (!result.success) return
+    loadScenario({ wellbeing: [...wellbeing.filter((x) => x.date !== dateKey || (x.environment ?? 'EARTH') !== environment), { date: dateKey, environment, mood: result.data.mood as 1|2|3|4|5, sleepHours: result.data.sleepHours }] })
+    setCheckInOpen(false)
+  }
 
   const astronaut = role === 'ASTRONAUT'
   const env = ENVIRONMENTS[environment]
@@ -183,6 +202,7 @@ export function OverviewPage() {
                 Log measurement
               </Button>
             )}
+            {astronaut && <Button variant="outline" onClick={() => { setMood(String(checkIn?.mood ?? 3)); setSleepHours(checkIn ? String(checkIn.sleepHours) : ''); setCheckInOpen(true) }}>{checkIn ? 'Update daily check-in' : 'Daily health check-in'}</Button>}
             <Button
               variant="outline"
               onClick={() => advanceDay(1)}
@@ -335,6 +355,7 @@ export function OverviewPage() {
           }}
         />
       )}
+      <Dialog open={checkInOpen} onOpenChange={setCheckInOpen}><DialogContent><form onSubmit={saveCheckIn} className="space-y-4"><DialogHeader><DialogTitle>Daily health check-in</DialogTitle><DialogDescription>{ENVIRONMENTS[environment].label} · quick self-report, saved separately for this environment. Not a clinical assessment.</DialogDescription></DialogHeader><fieldset className="space-y-2"><legend className="text-sm">How are you feeling? (1–5)</legend><div className="grid grid-cols-5 gap-2">{[1,2,3,4,5].map((n) => <label key={n} className="flex items-center justify-center gap-2 rounded-md bg-surface-2 p-2"><input type="radio" name="mood" checked={mood===String(n)} onChange={() => setMood(String(n))} />{n}</label>)}</div></fieldset><div className="space-y-2"><Label htmlFor="daily-sleep">Sleep last night (hours)</Label><Input id="daily-sleep" type="number" min="0" max="24" step="0.5" required value={sleepHours} onChange={(e) => setSleepHours(e.target.value)} /></div><p className="text-xs text-muted">For vital measurements, use Log measurement. Consult your flight surgeon.</p><DialogFooter><Button type="submit">Save check-in</Button></DialogFooter></form></DialogContent></Dialog>
     </div>
   )
 }

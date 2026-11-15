@@ -80,7 +80,7 @@ export function VitalChart({
   const values = [...data.map((p) => p.avg), today?.value ?? baseline.preflightMean, bandLow, bandHigh]
   const pad = (Math.max(...values) - Math.min(...values)) * 0.12 || 1
   const domain: [number, number] = [Math.floor(Math.min(...values) - pad), Math.ceil(Math.max(...values) + pad)]
-  const mid = Math.round((domain[0] + domain[1]) / 2)
+  const yTicks = Array.from({ length: 5 }, (_, i) => Math.round(domain[0] + ((domain[1] - domain[0]) * i) / 4))
 
   const chart = (width?: number) => (
     <LineChart
@@ -97,7 +97,7 @@ export function VitalChart({
         domain={xDomain ?? ['dataMin', 'dataMax']}
         allowDataOverflow
         ticks={xDomain ? [xDomain[0], Math.round((xDomain[0] + xDomain[1]) / 2), xDomain[1]] : undefined}
-        tickFormatter={(d: number) => `D${Math.round(d)}`}
+        tickFormatter={(d: number) => `Day ${Math.round(d)}`}
         stroke="var(--color-muted)"
         tickLine={false}
         fontSize={11}
@@ -105,7 +105,7 @@ export function VitalChart({
       />
       <YAxis
         domain={domain}
-        ticks={[domain[0], mid, domain[1]]}
+        ticks={yTicks}
         width={40}
         stroke="var(--color-muted)"
         axisLine={false}
@@ -122,7 +122,7 @@ export function VitalChart({
           fontFamily: 'var(--font-sans)',
           fontVariantNumeric: 'tabular-nums',
         }}
-        labelFormatter={(d) => `Mission day ${Math.round(Number(d))}`}
+        labelFormatter={(d) => `Day ${Math.round(Number(d))}`}
         formatter={(v, name) => [
           `${formatVitalValue(kind, Number(v))} ${unit}`,
           name === 'avg' ? '7-day average' : 'Reading',

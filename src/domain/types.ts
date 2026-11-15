@@ -58,6 +58,7 @@ export interface Baseline {
 
 export interface WellbeingEntry {
   date: string
+  environment?: MissionMode
   /** Autorrelato simples, NÃO é instrumento validado. */
   mood: 1 | 2 | 3 | 4 | 5
   sleepHours: number

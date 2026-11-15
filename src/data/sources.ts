@@ -207,6 +207,15 @@ export const SOURCES: readonly Source[] = [
     use: 'Earth–Mars delay from 0 to about 22 min over a mission',
     terms: 'NTRS: public, government use permitted',
   },
+  {
+    id: 'S21',
+    provider: 'npj Microgravity (2020)',
+    title: 'The role of exercise countermeasures on the International Space Station',
+    urls: ['https://pmc.ncbi.nlm.nih.gov/articles/PMC7645687/', 'https://doi.org/10.1038/s41526-020-00124-6'],
+    accessed: '2026-11-15',
+    use: 'Research context for exercise monitoring and countermeasures',
+    terms: 'Open access · cited, not reproduced',
+  },
 ]
 
 export function sourceById(id: SourceId): Source | undefined {

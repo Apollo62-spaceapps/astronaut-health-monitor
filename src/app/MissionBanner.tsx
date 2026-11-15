@@ -2,74 +2,17 @@
 // modo de ambiente (data-environment). O botão de modo de ambiente (K5) entra no `envSlot`.
 // O tempo de resposta do solo é texto estático ("Ground reply ≈ 40 min (2 × 20 min delay)"); uma contagem
 // regressiva só aparece quando há um pacote enviado esperando resposta (ESC-04).
-import { useEffect, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Clock3 } from 'lucide-react'
-import { ENVIRONMENTS, groundReplySec } from '@/domain/config/environments'
 import { useAppStore } from '@/state/store'
-import { isBlackoutActive } from '@/features/escalation/blackout'
 import { Button } from '@/components/ui/button'
 import { MeasurementDialog } from '@/features/routine/MeasurementDialog'
-import { formatShortDuration } from '@/lib/format'
 
 /** Divide segundos em horas, minutos e segundos. */
 export function splitHms(totalSec: number) {
   const s = Math.round(totalSec)
   return { h: Math.floor(s / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 }
 }
-const pad = (n: number) => String(n).padStart(2, '0')
-
-/** "Ground reply ≈ 40 min (2 × 20 min delay)" — texto estático, nunca um cronômetro parado. */
-export function groundReplyText(oneWaySec: number): string {
-  if (oneWaySec === 0) return 'Ground reply ≈ 0 s (near real time)'
-  return `Ground reply ≈ ${formatShortDuration(2 * oneWaySec)} (2 × ${formatShortDuration(oneWaySec)} delay)`
-}
-
-/**
- * Contagem regressiva real de um pacote já enviado (ESC-04). Começa quando o pacote aparece como "sent"
- * (o componente é montado com key = id do pacote) e anda com o relógio da página × a aceleração da demo.
- */
-function PacketCountdown({ etaSec }: { etaSec: number }) {
-  const acceleration = useAppStore((s) => s.timeAcceleration)
-  const [start] = useState(() => Date.now())
-  const [now, setNow] = useState(start)
-  useEffect(() => {
-    const t = window.setInterval(() => setNow(Date.now()), 1000)
-    return () => window.clearInterval(t)
-  }, [])
-  const remaining = Math.max(0, etaSec - ((now - start) / 1000) * acceleration)
-  const { h, m, s } = splitHms(remaining)
-  return (
-    <span role="timer" className="rounded bg-black/25 px-2 py-0.5">
-      Packet reply in{' '}
-      <span className="num font-semibold">
-        {h > 0 ? `${pad(h)}:` : ''}
-        {pad(m)}:{pad(s)}
-      </span>
-      {acceleration > 1 && <span className="text-white/85"> · time-accelerated for demo</span>}
-    </span>
-  )
-}
-
-export function GroundReplyWindow() {
-  const environment = useAppStore((st) => st.environment)
-  const env = ENVIRONMENTS[environment]
-  const blackout = useAppStore((st) => isBlackoutActive(st.environment, st.commBlackout))
-  const inFlight = useAppStore((st) => [...st.outbox].reverse().find((p) => p.status === 'sent'))
-  if (blackout) {
-    return <p className="text-sm font-semibold">Comm blackout · {env.label} · no ground link (demo)</p>
-  }
-  if (environment === 'EARTH') {
-    return <p className="text-sm font-semibold">Flight surgeon available now</p>
-  }
-  const total = groundReplySec(environment)
-  return (
-    <div aria-label={`Ground reply window, ${env.label}`} className="flex flex-wrap items-baseline gap-x-3 text-sm">
-      <span className="font-semibold">{groundReplyText(env.oneWayDelaySec)}</span>
-      {inFlight && total >= 60 && <PacketCountdown key={inFlight.id} etaSec={inFlight.etaGroundReplySec} />}
-    </div>
-  )
-}
-
 export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
   const role = useAppStore((s) => s.role)
   const routine = useAppStore((s) => s.routine)
@@ -97,9 +40,6 @@ export function MissionBanner({ envSlot }: { envSlot?: ReactNode }) {
         {envSlot}
 
 
-        <div className="ml-auto">
-          <GroundReplyWindow />
-        </div>
       </div>
       {/* Segunda linha só quando há algo a dizer (lembrete ou abrigo): o dia já aparece no topo de cada tela. */}
       {(shelterActive || reminder) && (

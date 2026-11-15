@@ -52,14 +52,16 @@ export function WellbeingPage() {
   // Log de auditoria por perfil (matriz §6.7): CMO vê só os próprios acessos.
   const auditEntries = visibleAuditEntries(auditLog, privacy).slice().reverse()
   const today = simNowIso.slice(0, 10)
+  const environment = useAppStore((s) => s.environment)
+  const environmentEntries = wellbeing.filter((item) => (item.environment ?? 'EARTH') === environment)
   const chartData = useMemo(
     () =>
       Array.from({ length: 14 }, (_, i) => {
         const date = daysBack(simNowIso, 13 - i)
-        const entry = wellbeing.find((item) => item.date === date)
+        const entry = environmentEntries.find((item) => item.date === date)
         return { date: formatUtc(`${date}T00:00:00Z`).split(' 20')[0], mood: entry?.mood ?? null, sleep: entry?.sleepHours ?? null }
       }),
-    [simNowIso, wellbeing],
+    [simNowIso, environmentEntries],
   )
   const chartEntries = chartData.filter((entry) => entry.mood !== null || entry.sleep !== null)
   const notification = auditLog.findLast((entry) => entry.action === 'BREAK_GLASS_VIEW' && entry.actor === 'CMO')
@@ -73,10 +75,11 @@ export function WellbeingPage() {
     }
     const entry: WellbeingEntry = {
       date: today,
+      environment,
       mood: parsed.data.mood as WellbeingEntry['mood'],
       sleepHours: parsed.data.sleepHours,
     }
-    loadScenario({ wellbeing: [...wellbeing.filter((item) => item.date !== today), entry] })
+    loadScenario({ wellbeing: [...wellbeing.filter((item) => item.date !== today || (item.environment ?? 'EARTH') !== environment), entry] })
     setError('')
   }
 
