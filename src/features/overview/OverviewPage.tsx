@@ -202,7 +202,7 @@ export function OverviewPage() {
                 Log measurement
               </Button>
             )}
-            {astronaut && <Button variant="outline" onClick={() => { setMood(String(checkIn?.mood ?? 3)); setSleepHours(checkIn ? String(checkIn.sleepHours) : ''); setCheckInOpen(true) }}>{checkIn ? 'Update daily check-in' : 'Daily health check-in'}</Button>}
+            <Button variant="outline" onClick={() => { setMood(String(checkIn?.mood ?? 3)); setSleepHours(checkIn ? String(checkIn.sleepHours) : ''); setCheckInOpen(true) }}>{checkIn ? 'Update daily check-in' : 'Daily health check-in'}</Button>
             <Button
               variant="outline"
               onClick={() => advanceDay(1)}
