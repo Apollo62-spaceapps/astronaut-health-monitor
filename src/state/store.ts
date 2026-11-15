@@ -3,6 +3,7 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { DEFAULT_ENVIRONMENT, groundReplySec } from '@/domain/config/environments'
+import { demoScenario } from '@/data/scenario'
 import type {
   AiMode,
   Alert,
@@ -86,18 +87,11 @@ export interface AppState extends ScenarioData {
   resetScenario: () => void
 }
 
-const EMPTY_SCENARIO: ScenarioData = {
-  vitals: [],
-  preflight: [],
-  wellbeing: [],
-  exercise: [],
-  routine: [],
-  radiation: { careerPriorMSv: 0, missionDayRateMSv: null, careerLimitMSv: 600 },
-  spaceWeatherEvent: null,
-}
+/** Cenário da demo (K3): fixtures [SIMULATED] validados por Zod + evento DONKI [REAL]. */
+const scenario = (): ScenarioData => demoScenario()
 
 const initialRuntime = () => ({
-  ...EMPTY_SCENARIO,
+  ...scenario(),
   missionDay: DEMO_MISSION_DAY,
   simNowIso: missionDayToIso(DEMO_MISSION_DAY),
   timeAcceleration: 1,

@@ -1,0 +1,6706 @@
+{
+  "preflight": [
+    {
+      "kind": "heartRate",
+      "value": 71.57,
+      "unit": "bpm",
+      "takenAt": "2026-07-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69.17,
+      "unit": "bpm",
+      "takenAt": "2026-07-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70.25,
+      "unit": "bpm",
+      "takenAt": "2026-07-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74.39,
+      "unit": "bpm",
+      "takenAt": "2026-07-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68.82,
+      "unit": "bpm",
+      "takenAt": "2026-07-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68.35,
+      "unit": "bpm",
+      "takenAt": "2026-07-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71.14,
+      "unit": "bpm",
+      "takenAt": "2026-07-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68.15,
+      "unit": "bpm",
+      "takenAt": "2026-07-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71.85,
+      "unit": "bpm",
+      "takenAt": "2026-07-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71.02,
+      "unit": "bpm",
+      "takenAt": "2026-07-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71.82,
+      "unit": "bpm",
+      "takenAt": "2026-07-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72.99,
+      "unit": "bpm",
+      "takenAt": "2026-07-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73.3,
+      "unit": "bpm",
+      "takenAt": "2026-07-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73.97,
+      "unit": "bpm",
+      "takenAt": "2026-07-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119.86,
+      "unit": "mmHg",
+      "takenAt": "2026-07-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121.67,
+      "unit": "mmHg",
+      "takenAt": "2026-07-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119.6,
+      "unit": "mmHg",
+      "takenAt": "2026-07-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116.02,
+      "unit": "mmHg",
+      "takenAt": "2026-07-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118.88,
+      "unit": "mmHg",
+      "takenAt": "2026-07-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115.67,
+      "unit": "mmHg",
+      "takenAt": "2026-07-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117.89,
+      "unit": "mmHg",
+      "takenAt": "2026-07-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119.52,
+      "unit": "mmHg",
+      "takenAt": "2026-07-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 124.13,
+      "unit": "mmHg",
+      "takenAt": "2026-07-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 113.51,
+      "unit": "mmHg",
+      "takenAt": "2026-07-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121.4,
+      "unit": "mmHg",
+      "takenAt": "2026-07-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121.11,
+      "unit": "mmHg",
+      "takenAt": "2026-07-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115.45,
+      "unit": "mmHg",
+      "takenAt": "2026-07-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115.7,
+      "unit": "mmHg",
+      "takenAt": "2026-07-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78.41,
+      "unit": "mmHg",
+      "takenAt": "2026-07-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77.64,
+      "unit": "mmHg",
+      "takenAt": "2026-07-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78.74,
+      "unit": "mmHg",
+      "takenAt": "2026-07-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 73.83,
+      "unit": "mmHg",
+      "takenAt": "2026-07-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78.3,
+      "unit": "mmHg",
+      "takenAt": "2026-07-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76.24,
+      "unit": "mmHg",
+      "takenAt": "2026-07-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78.08,
+      "unit": "mmHg",
+      "takenAt": "2026-07-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76.14,
+      "unit": "mmHg",
+      "takenAt": "2026-07-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 82.01,
+      "unit": "mmHg",
+      "takenAt": "2026-07-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 80.1,
+      "unit": "mmHg",
+      "takenAt": "2026-07-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76.61,
+      "unit": "mmHg",
+      "takenAt": "2026-07-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77.85,
+      "unit": "mmHg",
+      "takenAt": "2026-07-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76.61,
+      "unit": "mmHg",
+      "takenAt": "2026-07-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 74.44,
+      "unit": "mmHg",
+      "takenAt": "2026-07-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 86.4,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 85.44,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93.14,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93.45,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97.36,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 99.51,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 100.07,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93.82,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89.63,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 99.81,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89.49,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97.21,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 84.36,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 78.28,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-07-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.68,
+      "unit": "°C",
+      "takenAt": "2026-07-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.79,
+      "unit": "°C",
+      "takenAt": "2026-07-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.74,
+      "unit": "°C",
+      "takenAt": "2026-07-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.75,
+      "unit": "°C",
+      "takenAt": "2026-07-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.51,
+      "unit": "°C",
+      "takenAt": "2026-07-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.78,
+      "unit": "°C",
+      "takenAt": "2026-07-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.82,
+      "unit": "°C",
+      "takenAt": "2026-07-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.68,
+      "unit": "°C",
+      "takenAt": "2026-07-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-07-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.5,
+      "unit": "°C",
+      "takenAt": "2026-07-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.63,
+      "unit": "°C",
+      "takenAt": "2026-07-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.49,
+      "unit": "°C",
+      "takenAt": "2026-07-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.74,
+      "unit": "°C",
+      "takenAt": "2026-07-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Pre-flight exam (fictional)"
+      }
+    }
+  ],
+  "inflight": [
+    {
+      "kind": "heartRate",
+      "value": 66,
+      "unit": "bpm",
+      "takenAt": "2026-07-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-07-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-07-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-07-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-07-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 76,
+      "unit": "bpm",
+      "takenAt": "2026-07-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-07-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-07-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-07-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-07-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-07-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-07-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-07-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-07-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-08-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-08-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-08-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-08-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-08-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 76,
+      "unit": "bpm",
+      "takenAt": "2026-08-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-08-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 77,
+      "unit": "bpm",
+      "takenAt": "2026-08-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-08-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-08-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-08-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 67,
+      "unit": "bpm",
+      "takenAt": "2026-08-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-08-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-08-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-08-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-08-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 75,
+      "unit": "bpm",
+      "takenAt": "2026-08-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-08-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-08-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 67,
+      "unit": "bpm",
+      "takenAt": "2026-08-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-08-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 75,
+      "unit": "bpm",
+      "takenAt": "2026-08-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-08-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 67,
+      "unit": "bpm",
+      "takenAt": "2026-08-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-08-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-08-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-08-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-08-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-08-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-08-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-08-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-09-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-09-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-09-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-09-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-09-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 75,
+      "unit": "bpm",
+      "takenAt": "2026-09-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-09-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 75,
+      "unit": "bpm",
+      "takenAt": "2026-09-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-09-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-09-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-09-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-09-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-09-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-09-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-09-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-09-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-09-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-09-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-09-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-09-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 66,
+      "unit": "bpm",
+      "takenAt": "2026-09-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-09-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-09-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-09-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-09-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 67,
+      "unit": "bpm",
+      "takenAt": "2026-09-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-09-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-09-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-09-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-09-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-10-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-10-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-10-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 76,
+      "unit": "bpm",
+      "takenAt": "2026-10-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-10-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-10-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-10-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-10-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-10-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-10-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-10-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-10-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-10-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-10-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-10-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-10-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-10-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-10-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-10-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-10-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-10-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-10-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-10-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 76,
+      "unit": "bpm",
+      "takenAt": "2026-10-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-10-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-10-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-10-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-10-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-10-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-10-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 70,
+      "unit": "bpm",
+      "takenAt": "2026-10-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-11-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 73,
+      "unit": "bpm",
+      "takenAt": "2026-11-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 69,
+      "unit": "bpm",
+      "takenAt": "2026-11-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-11-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-11-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 68,
+      "unit": "bpm",
+      "takenAt": "2026-11-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 71,
+      "unit": "bpm",
+      "takenAt": "2026-11-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 72,
+      "unit": "bpm",
+      "takenAt": "2026-11-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 74,
+      "unit": "bpm",
+      "takenAt": "2026-11-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 76,
+      "unit": "bpm",
+      "takenAt": "2026-11-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Scripted deviation for the demo"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 78,
+      "unit": "bpm",
+      "takenAt": "2026-11-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Scripted deviation for the demo"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 80,
+      "unit": "bpm",
+      "takenAt": "2026-11-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Scripted deviation for the demo"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 82,
+      "unit": "bpm",
+      "takenAt": "2026-11-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Scripted deviation for the demo"
+      }
+    },
+    {
+      "kind": "heartRate",
+      "value": 84,
+      "unit": "bpm",
+      "takenAt": "2026-11-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Scripted deviation for the demo"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-07-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-07-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-07-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116,
+      "unit": "mmHg",
+      "takenAt": "2026-07-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 127,
+      "unit": "mmHg",
+      "takenAt": "2026-07-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 114,
+      "unit": "mmHg",
+      "takenAt": "2026-07-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 120,
+      "unit": "mmHg",
+      "takenAt": "2026-07-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 114,
+      "unit": "mmHg",
+      "takenAt": "2026-07-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-07-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115,
+      "unit": "mmHg",
+      "takenAt": "2026-07-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 128,
+      "unit": "mmHg",
+      "takenAt": "2026-07-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-07-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-07-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 114,
+      "unit": "mmHg",
+      "takenAt": "2026-07-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115,
+      "unit": "mmHg",
+      "takenAt": "2026-08-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-08-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115,
+      "unit": "mmHg",
+      "takenAt": "2026-08-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 120,
+      "unit": "mmHg",
+      "takenAt": "2026-08-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-08-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115,
+      "unit": "mmHg",
+      "takenAt": "2026-08-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115,
+      "unit": "mmHg",
+      "takenAt": "2026-08-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116,
+      "unit": "mmHg",
+      "takenAt": "2026-08-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 120,
+      "unit": "mmHg",
+      "takenAt": "2026-08-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-08-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-08-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116,
+      "unit": "mmHg",
+      "takenAt": "2026-08-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116,
+      "unit": "mmHg",
+      "takenAt": "2026-08-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-08-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-08-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-08-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-08-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-08-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-08-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-08-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 120,
+      "unit": "mmHg",
+      "takenAt": "2026-08-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 123,
+      "unit": "mmHg",
+      "takenAt": "2026-08-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-08-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116,
+      "unit": "mmHg",
+      "takenAt": "2026-08-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-08-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 112,
+      "unit": "mmHg",
+      "takenAt": "2026-08-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-08-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-08-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-08-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-08-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-08-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-09-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 109,
+      "unit": "mmHg",
+      "takenAt": "2026-09-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 114,
+      "unit": "mmHg",
+      "takenAt": "2026-09-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 120,
+      "unit": "mmHg",
+      "takenAt": "2026-09-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115,
+      "unit": "mmHg",
+      "takenAt": "2026-09-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 114,
+      "unit": "mmHg",
+      "takenAt": "2026-09-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-09-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-09-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-09-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 110,
+      "unit": "mmHg",
+      "takenAt": "2026-09-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-09-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-09-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-09-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 123,
+      "unit": "mmHg",
+      "takenAt": "2026-09-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 114,
+      "unit": "mmHg",
+      "takenAt": "2026-09-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-09-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-09-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-09-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-09-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 125,
+      "unit": "mmHg",
+      "takenAt": "2026-09-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 113,
+      "unit": "mmHg",
+      "takenAt": "2026-09-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-09-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-09-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 124,
+      "unit": "mmHg",
+      "takenAt": "2026-09-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-09-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-09-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-09-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 125,
+      "unit": "mmHg",
+      "takenAt": "2026-09-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-09-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-09-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-10-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 124,
+      "unit": "mmHg",
+      "takenAt": "2026-10-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-10-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-10-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-10-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-10-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 114,
+      "unit": "mmHg",
+      "takenAt": "2026-10-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-10-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-10-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-10-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116,
+      "unit": "mmHg",
+      "takenAt": "2026-10-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-10-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-10-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-10-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-10-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 115,
+      "unit": "mmHg",
+      "takenAt": "2026-10-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 124,
+      "unit": "mmHg",
+      "takenAt": "2026-10-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-10-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-10-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-10-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 119,
+      "unit": "mmHg",
+      "takenAt": "2026-10-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 123,
+      "unit": "mmHg",
+      "takenAt": "2026-10-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 114,
+      "unit": "mmHg",
+      "takenAt": "2026-10-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 123,
+      "unit": "mmHg",
+      "takenAt": "2026-10-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 125,
+      "unit": "mmHg",
+      "takenAt": "2026-10-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 124,
+      "unit": "mmHg",
+      "takenAt": "2026-10-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 129,
+      "unit": "mmHg",
+      "takenAt": "2026-10-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-10-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-10-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116,
+      "unit": "mmHg",
+      "takenAt": "2026-10-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 116,
+      "unit": "mmHg",
+      "takenAt": "2026-10-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-11-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 120,
+      "unit": "mmHg",
+      "takenAt": "2026-11-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-11-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-11-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-11-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 126,
+      "unit": "mmHg",
+      "takenAt": "2026-11-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 122,
+      "unit": "mmHg",
+      "takenAt": "2026-11-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-11-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 124,
+      "unit": "mmHg",
+      "takenAt": "2026-11-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-11-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-11-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 117,
+      "unit": "mmHg",
+      "takenAt": "2026-11-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 118,
+      "unit": "mmHg",
+      "takenAt": "2026-11-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "systolicBP",
+      "value": 121,
+      "unit": "mmHg",
+      "takenAt": "2026-11-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Scripted deviation for the demo"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-07-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 82,
+      "unit": "mmHg",
+      "takenAt": "2026-07-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-07-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-07-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-07-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-07-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-07-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-07-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-07-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-07-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 80,
+      "unit": "mmHg",
+      "takenAt": "2026-07-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-07-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 82,
+      "unit": "mmHg",
+      "takenAt": "2026-07-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 72,
+      "unit": "mmHg",
+      "takenAt": "2026-07-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-08-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 74,
+      "unit": "mmHg",
+      "takenAt": "2026-08-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-08-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-08-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-08-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-08-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-08-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 74,
+      "unit": "mmHg",
+      "takenAt": "2026-08-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-08-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 80,
+      "unit": "mmHg",
+      "takenAt": "2026-08-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-08-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-08-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 80,
+      "unit": "mmHg",
+      "takenAt": "2026-08-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-08-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 73,
+      "unit": "mmHg",
+      "takenAt": "2026-08-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-08-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-08-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-08-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-08-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 82,
+      "unit": "mmHg",
+      "takenAt": "2026-08-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-08-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-08-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-08-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-08-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-08-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-08-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-08-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-08-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 74,
+      "unit": "mmHg",
+      "takenAt": "2026-08-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 74,
+      "unit": "mmHg",
+      "takenAt": "2026-08-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-08-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-09-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-09-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 80,
+      "unit": "mmHg",
+      "takenAt": "2026-09-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-09-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-09-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-09-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-09-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 83,
+      "unit": "mmHg",
+      "takenAt": "2026-09-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-09-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-09-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 72,
+      "unit": "mmHg",
+      "takenAt": "2026-09-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 82,
+      "unit": "mmHg",
+      "takenAt": "2026-09-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-09-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-09-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-09-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-09-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-09-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-09-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-09-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-09-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-09-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 83,
+      "unit": "mmHg",
+      "takenAt": "2026-09-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-09-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-09-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-09-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-09-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-09-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-09-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-09-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 80,
+      "unit": "mmHg",
+      "takenAt": "2026-09-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 73,
+      "unit": "mmHg",
+      "takenAt": "2026-10-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 74,
+      "unit": "mmHg",
+      "takenAt": "2026-10-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-10-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 74,
+      "unit": "mmHg",
+      "takenAt": "2026-10-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-10-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 80,
+      "unit": "mmHg",
+      "takenAt": "2026-10-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-10-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-10-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-10-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 77,
+      "unit": "mmHg",
+      "takenAt": "2026-10-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-10-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-10-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-10-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-10-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-10-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-10-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-10-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-10-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 81,
+      "unit": "mmHg",
+      "takenAt": "2026-10-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-10-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-10-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-10-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-10-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 80,
+      "unit": "mmHg",
+      "takenAt": "2026-11-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-11-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-11-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-11-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-11-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-11-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 73,
+      "unit": "mmHg",
+      "takenAt": "2026-11-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-11-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-11-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 75,
+      "unit": "mmHg",
+      "takenAt": "2026-11-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-11-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 76,
+      "unit": "mmHg",
+      "takenAt": "2026-11-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 78,
+      "unit": "mmHg",
+      "takenAt": "2026-11-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "diastolicBP",
+      "value": 79,
+      "unit": "mmHg",
+      "takenAt": "2026-11-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Scripted deviation for the demo"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 96,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 96,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 98,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 96,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 98,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-07-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 85,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 104,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 102,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 88,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 99,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 95,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 86,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 84,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 85,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 95,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 100,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 83,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 95,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-08-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 98,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 99,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 80,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 88,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 95,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 88,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 88,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 84,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 85,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-09-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 90,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 99,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 86,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 88,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 96,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 95,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 95,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 99,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 89,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 96,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 88,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 81,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 101,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 99,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-10-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 97,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 93,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 92,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 100,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 94,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "glucose",
+      "value": 91,
+      "unit": "mg/dL",
+      "takenAt": "2026-11-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-07-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-07-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-07-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-07-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-07-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-07-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-07-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-07-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-07-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-07-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-07-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-07-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-07-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-07-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-08-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-08-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-08-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-08-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-08-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-08-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-08-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-08-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-08-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-08-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.5,
+      "unit": "°C",
+      "takenAt": "2026-08-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-08-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-08-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-08-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.4,
+      "unit": "°C",
+      "takenAt": "2026-08-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-09-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.5,
+      "unit": "°C",
+      "takenAt": "2026-09-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-09-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-09-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-09-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-09-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-09-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-09-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-09-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-09-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-09-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-09-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.5,
+      "unit": "°C",
+      "takenAt": "2026-09-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-09-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.5,
+      "unit": "°C",
+      "takenAt": "2026-09-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-09-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-09-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.4,
+      "unit": "°C",
+      "takenAt": "2026-09-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-09-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-09-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-10-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-10-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 37,
+      "unit": "°C",
+      "takenAt": "2026-10-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-10-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-10-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-10-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.5,
+      "unit": "°C",
+      "takenAt": "2026-10-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-10-15T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-16T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-17T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-18T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-10-19T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-10-20T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-10-21T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-10-22T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-23T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-24T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-10-25T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-10-26T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.5,
+      "unit": "°C",
+      "takenAt": "2026-10-27T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-28T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-10-29T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-30T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-10-31T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-11-01T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-11-02T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-11-03T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-11-04T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-11-05T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-11-06T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.9,
+      "unit": "°C",
+      "takenAt": "2026-11-07T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-11-08T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-11-09T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.8,
+      "unit": "°C",
+      "takenAt": "2026-11-10T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-11-11T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-11-12T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.7,
+      "unit": "°C",
+      "takenAt": "2026-11-13T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    },
+    {
+      "kind": "bodyTemp",
+      "value": 36.6,
+      "unit": "°C",
+      "takenAt": "2026-11-14T07:30:00.000Z",
+      "provenance": {
+        "kind": "simulated",
+        "note": "Synthetic noise around the pre-flight baseline"
+      }
+    }
+  ]
+}

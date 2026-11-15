@@ -1,0 +1,11 @@
+{
+  "id": "astro-1",
+  "name": "Cdr. A. Nova",
+  "crewRole": "Commander (fictional crew member)",
+  "missionDay": 120,
+  "careerPriorMSv": 0,
+  "provenance": {
+    "kind": "simulated",
+    "note": "Fictional astronaut generated for the demo"
+  }
+}
