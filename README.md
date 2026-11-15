@@ -1,72 +1,85 @@
-# 🚀 Apollo 62 — NASA Space Apps Challenge 2026
-Official repository for team **Apollo 62** (Goiânia, Brazil 🇧🇷) for the **NASA Space Apps Challenge 2026**.
+# 🚀 Apollo 62 — Astronaut Health Monitor
 
-> **Decision-support prototype — not a medical device, not for diagnosis.** This is a navigable frontend prototype built for the pitch. Some data is simulated, and every number on screen is labeled **REAL** or **SIMULATED**.
+Team **Apollo 62** (Goiânia, Brazil 🇧🇷) · **NASA Space Apps Challenge 2026** · Challenge: *Create Health Monitoring Software for Astronauts on Space Missions*.
 
-## 🩺 Challenge
-**Create Health Monitoring Software for Astronauts on Space Missions** (AEB / NASA) — Development of a visual health self-assessment and medical guidance tool for astronauts on space missions.
+**▶ Live demo:** https://astronaut-health-monitor-beta.vercel.app/ (desktop and mobile)
 
-## 💡 What we are building
+> **Decision-support prototype — not a medical device, not for diagnosis.** Some data is simulated, and every number on screen is labeled **REAL** or **SIMULATED**.
 
-The astronaut self-assesses through a **core of vital signs compared with their own baseline**, plus three modules that talk to each other: **radiation**, **mental wellbeing** and **exercise adherence**. The system keeps working far from Earth and escalates to the Crew Medical Officer (CMO) or to the ground, respecting who is allowed to see each piece of data.
+## 💡 What it is
 
-| Feature | What it shows |
+A visual self-assessment tool that keeps working far from Earth. The astronaut sees their vital signs compared with **their own pre-flight baseline**, plus radiation, wellbeing and exercise, on one body map. **Orbit**, an onboard copilot, explains what the data means and helps decide when to call the Crew Medical Officer (CMO) or the ground.
+
+**Three ideas set it apart:**
+
+1. **One system, four environments.** A mode button switches the whole platform between **Earth · Space Station · Moon · Spacecraft**. One click changes the communication delay, the escalation, the gravity phase, the radiation dose rate, the exercise context and the mission banner.
+2. **The communication delay is part of the interface.** On the Spacecraft: *"Ground reply in ~40 min — follow these safe actions now"*. On Earth: *"Flight surgeon available now"*.
+3. **Rules decide, AI assists.** Colors, alerts and escalation come from a deterministic, tested rule engine. Orbit only explains, cites its sources and drafts the report to the ground; it never changes an alert, names a condition or suggests medication.
+
+## 🧭 Screens
+
+| Screen | What you can do |
 |---|---|
-| **Body Status Map** | A clickable silhouette. Each zone (head, heart, torso, skin, plus a radiation overlay) shows the worst status of its indicators. The zone card shows the value vs. the personal baseline, the related NASA hazard and the source. |
-| **Vitals** | Heart rate, blood pressure, glucose and temperature, each with its % deviation from the pre-flight baseline (drawn as one range on the chart), the in-flight average, its trend and a provenance badge. |
-| **Radiation** | Career dose vs. the 600 mSv limit. A **real solar particle event from NASA DONKI** (May 11, 2024) is replayed in the scenario and triggers a shelter flow adapted from NASA's Orion procedure. |
-| **Wellbeing (restricted)** | Daily mood and sleep self-report, private by default. The CMO sees it only with the astronaut's consent, or through an audited **break-glass** emergency access. |
-| **Exercise** | Adherence to the prescribed ARED / T2 / CEVIS plan. |
-| **Environment mode button** | A button in the top bar switches the whole platform between **Earth · Space Station · Moon · Spacecraft**, the way a theme button switches a website. It is not a dark mode: one click changes the communication delay, escalation, gravity phase, daily radiation dose rate, exercise equipment, mission routine and the mission-banner color. Numbers without a source for that environment are not shown. |
-| **Delay-aware escalation** | The communication delay is part of the interface. On the Spacecraft: "Ground reply in ~40 min — follow these safe actions now", with a store-and-forward queue. On Earth: "Flight surgeon available now". |
-| **Assistant** | An on-device language model running in the browser (WebLLM), with a deterministic protocol fallback. The AI only talks and summarizes; it never changes an alert. |
-| **Mission routine** | The tool prompts the astronaut to take specific measurements and do activities at set times, as part of the mission routine (e.g. resting heart rate in the morning, wellbeing check-in, exercise, and spacecraft maintenance while docked at the Space Station). One click on **Log measurement** updates the body map and the charts. |
-| **Data & Sources** | Every source used, with links and terms. |
+| **Overview** | Body map (head, heart, torso, skin, arms, legs and a radiation overlay), active alerts, **Log measurement**, daily check-in, ground report |
+| **Vitals** | Heart rate, blood pressure, glucose and temperature against the pre-flight baseline, with trend and provenance |
+| **Baseline** | How the personal reference is built, and how it adapts after a gravity change (urgent is never masked) |
+| **Radiation** | Career dose against the 600 mSv limit; replay of a **real NASA DONKI solar particle event** that triggers an Orion-based shelter flow |
+| **Exercise** | Self-reported training time and weekly activity |
+| **Wellbeing** | Private mood and sleep check-in, 14-day chart, private journal and consent to share alerts (not details) with the CMO |
+| **Crew outlook** | Risk outlook for a small synthetic crew (Low / Guarded / Elevated / High), with the driver and safe actions |
+| **Orbit** | Chat with step-by-step answers and citations; detects emergency phrases; prepares a compact report for the ground |
+| **Data & Sources** | Every source (S01–S28) with links and terms, and how Orbit works |
 
-**Principles:**
-- **Rules decide, AI assists.** Colors, alerts and escalation come from a deterministic, tested rule engine.
-- **Works without Earth.** Everything runs locally, aligned with NASA's Earth-Independent Medical Operations research.
-- **Visible provenance:** REAL vs. SIMULATED on every number.
-- **Privacy by role**, in line with NASA's private medical communications.
-- **Never "fit", "healthy" or a diagnosis.** Statuses are Normal / Attention / Urgent / Adapting / Restricted, always shown with color + icon + text.
+A floating **Demo** panel replays the solar event, simulates a heart-rate change and speeds up time.
+
+## 🛡️ Principles
+
+- **Works without Earth:** everything runs in the browser, with no backend, no API keys and no CDN.
+- **Visible provenance:** REAL or SIMULATED on every number, with the source one click away.
+- **Never "fit", "healthy" or a diagnosis:** statuses are Normal / Attention / Urgent / Adapting / Restricted, always shown as color + icon + text.
+- **Privacy by role:** wellbeing is private; CMO access requires consent or an audited break-glass. This is implemented and tested, but the demo shows the astronaut's view.
+- **Illustrative thresholds:** no validated clinical ranges yet, and the screen says so.
 
 ## 🔍 Real vs. simulated
 
-| Real | Simulated |
+| Real (cited in the app) | Simulated |
 |---|---|
 | NASA DONKI solar particle event `2024-05-11T02:10:00-SEP-001` | Astronaut, vitals, wellbeing and exercise history (fixed-seed synthetic data) |
-| 600 mSv career limit (NASA OCHMO) | Prior career dose; dose increments during the event |
-| 1.8 mSv/day cruise average measured by MSL/RAD | Mission day 120 scenario |
-| Communication delay range of 4–24 min to Mars (NASA) | Alert thresholds, labeled *Illustrative thresholds* |
-| Mars communication blackouts of up to 2–3 weeks (NASA) | Exercise equipment on the Moon and on the Spacecraft; daily dose rates for the Station, Moon and Earth (not shown) |
-| ARED / T2 / CEVIS and ~2 h/day of exercise (NASA) | Exercise prescription split between devices |
+| 600 mSv career limit (NASA OCHMO) | Mission day 120 scenario and prior career dose |
+| 1.8 mSv/day cruise dose measured by MSL/RAD | Alert thresholds (labeled *Illustrative thresholds*) |
+| Earth–Mars delay of up to ~22 min and blackouts of up to 2–3 weeks (NASA) | Crew outlook crew members |
+| ARED / T2 / CEVIS and ~2 h/day of exercise on the ISS (NASA) | Dose rates for the Station, Moon and Earth (not shown: no source) |
+
+## 🧠 How Orbit works
+
+1. **Rule layer** (pure functions, tested): decides every status, alert and escalation.
+2. **Local library** of 58 short passages, most from NASA sources, retrieved on device (edge RAG) and cited in each answer.
+3. **Optional on-device model** (WebLLM, Llama 3.2 1B by default) that only rewrites the wording. If it is unavailable, protocol mode answers everything and the traffic light does not change.
 
 ## 🛠️ Tech stack
 
-React 19 · TypeScript 7 (strict) · Vite 8 · Tailwind CSS 4 · shadcn/ui (Radix) · Recharts 3 · Zustand · Zod · Vitest · WebLLM (in a Web Worker) · oxlint + Prettier. No backend, no API keys, nothing loaded from a CDN. The only exception is the one-time download of the model weights, which are then cached for offline use.
+React 19 · TypeScript (strict) · Vite 8 · Tailwind CSS 4 · shadcn/ui (Radix) · Recharts · Zustand · Zod · Vitest (436 tests) · WebLLM in a Web Worker · oxlint + Prettier.
 
-## 🚀 Getting started
+## 🚀 Run locally
 
-Requirements: Node.js 22 or 24 (minimum 20.19) and Git.
+Requirements: Node.js 22 or 24 (minimum 20.19).
 
 ```bash
 npm install
 npm run dev        # development server
-npm test           # run the rule-engine tests once
+npm test           # all tests (rule engine, Orbit, screens)
 npm run build      # production build
-npm run preview    # serve the production build at http://localhost:4173 (offline demo mode)
+npm run preview    # serve the build at http://localhost:4173
 ```
 
-Add `?ai=protocol` to the URL to run the assistant without the language model.
+Add `?ai=protocol` to the URL to run Orbit without the language model.
 
 ## 📚 Docs
 
-- [Frontend specification (pt-BR)](docs/SPEC-frontend.md): requirements, rules, data model, demo script and the full source catalog.
-- [Design system (NASA style)](docs/DESIGN-SYSTEM.md): colors, type, components ([PDF](docs/design/)).
-- Onboarding: [Lucas](docs/onboarding/LUCAS.md) · [Felipe](docs/onboarding/FELIPE.md)
-- [Project context (pt-BR)](CLAUDE.md)
-- [Coding guide (pt-BR)](INSTRUCOES-DE-CODIGO.md)
-- [Team kanban](https://github.com/orgs/Apollo62-spaceapps/projects/3)
+- [Frontend specification (pt-BR)](docs/SPEC-frontend.md): requirements, rules, data model and source catalog
+- [Design system (NASA style)](docs/DESIGN-SYSTEM.md) · [PDF](docs/design/)
+- Sources used in the app: **Data & Sources** screen, or [`src/data/sources.ts`](src/data/sources.ts)
 
 ## 👨‍💻 Team
+
 Software Engineering students from the **Federal University of Goiás (UFG)** and researchers from the **Center of Excellence in Artificial Intelligence (CEIA-UFG)**.
