@@ -686,7 +686,7 @@ Revisão feita em 14/11/2026 sobre o rascunho v0.1. Critérios: coerência inter
 
 > Este adendo foi acrescentado depois da v0.2, a pedido do time. Ele **substitui** o seletor de missão da §6.5 (ESC-01) e o tipo `MissionMode` da §5.4. O restante da SPEC continua valendo.
 
-**Ideia:** um seletor estilo "modo noturno" com quatro ambientes, **Earth · Space Station · Moon · Spacecraft**. Apertar um botão muda o sistema inteiro: tema de destaque, atraso de comunicação e escalonamento, gravidade (fases), taxa de dose diária, equipamentos de exercício e hazards em destaque. Isso atende ao pedido do briefing de adaptar a ferramenta a vários ambientes [S01].
+**Ideia:** um **botão de modo de ambiente** com quatro modos, **Earth · Space Station · Moon · Spacecraft**. Ao clicar, a plataforma inteira troca de modo, do mesmo jeito que um botão de tema troca a aparência de um site. **Não é um tema escuro** (o visual escuro do design system não muda). O que muda: a cor da faixa da missão, atraso de comunicação e escalonamento, gravidade (fases), taxa de dose diária, equipamentos de exercício e hazards em destaque. Isso atende ao pedido do briefing de adaptar a ferramenta a vários ambientes [S01].
 
 ```ts
 type MissionMode = 'EARTH' | 'ISS' | 'LUNAR' | 'SPACECRAFT';   // substitui 'ISS' | 'LUNAR' | 'MARS_TRANSIT'
@@ -716,7 +716,7 @@ interface MissionProfile {
 | --- | --- | --- |
 | ENV-01 | Seletor na TopBar com 4 botões (ícone + texto), acessível por teclado. O ambiente fica em `store.environment` e é salvo no localStorage | P0 |
 | ENV-02 | A troca é instantânea, não perde o estado da demo e atualiza comunicação, escalonamento, radiação, exercício e o destaque de hazards | P0 |
-| ENV-03 | O atributo `data-environment` no `<html>` muda só a cor de destaque (tokens CSS). Os status (verde, âmbar e vermelho, com ícone e texto) não mudam de cor. Contraste AA | P0 |
+| ENV-03 | O atributo `data-environment` no `<html>` muda só a cor da faixa da missão (`--color-banner`, ver DESIGN-SYSTEM §5). Os status (verde, âmbar e vermelho, com ícone e texto) não mudam de cor. Contraste AA | P0 |
 | ENV-04 | Um ambiente sem fonte para um número não mostra o número ("rate not sourced for this environment") | P0 |
 | ENV-05 | O ambiente entra no `AssistantContext` e no `OutboundPacket` | P0 |
 | ENV-06 | A troca de gravidade (ex.: Spacecraft → Moon, Spacecraft → Earth) dispara "Adapting" pela R-PHASE-01 (urgent nunca é mascarado) | P1 |

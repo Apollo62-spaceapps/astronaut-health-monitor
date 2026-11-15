@@ -29,12 +29,14 @@ npm run dev
 
 | # | Task | Depende de | Prazo |
 |---|---|---|---|
-| [#59](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/59) | **F5** · Rotina da missão: agenda do dia, lembretes e **Log measurement** (ROUT-01..05) | K2, K4, L1 | dom 01h |
-| [#45](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/45) | **F1** · Radiação: dose de carreira, evento DONKI real e fluxo de abrigo (RAD-01..05, 07) | K3, K4, L2 | dom 01h |
-| [#56](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/56) | **F4** · Exercício: plano do dia, check-in e adesão (EX-01..03, 05) | K3, L2 | dom manhã |
-| [#47](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/47) | **F2** · Bem-estar e privacidade: check-in, consentimento, break-glass e auditoria (MH-01/02/04, PRIV-02..04) | K4, L1 | dom manhã |
-| [#49](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/49) | **F3** · Data & Sources e Demo controls (SRC-01/03, DEMO-01/02) | K3 | dom manhã |
-| [#60](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/60) | **F6** (extra) · Gamificação sóbria e alerta de bem-estar baixo | F2, F4 | só depois do P0 |
+| [#59](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/59) | **F1** · Criar a rotina da missão com lembretes e **Log measurement** (ROUT-01..05) | K2, K4, L1 | dom 01h |
+| [#45](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/45) | **F2** · Criar o módulo de radiação com o evento solar real e o abrigo (RAD-01..05, 07) | K3, K4, L2 | dom 01h |
+| [#56](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/56) | **F3** · Criar o módulo de exercício com o plano do dia e a adesão (EX-01..03, 05) | K3, L2 | dom manhã |
+| [#47](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/47) | **F4** · Criar o bem-estar com privacidade e acesso de emergência auditado (MH-01/02/04, PRIV-02..04) | K4, L1 | dom manhã |
+| [#49](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/49) | **F5** · Criar a página de fontes e o painel de controles da demo (SRC-01/03, DEMO-01/02) | K3 | dom manhã |
+| [#60](https://github.com/Apollo62-spaceapps/astronaut-health-monitor/issues/60) | **F6** (extra) · Gamificação sóbria e alerta de bem-estar baixo | F3, F4 | só depois do P0 |
+
+O número da task é a ordem: faça F1 → F2 → F3 → F4 → F5, e a F6 só se sobrar tempo.
 
 **Enquanto as regras do Lucas não entram:** use uma função temporária com a **mesma assinatura** e o comentário `// TODO(Lucas): trocar pela regra real`.
 

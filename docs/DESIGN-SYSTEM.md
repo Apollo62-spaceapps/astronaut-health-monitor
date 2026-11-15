@@ -119,7 +119,7 @@ Com isso, as classes `bg-surface`, `text-normal`, `bg-action`, `hover:bg-action-
 
 ## 5. Ambientes (adendo §17) dentro do design system
 
-O seletor funciona como o botão de modo noturno. **Só a faixa da missão (banner) e o ícone do ambiente mudam.** Status, botão de ação e superfícies continuam iguais.
+O **botão de modo de ambiente** troca o modo da plataforma ao clicar, como um botão de tema. **Não é um tema escuro**: o fundo continua escuro. Visualmente, **só a faixa da missão (banner) e o ícone do ambiente mudam**; status, botão de ação e superfícies continuam iguais. O resto da troca é de comportamento (atraso, dose, rotina etc., SPEC §17).
 
 | Ambiente | `data-environment` | Cor da faixa | Contraste com branco | Ícone (lucide) |
 |---|---|---|---|---|
